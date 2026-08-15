@@ -8,7 +8,53 @@ const sb = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_
 export default function App() {
   const [u, setU] = useState(() => JSON.parse(localStorage.getItem('bagtrack_user'))), [tab, setTab] = useState('All'), [recs, setRecs] = useState([]), [srch, setSrch] = useState(''), [isS, setIsS] = useState(false), [auth, setAuth] = useState({}), [form, setForm] = useState({ irregularity_type: 'Delayed' }), [edId, setEdId] = useState(null), [edF, setEdF] = useState({}), [dash, setDash] = useState(false), [sd, setSd] = useState(''), [ed, setEd] = useState('');
   useEffect(() => { if (!u) return; const f = async () => { let q = sb.from('baggage_records').select('*').order('created_at', { ascending: true }); const { data } = await (tab !== 'All' ? q.eq('irregularity_type', tab) : q); if (data) setRecs(data); }; f(); const ch = sb.channel('db').on('postgres_changes', { event: '*', schema: 'public', table: 'baggage_records' }, f).subscribe(); return () => sb.removeChannel(ch); }, [u, tab]);
-  const hAuth = (e) => { e.preventDefault(); const l = JSON.parse(localStorage.getItem('bagtrack_registered_agents')) || []; if (isS) { l.push({ ...auth, username: auth.username.toLowerCase().trim() }); localStorage.setItem('bagtrack_registered_agents', JSON.stringify(l)); setIsS(false); } else { const m = l.find(p => p.username?.toLowerCase() === auth.username?.toLowerCase().trim() && p.password === auth.password); if (!m) return alert('Failed'); localStorage.setItem('bagtrack_user', JSON.stringify(m)); setU(m); } };
+    // ⚡ UPDATED AUTHENTICATION FUNCTION WITH UNIQUE USERNAME & UNIQUE FULL NAME CHECKS
+  const hAuth = (e) => {
+    e.preventDefault();
+    const l = JSON.parse(localStorage.getItem('bagtrack_registered_agents')) || [];
+    
+    // Normalize inputs to ensure spaces or capitalization differences don't bypass checks
+    const currentUsername = auth.username?.toLowerCase().trim();
+    const currentFirst = auth.first_name?.toLowerCase().trim() || '';
+    const currentMiddle = auth.middle_name?.toLowerCase().trim() || '';
+
+    if (isS) {
+      // 🕵️‍♂️ RESTRICTION 1: Block duplicate Usernames / Agent IDs
+      const usernameExists = l.some(p => p.username?.toLowerCase() === currentUsername);
+      if (usernameExists) {
+        return alert(`🚫 Registration Failed: The username "${auth.username}" is already taken.`);
+      }
+
+      // 🕵️‍♂️ RESTRICTION 2: Block duplicate Full Names (First Name + Middle/Last Name)
+      const nameExists = l.some(p => {
+        const existingFirst = p.first_name?.toLowerCase().trim() || '';
+        const existingMiddle = p.middle_name?.toLowerCase().trim() || '';
+        return existingFirst === currentFirst && existingMiddle === currentMiddle;
+      });
+
+      if (nameExists) {
+        return alert(`🚫 Registration Failed: An agent account with the name "${auth.first_name} ${auth.middle_name || ''}" already exists. Each agent profile must be completely unique.`);
+      }
+
+      // If all identity constraints clear safely, push and save the new profile parameters
+      l.push({ 
+        ...auth, 
+        username: currentUsername,
+        first_name: auth.first_name.trim(),
+        middle_name: auth.middle_name?.trim() || ''
+      });
+      localStorage.setItem('bagtrack_registered_agents', JSON.stringify(l));
+      alert('✅ Station account created successfully! Proceeding to portal login.');
+      setIsS(false);
+    } else {
+      // Secure Portal Login Verification Sequence
+      const m = l.find(p => p.username?.toLowerCase() === currentUsername && p.password === auth.password);
+      if (!m) return alert('❌ Portal Access Denied: Invalid agent credentials or incorrect password.');
+      localStorage.setItem('bagtrack_user', JSON.stringify(m));
+      setU(m);
+    }
+  };
+
   const hRec = async (e) => { e.preventDefault(); const t = form.irregularity_type || 'Delayed', req = t !== 'Delayed'; if (!form.bag_tag_number || !form.passenger_last_name || !form.passenger_first_name || (req && !form.file_number?.trim())) return alert('Missing fields.'); const { error } = await sb.from('baggage_records').insert([{ ...form, agent_name: `${u.first_name} ${u.middle_name || ''}`.trim(), bag_tag_number: form.bag_tag_number.toUpperCase().trim(), file_number: form.file_number?.trim() ? form.file_number.toUpperCase().trim() : null, bag_status: 'Open' }]); if (error) alert('Error'); else setForm({ irregularity_type: t }); };
     // INSERT THIS PRINT ENGINE BLOCK DIRECTLY BELOW YOUR hRec FUNCTION
       // --- FIND THIS ROW IN YOUR FILE ---
