@@ -1,39 +1,31 @@
-
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import BaggageCharts from './BaggageCharts';
 import './App.css';
 import logo from './assets/logo.webp';
-
 
 const sb = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_ANON_KEY), flds = ['bag_tag_number', 'passenger_last_name', 'passenger_first_name', 'file_number', 'ticket_number', 'phone_number'];
 export default function App() {
   const [u, setU] = useState(() => JSON.parse(localStorage.getItem('bagtrack_user'))), [tab, setTab] = useState('All'), [recs, setRecs] = useState([]), [srch, setSrch] = useState(''), [isS, setIsS] = useState(false), [auth, setAuth] = useState({}), [form, setForm] = useState({ irregularity_type: 'Delayed' }), [edId, setEdId] = useState(null), [edF, setEdF] = useState({}), [dash, setDash] = useState(false), [sd, setSd] = useState(''), [ed, setEd] = useState('');
   useEffect(() => { if (!u) return; const f = async () => { let q = sb.from('baggage_records').select('*').order('created_at', { ascending: true }); const { data } = await (tab !== 'All' ? q.eq('irregularity_type', tab) : q); if (data) setRecs(data); }; f(); const ch = sb.channel('db').on('postgres_changes', { event: '*', schema: 'public', table: 'baggage_records' }, f).subscribe(); return () => sb.removeChannel(ch); }, [u, tab]);
     // ⚡ UPDATED AUTHENTICATION FUNCTION WITH UNIQUE USERNAME & UNIQUE FULL NAME CHECKS
-    // ⚡ MOBILE-PROOF SINGLE STATES (Prevents object-rebuilding focus drops)
-  const [isS, setIsS] = useState(false);
-  const [authUsername, setAuthUsername] = useState('');
-  const [authPassword, setAuthPassword] = useState('');
-  const [authFirst, setAuthFirst] = useState('');
-  const [authMiddle, setAuthMiddle] = useState('');
-
-  // ⚡ bulletproof MOBILE HANDLER ENGINE
   const hAuth = (e) => {
     e.preventDefault();
     const l = JSON.parse(localStorage.getItem('bagtrack_registered_agents')) || [];
     
-    // Explicitly grab standard string updates
-    const currentUsername = authUsername.toLowerCase().trim();
-    const currentFirst = authFirst.toLowerCase().trim();
-    const currentMiddle = authMiddle.toLowerCase().trim();
+    // Normalize inputs to ensure spaces or capitalization differences don't bypass checks
+    const currentUsername = auth.username?.toLowerCase().trim();
+    const currentFirst = auth.first_name?.toLowerCase().trim() || '';
+    const currentMiddle = auth.middle_name?.toLowerCase().trim() || '';
 
     if (isS) {
+      // 🕵️‍♂️ RESTRICTION 1: Block duplicate Usernames / Agent IDs
       const usernameExists = l.some(p => p.username?.toLowerCase() === currentUsername);
       if (usernameExists) {
-        return alert(`🚫 Username "${authUsername}" is already taken.`);
+        return alert(`🚫 Registration Failed: The username "${auth.username}" is already taken.`);
       }
 
+      // 🕵️‍♂️ RESTRICTION 2: Block duplicate Full Names (First Name + Middle/Last Name)
       const nameExists = l.some(p => {
         const existingFirst = p.first_name?.toLowerCase().trim() || '';
         const existingMiddle = p.middle_name?.toLowerCase().trim() || '';
@@ -41,30 +33,27 @@ export default function App() {
       });
 
       if (nameExists) {
-        return alert(`🚫 Account with the name "${authFirst} ${authMiddle}" already exists.`);
+        return alert(`🚫 Registration Failed: An agent account with the name "${auth.first_name} ${auth.middle_name || ''}" already exists. Each agent profile must be completely unique.`);
       }
 
-      // Save to registry array
+      // If all identity constraints clear safely, push and save the new profile parameters
       l.push({ 
+        ...auth, 
         username: currentUsername,
-        password: authPassword,
-        first_name: authFirst.trim(),
-        middle_name: authMiddle.trim()
+        first_name: auth.first_name.trim(),
+        middle_name: auth.middle_name?.trim() || ''
       });
       localStorage.setItem('bagtrack_registered_agents', JSON.stringify(l));
-      alert('✅ Account created successfully! Please sign in.');
-      
-      // Clear strings
-      setAuthFirst(''); setAuthMiddle('');
+      alert('✅ Station account created successfully! Proceeding to portal login.');
       setIsS(false);
     } else {
-      const m = l.find(p => p.username?.toLowerCase() === currentUsername && p.password === authPassword);
-      if (!m) return alert('❌ Invalid username or security password.');
+      // Secure Portal Login Verification Sequence
+      const m = l.find(p => p.username?.toLowerCase() === currentUsername && p.password === auth.password);
+      if (!m) return alert('❌ Portal Access Denied: Invalid agent credentials or incorrect password.');
       localStorage.setItem('bagtrack_user', JSON.stringify(m));
       setU(m);
     }
   };
-
 
   const hRec = async (e) => { e.preventDefault(); const t = form.irregularity_type || 'Delayed', req = t !== 'Delayed'; if (!form.bag_tag_number || !form.passenger_last_name || !form.passenger_first_name || (req && !form.file_number?.trim())) return alert('Missing fields.'); const { error } = await sb.from('baggage_records').insert([{ ...form, agent_name: `${u.first_name} ${u.middle_name || ''}`.trim(), bag_tag_number: form.bag_tag_number.toUpperCase().trim(), file_number: form.file_number?.trim() ? form.file_number.toUpperCase().trim() : null, bag_status: 'Open' }]); if (error) alert('Error'); else setForm({ irregularity_type: t }); };
     // INSERT THIS PRINT ENGINE BLOCK DIRECTLY BELOW YOUR hRec FUNCTION
@@ -228,16 +217,17 @@ export default function App() {
 
 
     // ⚡ FIND AND REPLACE YOUR OLD AUTH RETURNING BLOCK WITH This:
-    if (!u) return (
+  if (!u) return (
     <div className="auth-wrapper">
       <div className="auth-card">
+        {/* Floating Top Brand Image Header */}
         <div style={{ marginBottom: '20px', display: 'flex', justifyContent: 'center' }}>
           <img src={logo} alt="Ethiopian Airlines" style={{ width: '180px', height: '60px', objectFit: 'contain' }} />
         </div>
 
         <div className="auth-header">
-          <h2>{isS ? 'Agent Registration' : 'Agent Portal Login'}</h2>
-          <p>{isS ? 'Create an authorized terminal account' : 'Enter security credentials to open dashboard'}</p>
+          <h2>{isS ? 'Agent Registration' : 'GDQ Baggage Service Login'}</h2>
+          <p>{isS ? 'Create an authorized account' : 'Enter security credentials to open dashboard'}</p>
         </div>
 
         <form onSubmit={hAuth}>
@@ -245,54 +235,36 @@ export default function App() {
             <>
               <div className="auth-form-group">
                 <label>First Name</label>
-                <input required className="auth-input" type="text" value={authFirst} placeholder="e.g. Yohannes" onChange={e => setAuthFirst(e.target.value)}/>
+                <input required className="auth-input" placeholder="First Name" onChange={e => setAuth({...auth, first_name: e.target.value})}/>
               </div>
               <div className="auth-form-group">
-                <label>Middle Name (Optional)</label>
-                <input className="auth-input" type="text" value={authMiddle} placeholder="e.g. Abebe" onChange={e => setAuthMiddle(e.target.value)}/>
+                <label>Middle Name</label>
+                <input className="auth-input" placeholder="Middle Name" onChange={e => setAuth({...auth, middle_name: e.target.value})}/>
               </div>
             </>
           )}
 
           <div className="auth-form-group">
-            <label>Username / Agent ID</label>
-            <input 
-              required 
-              className="auth-input" 
-              type="text" 
-              value={authUsername}
-              inputMode="text"
-              autoCapitalize="none"
-              autoCorrect="off"
-              placeholder="Enter username" 
-              onChange={e => setAuthUsername(e.target.value)}
-            />
+            <label>Username</label>
+            <input required className="auth-input" type="text" placeholder="Username"  onChange={e => setAuth({...auth, username: e.target.value})}/>
           </div>
 
           <div className="auth-form-group">
-            <label>Security Password</label>
-            <input 
-              required 
-              className="auth-input" 
-              type="password" 
-              value={authPassword}
-              placeholder="••••••••" 
-              onChange={e => setAuthPassword(e.target.value)}
-            />
+            <label>Password</label>
+            <input required className="auth-input" type="password" placeholder="••••••••" onChange={e => setAuth({...auth, password: e.target.value})}/>
           </div>
 
-          <button type="submit" className="auth-submit-btn">
-            {isS ? 'Register Station Account ✓' : 'Secure Sign In 🔑'}
+          <button className="auth-submit-btn" style={{ background: isS ? '#5E8F4D' : '#5E8F4D' }}>
+            {isS ? 'Register Account' : 'Sign In'}
           </button>
         </form>
 
-        <button type="button" className="auth-toggle-link" style={{ color: '#C52528' }} onClick={() => { setIsS(!isS); setAuthUsername(''); setAuthPassword(''); }}>
-          {isS ? 'Already registered? Sign In instead' : 'New station agent? Create account here'}
+        <button className="auth-toggle-link" style={{ color: '#C52528' }} onClick={() => setIsS(!isS)}>
+          {isS ? 'Already registered? Sign In Instead' : 'New station agent? Create account here'}
         </button>
       </div>
     </div>
   );
-
 
   const getI = (n) => n ? n.split(' ').map(x => x.charAt(0)).join('').toUpperCase().substring(0, 2) : 'AG', fil = recs.filter(r => { const dt = r.created_at?.split('T')[0]; return !(sd && dt < sd) && !(ed && dt > ed) && (!srch || [r.bag_tag_number, r.passenger_last_name, r.passenger_first_name, r.file_number, r.ticket_number].some(v => v?.toLowerCase().includes(srch.toLowerCase().trim()))); }), reqFn = (form.irregularity_type || 'Delayed') !== 'Delayed';
   return (
