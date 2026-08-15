@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useState, useEffect, useRef } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import BaggageCharts from './BaggageCharts';
 import './App.css';
 import logo from './assets/logo.webp';
+
 
 const sb = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_ANON_KEY), flds = ['bag_tag_number', 'passenger_last_name', 'passenger_first_name', 'file_number', 'ticket_number', 'phone_number'];
 export default function App() {

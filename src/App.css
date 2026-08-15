@@ -110,102 +110,48 @@ tr:hover td { background: #f8fafc; }
 }
 
 /* MODERN METRIC BRANDED LOGIN LAYOUT SHAPES */
+/* 📱 BULLETPROOF MOBILE TOUCH FOCUS UNLOCKER ENGINE */
+
+/* 1. Ensure the auth screen handles pointer interactions cleanly */
 .auth-wrapper {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #ffffff;
-  padding: 20px;
+  position: relative !important;
+  z-index: 1 !important;
+  pointer-events: auto !important;
 }
 
+/* 2. Prevent the login card container from blocking layout input events */
 .auth-card {
-  width: 100%;
-  max-width: 400px;
-  background: #ffffff;
-  border-radius: 12px;
-  border: 1px solid #cbd5e1;
-  padding: 35px 30px;
-  box-shadow: 0 10px 25px -5px rgba(94, 143, 77, 0.15);
-  text-align: center;
+  position: relative !important;
+  z-index: 10 !important;
+  pointer-events: auto !important;
 }
 
-.auth-header {
-  margin-bottom: 25px;
-}
-
-.auth-header h2 {
-  margin: 0;
-  color: var(--primary);
-  font-size: 24px;
-  font-weight: 800;
-  letter-spacing: 0.5px;
-}
-
-.auth-header p {
-  margin: 5px 0 0 0;
-  color: #64748b;
-  font-size: 13px;
-}
-
-.auth-form-group {
-  margin-bottom: 16px;
-  text-align: left;
-}
-
-.auth-form-group label {
-  display: block;
-  font-size: 12px;
-  font-weight: 700;
-  color: #475569;
-  margin-bottom: 6px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
+/* 3. Strip all potential touch blocks and unlock the keyboard pointer events */
 .auth-input {
-  width: 100%;
-  height: 42px;
-  padding: 0 14px;
-  font-size: 14px;
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
-  background: #ffffff;
-  transition: all 0.2s ease;
+  width: 100% !important;
+  height: 46px !important;       /* Comfortable size for mobile thumb targets */
+  font-size: 16px !important;    /* 16px is required to stop iOS Safari from auto-zooming and freezing inputs */
+  background-color: #ffffff !important;
+  color: #1e293b !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important; /* Re-grants physical tap actions to inputs */
+  cursor: text !important;
+  
+  /* Forces the mobile operating system to grant text entry capabilities */
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+  user-select: text !important;
+  
+  /* Removes deep native mobile rendering locks */
+  -webkit-appearance: none !important;
+  appearance: none !important;
 }
 
+/* 4. Visual feedback indicator to confirm the input is actively targeted */
 .auth-input:focus {
-  outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(94, 143, 77, 0.15);
-}
-
-.auth-submit-btn {
-  width: 100%;
-  height: 44px;
-  background: var(--primary);
-  color: #ffffff;
-  border: none;
-  border-radius: 6px;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  margin-top: 10px;
-  transition: opacity 0.2s ease;
-}
-
-.auth-submit-btn:hover {
-  opacity: 0.9;
-}
-
-.auth-toggle-link {
-  background: transparent;
-  border: none;
-  color: var(--third);
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: underline;
-  margin-top: 20px;
+  outline: 2px solid #5E8F4D !important;
+  background: #ffffff !important;
 }
 
