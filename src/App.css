@@ -120,38 +120,41 @@ tr:hover td { background: #f8fafc; }
 }
 
 /* 2. Prevent the login card container from blocking layout input events */
+/* ⚡ FORCE CONTROLS TO THE ABSOLUTE FRONT OF THE USER CANVAS SCREEN */
+
+/* 1. Lift the card above any invisible background wrappers */
 .auth-card {
   position: relative !important;
-  z-index: 10 !important;
+  z-index: 9999 !important; /* Forces the box to stack on top of everything else */
+}
+
+/* 2. Layer form groups explicitly so touch actions register cleanly */
+.auth-form-group {
+  position: relative !important;
+  z-index: 10000 !important;
+}
+
+/* 3. Bring text fields to the front layer and enforce touch interaction metrics */
+.auth-input {
+  position: relative !important;
+  z-index: 10001 !important;
+  pointer-events: auto !important; /* Enforces physical touch registrations */
+  cursor: text !important;
+  
+  /* Forces mobile browsers to process typing actions */
+  -webkit-user-select: text !important;
+  user-select: text !important;
+  
+  /* 16px is required to stop iOS and Chrome mobile from running auto-zoom lockups */
+  font-size: 16px !important; 
+  height: 46px !important;
+}
+
+/* 4. Layer links and buttons cleanly on top to avoid overlapping layers */
+.auth-submit-btn, .auth-toggle-link {
+  position: relative !important;
+  z-index: 10002 !important;
   pointer-events: auto !important;
 }
 
-/* 3. Strip all potential touch blocks and unlock the keyboard pointer events */
-.auth-input {
-  width: 100% !important;
-  height: 46px !important;       /* Comfortable size for mobile thumb targets */
-  font-size: 16px !important;    /* 16px is required to stop iOS Safari from auto-zooming and freezing inputs */
-  background-color: #ffffff !important;
-  color: #1e293b !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  pointer-events: auto !important; /* Re-grants physical tap actions to inputs */
-  cursor: text !important;
-  
-  /* Forces the mobile operating system to grant text entry capabilities */
-  -webkit-user-select: text !important;
-  -moz-user-select: text !important;
-  -ms-user-select: text !important;
-  user-select: text !important;
-  
-  /* Removes deep native mobile rendering locks */
-  -webkit-appearance: none !important;
-  appearance: none !important;
-}
-
-/* 4. Visual feedback indicator to confirm the input is actively targeted */
-.auth-input:focus {
-  outline: 2px solid #5E8F4D !important;
-  background: #ffffff !important;
-}
 
