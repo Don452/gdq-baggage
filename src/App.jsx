@@ -314,7 +314,7 @@ export default function App() {
                 <input required className="auth-input" placeholder="e.g. Yohannes" onChange={e => setAuth({...auth, first_name: e.target.value})}/>
               </div>
               <div className="auth-form-group">
-                <label>Middle Name (Optional)</label>
+                <label>Middle Name</label>
                 <input className="auth-input" placeholder="e.g. Abebe" onChange={e => setAuth({...auth, middle_name: e.target.value})}/>
               </div>
             </>
@@ -327,7 +327,7 @@ export default function App() {
           </div>
 
           <div className="auth-form-group">
-            <label>Username / Agent ID</label>
+            <label>Username</label>
             <input required className="auth-input" type="text" placeholder="Enter username" onChange={e => setAuth({...auth, username: e.target.value})}/>
           </div>
           
@@ -337,7 +337,7 @@ export default function App() {
           </div>
           
           <button type="submit" className="auth-submit-btn">
-            {isS ? 'Register Station Account ✓' : 'Secure Sign In 🔑'}
+            {isS ? 'Register Account' : 'Sign In'}
           </button>
         </form>
 
