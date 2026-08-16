@@ -311,11 +311,11 @@ export default function App() {
             <>
               <div className="auth-form-group">
                 <label>First Name</label>
-                <input required className="auth-input" placeholder="e.g. Yohannes" onChange={e => setAuth({...auth, first_name: e.target.value})}/>
+                <input required className="auth-input" placeholder="First Name" onChange={e => setAuth({...auth, first_name: e.target.value})}/>
               </div>
               <div className="auth-form-group">
                 <label>Middle Name</label>
-                <input className="auth-input" placeholder="e.g. Abebe" onChange={e => setAuth({...auth, middle_name: e.target.value})}/>
+                <input className="auth-input" placeholder="Middle Name" onChange={e => setAuth({...auth, middle_name: e.target.value})}/>
               </div>
             </>
           )}
