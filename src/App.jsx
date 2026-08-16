@@ -395,15 +395,11 @@ export default function App() {
                  {/* ⚡ REPLACE YOUR OLD 7th CELL WITH THIS DYNAMIC VERSION */}
   <td style={cellStyle}>
     {isEd ? (
-    <select 
-  className="table-edit-select" 
-  value={it.irregularity_type || ''} 
-  onChange={e => setEdF({...edF, irregularity_type: e.target.value})}
->
-  <option value="Delayed">Delayed</option>
-  <option value="Damaged">Damaged</option>
-  <option value="Onhand">Onhand</option>
-</select>
+      <select style={{ width: '100%', padding: '4px' }} value={it.irregularity_type || ''} onChange={e => setEdF({ ...edF, irregularity_type: e.target.value })}>
+        <option value="Delayed">Delayed</option>
+        <option value="Damaged">Damaged</option>
+        <option value="Onhand">Onhand</option>
+      </select>
     ) : (
       <span style={getTypeBadgeStyle(b.irregularity_type)}>{b.irregularity_type}</span>
     )}

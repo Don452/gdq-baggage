@@ -375,43 +375,5 @@ tr:hover td { background: #f8fafc; }
 }
 
 
-/* ==========================================================================
-   📊 MOBILE-RESPONSIVE INLINE TABLE SELECTOR
-   ========================================================================== */
-
-.table-edit-select {
-  width: 100% !important;
-  height: 34px !important;
-  padding: 4px 8px !important;
-  font-size: 13px !important;
-  background-color: #ffffff !important;
-  color: #1e293b !important;
-  border: 1px solid var(--primary) !important; /* Default State: Branded Green */
-  border-radius: 4px !important;
-  outline: none !important;
-  cursor: pointer !important;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  box-sizing: border-box !important;
-}
-
-/* Hover State */
-.table-edit-select:hover {
-  border-color: #FFC92D !important; /* Theme Yellow */
-}
-
-/* Focused / Active Touch Dropdown Selection State */
-.table-edit-select:focus {
-  border-color: #FFC92D !important;
-  box-shadow: 0 0 0 3px rgba(255, 201, 45, 0.15) !important;
-}
-
-/* 📱 Mobile Specific Viewport Enhancements */
-@media (max-width: 768px) {
-  .table-edit-select {
-    height: 42px !important; /* Enlarged touch-target for mobile thumbs */
-    font-size: 16px !important; /* ⚠️ Prevents mobile browsers from running auto-zoom freezes */
-    padding: 8px 10px !important;
-  }
-}
 
 
