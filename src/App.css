@@ -233,24 +233,74 @@ tr:hover td { background: #f8fafc; }
   box-shadow: 0 0 0 3px rgba(255, 201, 45, 0.15) !important; /* Optional soft yellow glow */
 }
 
-.container input {
-  border: 1px solid var(--primary) !important;
-  background-color: #ffffff !important;
-  color: #1e293b !important;
-  border-radius: 4px;
-  padding: 8px;
-  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+/* ==========================================================================
+   📅 COLOR-MATCHED DATE RANGE FILTER CONTAINER STYLES
+   ========================================================================== */
+
+/* 1. Main Date Wrapper Panel Box */
+.date-filter-panel {
+  display: flex !important;
+  gap: 8px !important;
+  align-items: center !important;
+  background: #ffffff !important; /* Changed from #f1f5f9 to crisp white */
+  padding: 6px 12px !important;
+  border-radius: 6px !important;
+  font-size: 13px !important;
+  border: 1px solid var(--primary) !important; /* Default state: Branded Primary Green */
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-/* 2. Hover state: Changes cleanly to your custom yellow */
-.container input:hover {
+/* 2. Hover State: Swaps border to your theme Yellow */
+.date-filter-panel:hover {
   border-color: #FFC92D !important;
 }
 
-/* 3. Focus state (When clicked): REMOVES default browser blue and locks onto your custom yellow */
-.container input:focus {
-  outline: none !important;            /* ⚡ REMOVES THE DEFAULT BROWSER BLUE BORDER */
-  border-color: #FFC92D !important;    /* Keeps it yellow when typing */
-  box-shadow: 0 0 0 3px rgba(255, 201, 45, 0.15) !important; /* Optional soft yellow glow */
+/* 3. Focus-Within State: Changes to yellow when an agent clicks a date field inside */
+.date-filter-panel:focus-within {
+  border-color: #FFC92D !important;
+  box-shadow: 0 0 0 3px rgba(255, 201, 45, 0.15) !important;
 }
+
+/* 4. Text labels spacing */
+.date-filter-panel span {
+  color: #475569 !important;
+  font-weight: 600 !important;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+}
+
+/* 5. Date Native Input Reset Configuration */
+.date-filter-input {
+  border: none !important;
+  background: transparent !important;
+  color: #1e293b !important;
+  font-family: inherit !important;
+  font-size: 13px !important;
+  outline: none !important; /* Strips browser blue outline */
+  cursor: pointer !important;
+  padding: 2px 4px !important;
+}
+
+/* 6. Dynamic Clear (✕) Action Button Wrapper */
+.date-clear-btn {
+  border: none !important;
+  background: #cbd5e1 !important;
+  color: #475569 !important;
+  border-radius: 50% !important;
+  cursor: pointer !important;
+  padding: 2px 6px !important;
+  font-size: 11px !important;
+  font-weight: bold !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: background 0.2s;
+}
+
+.date-clear-btn:hover {
+  background: #94a3b8 !important;
+  color: #ffffff !important;
+}
+
 

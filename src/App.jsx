@@ -319,13 +319,34 @@ export default function App() {
         <button onClick={() => { localStorage.removeItem('bagtrack_user'); setU(null); }} className="link-btn">Sign Out</button>
         </div>
      </nav>
-      <div className="container">
-        <div className="utility-bar" style={{ display: 'flex', gap: '10px', margin: '10px 0', flexWrap: 'wrap' }}>
-          <div style={{ display: 'flex', gap: '5px', alignItems: 'center', background: '#f1f5f9', padding: '4px 8px', borderRadius: '6px', fontSize: '13px' }}>
-            <span>From:</span><input type="date" value={sd} onChange={e => setSd(e.target.value)} style={{ border: 'none', background: 'transparent' }}/>
-            <span>To:</span><input type="date" value={ed} onChange={e => setEd(e.target.value)} style={{ border: 'none', background: 'transparent' }}/>
-            {(sd || ed) && <button onClick={() => { setSd(''); setEd(''); }} style={{ border: 'none', background: '#cbd5e1', borderRadius: '50%', cursor: 'pointer' }}>✕</button>}
-          </div>
+    {/* ⚡ UPDATED COMPACT CLEAN DESIGN DATE FILTER PANEL MARKUP */}
+      <div className="date-filter-panel">
+        <span>From:</span>
+        <input 
+          type="date" 
+          className="date-filter-input" 
+          value={sd} 
+          onChange={e => setSd(e.target.value)} 
+        />
+        
+        <span>To:</span>
+        <input 
+          type="date" 
+          className="date-filter-input" 
+          value={ed} 
+          onChange={e => setEd(e.target.value)} 
+        />
+        
+        {(sd || ed) && (
+          <button 
+            className="date-clear-btn" 
+            onClick={() => { setSd(''); setEd(''); }}
+          >
+            ✕
+          </button>
+        )}
+      </div>
+
           <button className="btn" onClick={() => setDash(!dash)} >{dash ? '📋 Display Records' : '📊 Analytics'}</button>
         </div>
         {dash ? <BaggageCharts recs={fil} getI={getI} /> : <>
