@@ -429,10 +429,9 @@ export default function App() {
                 <td><a href="https://desktop.worldtracer.aero/desktop/index.html#!/index/login" target="_blank" rel="noreferrer"><button className="btn btn-sm" style={{ background: '#0284c7', color: '#fff' }}>Trace</button></a></td>
                 
                 <td>{isEd ? <><button className="btn btn-sm" onClick={async () => { await sb.from('baggage_records').update({ ...edF, bag_tag_number: edF.bag_tag_number.toUpperCase().trim(), file_number: edF.file_number ? edF.file_number.toUpperCase().trim() : null }).eq('id', b.id); setEdId(null); }}>✓</button><button className="btn btn-sm" onClick={() => setEdId(null)}>X</button></> : 
-                             <>{/* ⚡ REPLACE YOUR EXISTING "DEL" BUTTON ROW WITH THIS SECURE VERSION */}
-                             <button 
-                                className="btn btn-sm" 
-                                style={{ background: '#C52528', color: '#fff', flex: 1 }} 
+                             <><button className="btn btn-sm" onClick={() => { setEdId(b.id); setEdF({...b}); }}>Edit</button>
+                             {/* ⚡ REPLACE YOUR EXISTING "DEL" BUTTON ROW WITH THIS SECURE VERSION */}
+                              <button className="btn btn-sm" 
                                 onClick={async () => {
                                   // 🕵️‍♂️ SECURITY AUTONOMY CHECK: Trims and compares full names to block unauthorized deletions
                                   const currentAgentName = `${u.first_name} ${u.middle_name || ''}`.trim().toLowerCase();
@@ -454,8 +453,8 @@ export default function App() {
                                 }}
                               >
                                 Del
-                              </button> </>}
-                  </td>
+                              </button>
+                              </>}</td>
 
                   <td>{isEd ? <><button className="btn btn-sm" onClick={async () => { await sb.from('baggage_records').update({ ...edF, bag_tag_number: edF.bag_tag_number.toUpperCase().trim(), file_number: edF.file_number ? edF.file_number.toUpperCase().trim() : null }).eq('id', b.id); setEdId(null); }}>✓</button><button className="btn btn-sm" onClick={() => setEdId(null)}>X</button></> : 
                 <><button className="btn btn-sm" onClick={() => hPrnt(b)}>Print</button></>}</td>
