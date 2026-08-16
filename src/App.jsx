@@ -278,6 +278,10 @@ export default function App() {
         
         <br/>
         <div style="margin-top:40px;border-top:1px solid #e2e8f0;padding-top:15px;text-align:center;">
+          <p style="font-size:12px;color:#1e293b;line-height:1.6;margin:0;font-weight:600;">
+            ይህ ሰነድ ስለመዘገቡት የሻንጣ መጥፋት/መዘግየት ጥያቄ ይፋዊ ማረጋገጫ ሆኖ የሚያገለግል ነው።<br/>
+            የአየር መንገዳችን የስራ ቡድን ሂደቱን እስኪያጠናቅቅ ድረስ ላደረጉልን ትብብር እናመሰግናለን። ለተፈጠረው መስተጓጎል ይቅርታ እንጠይቃለን።
+          </p>
           <p style="font-size:11px;color:#94a3b8;line-height:1.6;margin:0;white-space:normal;">
             This serves as an official confirmation of your registered baggage irregularity claim file.<br/>
             Thank you for your cooperation while our station team processes your records.
