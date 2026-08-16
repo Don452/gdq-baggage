@@ -234,55 +234,51 @@ tr:hover td { background: #f8fafc; }
 }
 
 /* ==========================================================================
-   📅 COLOR-MATCHED DATE RANGE FILTER CONTAINER STYLES
+   📅 CUSTOM DESIGN THEMED DATE RANGE PANEL
    ========================================================================== */
 
-/* 1. Main Date Wrapper Panel Box */
+/* Main Date Wrapper Box Panel */
 .date-filter-panel {
   display: flex !important;
-  gap: 8px !important;
+  gap: 5px !important;
   align-items: center !important;
-  background: #ffffff !important; /* Changed from #f1f5f9 to crisp white */
-  padding: 6px 12px !important;
+  background: #ffffff !important; /* Clean matching white container background */
+  padding: 4px 8px !important;
   border-radius: 6px !important;
   font-size: 13px !important;
-  border: 1px solid var(--primary) !important; /* Default state: Branded Primary Green */
+  border: 1px solid var(--primary) !important; /* Default State: Branded Green */
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-/* 2. Hover State: Swaps border to your theme Yellow */
+/* Hover State */
 .date-filter-panel:hover {
-  border-color: #FFC92D !important;
+  border-color: #FFC92D !important; /* Accent Yellow */
 }
 
-/* 3. Focus-Within State: Changes to yellow when an agent clicks a date field inside */
+/* Active Touch / Focused Typing State */
 .date-filter-panel:focus-within {
   border-color: #FFC92D !important;
   box-shadow: 0 0 0 3px rgba(255, 201, 45, 0.15) !important;
 }
 
-/* 4. Text labels spacing */
+/* Label text formatting inside the box */
 .date-filter-panel span {
   color: #475569 !important;
   font-weight: 600 !important;
-  text-transform: uppercase;
-  font-size: 11px;
-  letter-spacing: 0.5px;
 }
 
-/* 5. Date Native Input Reset Configuration */
+/* Native Date Entry Fields Reset Layout */
 .date-filter-input {
   border: none !important;
   background: transparent !important;
   color: #1e293b !important;
   font-family: inherit !important;
   font-size: 13px !important;
-  outline: none !important; /* Strips browser blue outline */
+  outline: none !important; /* Completely removes browser default blue selection borders */
   cursor: pointer !important;
-  padding: 2px 4px !important;
 }
 
-/* 6. Dynamic Clear (✕) Action Button Wrapper */
+/* Rounded Close Action Tag (✕) */
 .date-clear-btn {
   border: none !important;
   background: #cbd5e1 !important;
@@ -292,9 +288,6 @@ tr:hover td { background: #f8fafc; }
   padding: 2px 6px !important;
   font-size: 11px !important;
   font-weight: bold !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
   transition: background 0.2s;
 }
 
@@ -302,6 +295,7 @@ tr:hover td { background: #f8fafc; }
   background: #94a3b8 !important;
   color: #ffffff !important;
 }
+
 
 /* ==========================================================================
    📱 CROSS-PLATFORM MOBILE KEYBOARD ACCESSIBILITY OVERRIDES (iOS & ANDROID)
