@@ -52,51 +52,78 @@ export default function App() {
 
   useEffect(() => { if (!u) return; const f = async () => { let q = sb.from('baggage_records').select('*').order('created_at', { ascending: true }); const { data } = await (tab !== 'All' ? q.eq('irregularity_type', tab) : q); if (data) setRecs(data); }; f(); const ch = sb.channel('db').on('postgres_changes', { event: '*', schema: 'public', table: 'baggage_records' }, f).subscribe(); return () => sb.removeChannel(ch); }, [u, tab]);
     // ⚡ UPDATED AUTHENTICATION FUNCTION WITH UNIQUE USERNAME & UNIQUE FULL NAME CHECKS
-  const hAuth = (e) => {
+    // 🔐 CLOUD AUTHENTICATION ENGINE: Syncs logins instantly between mobile phones and PCs via Supabase
+  const hAuth = async (e) => {
     e.preventDefault();
-    const l = JSON.parse(localStorage.getItem('bagtrack_registered_agents')) || [];
     
-    // Normalize inputs to ensure spaces or capitalization differences don't bypass checks
+    // Clean up tracking values
     const currentUsername = auth.username?.toLowerCase().trim();
-    const currentFirst = auth.first_name?.toLowerCase().trim() || '';
-    const currentMiddle = auth.middle_name?.toLowerCase().trim() || '';
+    const currentFirst = auth.first_name?.trim() || '';
+    const currentMiddle = auth.middle_name?.trim() || '';
+    const currentPassword = auth.password;
+
+    if (!currentUsername || !currentPassword) {
+      return alert('⚠️ Please fill out all required security fields.');
+    }
 
     if (isS) {
-      // 🕵️‍♂️ RESTRICTION 1: Block duplicate Usernames / Agent IDs
-      const usernameExists = l.some(p => p.username?.toLowerCase() === currentUsername);
-      if (usernameExists) {
-        return alert(`🚫 Registration Failed: The username "${auth.username}" is already taken.`);
+      // 🕵️‍♂️ CLOUD CHECK 1: Query Supabase to see if this agent ID is already claimed
+      const { data: userCheck } = await sb
+        .from('agents')
+        .select('username')
+        .eq('username', currentUsername)
+        .maybeSingle();
+
+      if (userCheck) {
+        return alert(`🚫 Registration Failed: The username "${auth.username}" is already claimed by another station agent.`);
       }
 
-      // 🕵️‍♂️ RESTRICTION 2: Block duplicate Full Names (First Name + Middle/Last Name)
-      const nameExists = l.some(p => {
-        const existingFirst = p.first_name?.toLowerCase().trim() || '';
-        const existingMiddle = p.middle_name?.toLowerCase().trim() || '';
-        return existingFirst === currentFirst && existingMiddle === currentMiddle;
-      });
+      // 🕵️‍♂️ CLOUD CHECK 2: Query Supabase to stop duplicate real names from creating extra accounts
+      const { data: nameCheck } = await sb
+        .from('agents')
+        .select('first_name, middle_name')
+        .eq('first_name', currentFirst)
+        .eq('middle_name', currentMiddle);
 
-      if (nameExists) {
-        return alert(`🚫 Registration Failed: An agent account with the name "${auth.first_name} ${auth.middle_name || ''}" already exists. Each agent profile must be completely unique.`);
+      if (nameCheck && nameCheck.length > 0) {
+        return alert(`🚫 Registration Failed: An agent profile named "${auth.first_name} ${auth.middle_name || ''}" is already registered on the central network.`);
       }
 
-      // If all identity constraints clear safely, push and save the new profile parameters
-      l.push({ 
-        ...auth, 
-        username: currentUsername,
-        first_name: auth.first_name.trim(),
-        middle_name: auth.middle_name?.trim() || ''
-      });
-      localStorage.setItem('bagtrack_registered_agents', JSON.stringify(l));
-      alert('✅ Station account created successfully! Proceeding to portal login.');
+      // Push safe identity profile data straight to your global cloud database table
+      const { error: regError } = await sb
+        .from('agents')
+        .insert([{ 
+          username: currentUsername, 
+          password: currentPassword, 
+          first_name: currentFirst, 
+          middle_name: currentMiddle 
+        }]);
+
+      if (regError) {
+        return alert('❌ Cloud Sync Failure: Unable to save station account to network servers.');
+      }
+
+      alert('✅ Station account created successfully on the cloud registry! Proceeding to portal login.');
       setIsS(false);
     } else {
-      // Secure Portal Login Verification Sequence
-      const m = l.find(p => p.username?.toLowerCase() === currentUsername && p.password === auth.password);
-      if (!m) return alert('❌ Portal Access Denied: Invalid agent credentials or incorrect password.');
-      localStorage.setItem('bagtrack_user', JSON.stringify(m));
-      setU(m);
+      // Secure Cloud Portal Cross-Device Login Verification Sequence
+      const { data: matchingAgent, error: loginError } = await sb
+        .from('agents')
+        .select('*')
+        .eq('username', currentUsername)
+        .eq('password', currentPassword)
+        .maybeSingle();
+
+      if (loginError || !matchingAgent) {
+        return alert('❌ Portal Access Denied: Invalid agent credentials or incorrect password.');
+      }
+
+      // Persist session to local memory so you don't have to re-login on refresh
+      localStorage.setItem('bagtrack_user', JSON.stringify(matchingAgent));
+      setU(matchingAgent);
     }
   };
+
 
   const hRec = async (e) => { e.preventDefault(); const t = form.irregularity_type || 'Delayed', req = t !== 'Delayed'; if (!form.bag_tag_number || !form.passenger_last_name || !form.passenger_first_name || (req && !form.file_number?.trim())) return alert('Missing fields.'); const { error } = await sb.from('baggage_records').insert([{ ...form, agent_name: `${u.first_name} ${u.middle_name || ''}`.trim(), bag_tag_number: form.bag_tag_number.toUpperCase().trim(), file_number: form.file_number?.trim() ? form.file_number.toUpperCase().trim() : null, bag_status: 'Open' }]); if (error) alert('Error'); else setForm({ irregularity_type: t }); };
     // INSERT THIS PRINT ENGINE BLOCK DIRECTLY BELOW YOUR hRec FUNCTION
