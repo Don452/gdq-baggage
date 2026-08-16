@@ -18,16 +18,17 @@ export default function App() {
   [sd, setSd] = useState(''), 
   [ed, setEd] = useState('');
     // ⏱️ 10-SECOND AUTOMATIC INACTIVITY LOGOUT ENGINE FOR TESTING
+  // ⏱️ 5-MINUTE AUTOMATIC INACTIVITY LOGOUT ENGINE (PRODUCTION BASELINE)
   useEffect(() => {
     if (!u) return; // Only track activity if an agent is securely signed in
 
     let timeoutId;
-    const INACTIVITY_TIME = 10 * 1000; // ⚡ SET TO EXACTLY 10 SECONDS
+    const INACTIVITY_TIME = 5 * 60 * 1000; // ⚡ SAFELY RESTORED TO EXACTLY 5 MINUTES
 
     const handleLogout = () => {
       localStorage.removeItem('bagtrack_user');
       setU(null);
-      alert('🔒 Session Expired: You have been logged out automatically due to 10 seconds of inactivity.');
+      alert('🔒 Session Expired: You have been logged out automatically due to 5 minutes of inactivity.');
     };
 
     const resetTimer = () => {
@@ -48,6 +49,7 @@ export default function App() {
       events.forEach(event => window.removeEventListener(event, resetTimer));
     };
   }, [u]);
+
 
   useEffect(() => { if (!u) return; const f = async () => { let q = sb.from('baggage_records').select('*').order('created_at', { ascending: true }); const { data } = await (tab !== 'All' ? q.eq('irregularity_type', tab) : q); if (data) setRecs(data); }; f(); const ch = sb.channel('db').on('postgres_changes', { event: '*', schema: 'public', table: 'baggage_records' }, f).subscribe(); return () => sb.removeChannel(ch); }, [u, tab]);
     // ⚡ UPDATED AUTHENTICATION FUNCTION WITH UNIQUE USERNAME & UNIQUE FULL NAME CHECKS
