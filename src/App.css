@@ -210,6 +210,6 @@ tr:hover td { background: #f8fafc; }
 }
 
 .card input{
-  border: var(--primary);
+  border-color: var(--primary);
 }
 
