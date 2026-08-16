@@ -209,11 +209,26 @@ tr:hover td { background: #f8fafc; }
   margin-top: 20px;
 }
 
-.card input{
-  border-color: var(--primary);
-  
-}
-.card input:hover{
-  border-color:#FFC92D ;
+/* 🎨 STICKING STRICTLY TO YOUR CUSTOM PALETTE FOR CARD INPUTS */
+
+/* 1. Default state: Clean border matching your primary green variable */
+.card input {
+  border: 1px solid var(--primary) !important;
+  background-color: #ffffff !important;
+  color: #1e293b !important;
+  border-radius: 4px;
+  padding: 8px;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
+/* 2. Hover state: Changes cleanly to your custom yellow */
+.card input:hover {
+  border-color: #FFC92D !important;
+}
+
+/* 3. Focus state (When clicked): REMOVES default browser blue and locks onto your custom yellow */
+.card input:focus {
+  outline: none !important;            /* ⚡ REMOVES THE DEFAULT BROWSER BLUE BORDER */
+  border-color: #FFC92D !important;    /* Keeps it yellow when typing */
+  box-shadow: 0 0 0 3px rgba(255, 201, 45, 0.15) !important; /* Optional soft yellow glow */
+}
