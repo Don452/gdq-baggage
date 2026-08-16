@@ -429,7 +429,33 @@ export default function App() {
                 <td><a href="https://desktop.worldtracer.aero/desktop/index.html#!/index/login" target="_blank" rel="noreferrer"><button className="btn btn-sm" style={{ background: '#0284c7', color: '#fff' }}>Trace</button></a></td>
                 
                 <td>{isEd ? <><button className="btn btn-sm" onClick={async () => { await sb.from('baggage_records').update({ ...edF, bag_tag_number: edF.bag_tag_number.toUpperCase().trim(), file_number: edF.file_number ? edF.file_number.toUpperCase().trim() : null }).eq('id', b.id); setEdId(null); }}>✓</button><button className="btn btn-sm" onClick={() => setEdId(null)}>X</button></> : 
-                             <><button className="btn btn-sm" onClick={() => { setEdId(b.id); setEdF({...b}); }}>Edit</button><button className="btn btn-sm" onClick={async () => { if(window.confirm('Del?')) await sb.from('baggage_records').delete().eq('id', b.id); }}>Del</button></>}</td>
+                             <>{/* ⚡ REPLACE YOUR EXISTING "DEL" BUTTON ROW WITH THIS SECURE VERSION */}
+                             <button 
+                                className="btn btn-sm" 
+                                style={{ background: '#C52528', color: '#fff', flex: 1 }} 
+                                onClick={async () => {
+                                  // 🕵️‍♂️ SECURITY AUTONOMY CHECK: Trims and compares full names to block unauthorized deletions
+                                  const currentAgentName = `${u.first_name} ${u.middle_name || ''}`.trim().toLowerCase();
+                                  const recordCreatorName = (b.agent_name || '').trim().toLowerCase();
+
+                                  if (currentAgentName !== recordCreatorName) {
+                                    return alert(`🚫 Action Blocked: You can only delete baggage records that you personally registered. This file belongs to Agent: ${b.agent_name || 'System Master'}.`);
+                                  }
+
+                                  // If the identity matches, prompt for final physical confirmation
+                                  if (window.confirm(`⚠️ Are you sure you want to permanently delete Tag File ${b.bag_tag_number}?`)) {
+                                    const { error } = await sb.from('baggage_records').delete().eq('id', b.id);
+                                    if (error) {
+                                      alert('❌ Database Error: Unable to remove record from cloud registry.');
+                                    } else {
+                                      alert('✅ Record deleted successfully!');
+                                    }
+                                  }
+                                }}
+                              >
+                                Del
+                              </button> </>}
+                  </td>
 
                   <td>{isEd ? <><button className="btn btn-sm" onClick={async () => { await sb.from('baggage_records').update({ ...edF, bag_tag_number: edF.bag_tag_number.toUpperCase().trim(), file_number: edF.file_number ? edF.file_number.toUpperCase().trim() : null }).eq('id', b.id); setEdId(null); }}>✓</button><button className="btn btn-sm" onClick={() => setEdId(null)}>X</button></> : 
                 <><button className="btn btn-sm" onClick={() => hPrnt(b)}>Print</button></>}</td>
