@@ -51,7 +51,7 @@ export default function App() {
 
 
   useEffect(() => { if (!u) return; const f = async () => { let q = sb.from('baggage_records').select('*').order('created_at', { ascending: true }); const { data } = await (tab !== 'All' ? q.eq('irregularity_type', tab) : q); if (data) setRecs(data); }; f(); const ch = sb.channel('db').on('postgres_changes', { event: '*', schema: 'public', table: 'baggage_records' }, f).subscribe(); return () => sb.removeChannel(ch); }, [u, tab]);
-    // 🔐 CLOUD AUTHENTICATION ENGINE WITH SECURE PRE-AUTHORIZATION KEY
+    // 🔐 HARDENED CLOUD AUTHENTICATION ENGINE: Requires master passcode for both Login and Registration
   const hAuth = async (e) => {
     e.preventDefault();
     
@@ -59,19 +59,19 @@ export default function App() {
     const currentFirst = auth.first_name?.trim() || '';
     const currentMiddle = auth.middle_name?.trim() || '';
     const currentPassword = auth.password;
+    const currentStationKey = auth.station_key;
 
-    if (!currentUsername || !currentPassword) {
-      return alert('⚠️ Please fill out all required security fields.');
+    if (!currentUsername || !currentPassword || !currentStationKey) {
+      return alert('⚠️ Please fill out all required security fields, including the Station Passcode.');
+    }
+
+    // 🕵️‍♂️ GLOBAL SECURITY GATEWAY: Matches against your master corporate passcode first
+    const MASTER_STATION_KEY = "ETGDQ"; 
+    if (currentStationKey !== MASTER_STATION_KEY) {
+      return alert("🚫 Access Denied: Invalid Station Administration Passcode. Operations unauthorized.");
     }
 
     if (isS) {
-      
-      // 🕵️‍♂️ SECURITY PRE-AUTHORIZATION CONSTRAINT: Matches against your master corporate passcode
-      const MASTER_STATION_KEY = "ETGDQ"; 
-      if (auth.station_key !== MASTER_STATION_KEY) {
-        return alert("🚫 Access Denied: Invalid Station Administration Passcode. You are not authorized to register terminal accounts.");
-      }
-
       // Query Supabase to see if this agent ID is already claimed
       const { data: userCheck } = await sb
         .from('agents')
@@ -127,6 +127,7 @@ export default function App() {
       setU(matchingAgent);
     }
   };
+
 
 
 
@@ -305,7 +306,7 @@ export default function App() {
           <p>{isS ? 'Create an authorized account' : 'Enter security credentials to open dashboard'}</p>
         </div>
 
-                <form onSubmit={hAuth}>
+                  <form onSubmit={hAuth}>
           {isS && (
             <>
               <div className="auth-form-group">
@@ -316,25 +317,30 @@ export default function App() {
                 <label>Middle Name (Optional)</label>
                 <input className="auth-input" placeholder="e.g. Abebe" onChange={e => setAuth({...auth, middle_name: e.target.value})}/>
               </div>
-              {/* ⚡ NEW PRE-AUTHORIZATION PASSCODE GATEWAY FIELD */}
-              <div className="auth-form-group">
-                <label style={{ color: '#C52528' }}>Station Administration Passcode</label>
-                <input required className="auth-input" type="password" placeholder="Enter corporate security key" onChange={e => setAuth({...auth, station_key: e.target.value})}/>
-              </div>
             </>
           )}
+          
+          {/* ⚡ PERMANENT PASSCODE GATEWAY FIELD FOR BOTH LOGIN & REGISTRATION */}
+          <div className="auth-form-group">
+            <label style={{ color: '#C52528' }}>Station Administration Passcode</label>
+            <input required className="auth-input" type="password" placeholder="Enter corporate security key" onChange={e => setAuth({...auth, station_key: e.target.value})}/>
+          </div>
+
           <div className="auth-form-group">
             <label>Username / Agent ID</label>
             <input required className="auth-input" type="text" placeholder="Enter username" onChange={e => setAuth({...auth, username: e.target.value})}/>
           </div>
+          
           <div className="auth-form-group">
             <label>Security Password</label>
             <input required className="auth-input" type="password" placeholder="••••••••" onChange={e => setAuth({...auth, password: e.target.value})}/>
           </div>
+          
           <button type="submit" className="auth-submit-btn">
             {isS ? 'Register Station Account ✓' : 'Secure Sign In 🔑'}
           </button>
         </form>
+
 
 
         <button className="auth-toggle-link" style={{ color: '#C52528' }} onClick={() => setIsS(!isS)}>
