@@ -51,7 +51,6 @@ export default function App() {
 
 
   useEffect(() => { if (!u) return; const f = async () => { let q = sb.from('baggage_records').select('*').order('created_at', { ascending: true }); const { data } = await (tab !== 'All' ? q.eq('irregularity_type', tab) : q); if (data) setRecs(data); }; f(); const ch = sb.channel('db').on('postgres_changes', { event: '*', schema: 'public', table: 'baggage_records' }, f).subscribe(); return () => sb.removeChannel(ch); }, [u, tab]);
-    // ⚡ UPDATED AUTHENTICATION FUNCTION WITH UNIQUE USERNAME & UNIQUE FULL NAME CHECKS
     // 🔐 CLOUD AUTHENTICATION ENGINE: Syncs logins instantly between mobile phones and PCs via Supabase
   const hAuth = async (e) => {
     e.preventDefault();
@@ -396,11 +395,15 @@ export default function App() {
                  {/* ⚡ REPLACE YOUR OLD 7th CELL WITH THIS DYNAMIC VERSION */}
   <td style={cellStyle}>
     {isEd ? (
-      <select style={{ width: '100%', padding: '4px' }} value={it.irregularity_type || ''} onChange={e => setEdF({ ...edF, irregularity_type: e.target.value })}>
-        <option value="Delayed">Delayed</option>
-        <option value="Damaged">Damaged</option>
-        <option value="Onhand">Onhand</option>
-      </select>
+    <select 
+  className="table-edit-select" 
+  value={it.irregularity_type || ''} 
+  onChange={e => setEdF({...edF, irregularity_type: e.target.value})}
+>
+  <option value="Delayed">Delayed</option>
+  <option value="Damaged">Damaged</option>
+  <option value="Onhand">Onhand</option>
+</select>
     ) : (
       <span style={getTypeBadgeStyle(b.irregularity_type)}>{b.irregularity_type}</span>
     )}
