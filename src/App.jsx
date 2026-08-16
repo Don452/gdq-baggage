@@ -6,17 +6,17 @@ import logo from './assets/logo.webp';
 
 const sb = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_ANON_KEY), flds = ['bag_tag_number', 'passenger_last_name', 'passenger_first_name', 'file_number', 'ticket_number', 'phone_number'];
 export default function App() {
-  const [u, setU] = useState(() => JSON.parse(localStorage.getItem('bagtrack_user'))), 
-  [tab, setTab] = useState('All'), 
-  [recs, setRecs] = useState([]), 
-  [srch, setSrch] = useState(''), 
-  [isS, setIsS] = useState(false),
-  [auth, setAuth] = useState({}),
-  [form, setForm] = useState({ irregularity_type: 'Delayed' }),
-  [edId, setEdId] = useState(null), [edF, setEdF] = useState({}),
-  [dash, setDash] = useState(false),
-  [sd, setSd] = useState(''), 
-  [ed, setEd] = useState('');
+  const [u, setU] = useState(() => JSON.parse(localStorage.getItem('bagtrack_user'))),
+    [tab, setTab] = useState('All'),
+    [recs, setRecs] = useState([]),
+    [srch, setSrch] = useState(''),
+    [isS, setIsS] = useState(false),
+    [auth, setAuth] = useState({}),
+    [form, setForm] = useState({ irregularity_type: 'Delayed' }),
+    [edId, setEdId] = useState(null), [edF, setEdF] = useState({}),
+    [dash, setDash] = useState(false),
+    [sd, setSd] = useState(''),
+    [ed, setEd] = useState('');
   // ⏱️ 5-MINUTE AUTOMATIC INACTIVITY LOGOUT ENGINE (PRODUCTION BASELINE)
   useEffect(() => {
     if (!u) return; // Only track activity if an agent is securely signed in
@@ -51,10 +51,10 @@ export default function App() {
 
 
   useEffect(() => { if (!u) return; const f = async () => { let q = sb.from('baggage_records').select('*').order('created_at', { ascending: true }); const { data } = await (tab !== 'All' ? q.eq('irregularity_type', tab) : q); if (data) setRecs(data); }; f(); const ch = sb.channel('db').on('postgres_changes', { event: '*', schema: 'public', table: 'baggage_records' }, f).subscribe(); return () => sb.removeChannel(ch); }, [u, tab]);
-    // 🔐 HARDENED CLOUD AUTHENTICATION ENGINE: Requires master passcode for both Login and Registration
+  //HARDENED CLOUD AUTHENTICATION ENGINE: Requires master passcode for both Login and Registration
   const hAuth = async (e) => {
     e.preventDefault();
-    
+
     const currentUsername = auth.username?.toLowerCase().trim();
     const currentFirst = auth.first_name?.trim() || '';
     const currentMiddle = auth.middle_name?.trim() || '';
@@ -66,7 +66,7 @@ export default function App() {
     }
 
     // 🕵️‍♂️ GLOBAL SECURITY GATEWAY: Matches against your master corporate passcode first
-    const MASTER_STATION_KEY = "ETGDQ"; 
+    const MASTER_STATION_KEY = "ETGDQ";
     if (currentStationKey !== MASTER_STATION_KEY) {
       return alert("🚫 Access Denied: Invalid Station Administration Passcode. Operations unauthorized.");
     }
@@ -97,11 +97,11 @@ export default function App() {
       // Push safe identity profile data straight to your global cloud database table
       const { error: regError } = await sb
         .from('agents')
-        .insert([{ 
-          username: currentUsername, 
-          password: currentPassword, 
-          first_name: currentFirst, 
-          middle_name: currentMiddle 
+        .insert([{
+          username: currentUsername,
+          password: currentPassword,
+          first_name: currentFirst,
+          middle_name: currentMiddle
         }]);
 
       if (regError) {
@@ -131,12 +131,45 @@ export default function App() {
 
 
 
-  const hRec = async (e) => { e.preventDefault(); const t = form.irregularity_type || 'Delayed', req = t !== 'Delayed'; if (!form.bag_tag_number || !form.passenger_last_name || !form.passenger_first_name || (req && !form.file_number?.trim())) return alert('Missing fields.'); const { error } = await sb.from('baggage_records').insert([{ ...form, agent_name: `${u.first_name} ${u.middle_name || ''}`.trim(), bag_tag_number: form.bag_tag_number.toUpperCase().trim(), file_number: form.file_number?.trim() ? form.file_number.toUpperCase().trim() : null, bag_status: 'Open' }]); if (error) alert('Error'); else setForm({ irregularity_type: t }); };
-    // INSERT THIS PRINT ENGINE BLOCK DIRECTLY BELOW YOUR hRec FUNCTION
-      // --- FIND THIS ROW IN YOUR FILE ---
-  const cellStyle = { padding:'12px 8px', textAlign:'center', verticalAlign:'middle', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' };
+      // 💼 SEAMLESS RECORD REGISTRATION ENGINE WITH ACTUAL REAL-TIME ERROR EXTRACTION
+  const hRec = async (e) => {
+    e.preventDefault(); 
+    const t = form.irregularity_type || 'Delayed', req = t !== 'Delayed'; 
+    if (!form.bag_tag_number || !form.passenger_last_name || !form.passenger_first_name || (req && !form.file_number?.trim())) {
+      return alert('⚠️ Operational Halt: Cannot submit data profile. Missing required fields.'); 
+    }
+    
+    const { error } = await sb.from('baggage_records').insert([{ 
+      ...form, 
+      agent_name: `${u.first_name} ${u.middle_name || ''}`.trim(), 
+      bag_tag_number: form.bag_tag_number.toUpperCase().trim(), 
+      file_number: form.file_number?.trim() ? form.file_number.toUpperCase().trim() : null, 
+      bag_status: 'Open' 
+    }]); 
+    
+    // ⚡ EXTRACTS AND VISUALIZES THE ACTUAL ENGINE EXCEPTION TEXT
+    if (error) {
+      console.error("Supabase Database Registration Failure:", error);
+      
+      // Compiles an actionable error readout for the terminal handler
+      const errorHeading = `🚫 Central Database Registration Error`;
+      const errorCode = `System Code: ${error.code || 'UNKNOWN_DB_FAULT'}`;
+      const errorMessage = `Actual Cause: ${error.message || 'The cloud server rejected the data structure.'}`;
+      const errorDetails = error.details ? `Technical Details: ${error.details}` : '';
+      const errorHint = error.hint ? `Suggested Fix: ${error.hint}` : '';
+      
+      // Triggers the comprehensive descriptive layout window alert
+      return alert([errorHeading, errorCode, errorMessage, errorDetails, errorHint].filter(Boolean).join('\n\n'));
+    } else { 
+      // Clean clear reset on absolute success loops
+      setForm({ irregularity_type: t }); 
+      alert('✅ Baggage file logged securely to cloud registry database!');
+    } 
+  };
 
-  // ⚡ INSERT THIS TYPING PALETTE MAPPER DIRECTLY BELOW IT
+
+  const cellStyle = { padding: '12px 8px', textAlign: 'center', verticalAlign: 'middle', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' };
+
   const getTypeBadgeStyle = (type) => {
     if (type === 'Onhand') return { background: '#0c6a23', color: '#ffffff', padding: '3px 8px', borderRadius: '4px', fontWeight: 'bold' };   // Blue
     if (type === 'Delayed') return { background: '#FFC92D', color: '#1e293b', padding: '3px 8px', borderRadius: '4px', fontWeight: 'bold' };  // Yellow
@@ -293,10 +326,6 @@ export default function App() {
     w.document.close();
   };
 
-  
-
-
-    // ⚡ FIND AND REPLACE YOUR OLD AUTH RETURNING BLOCK WITH This:
   if (!u) return (
     <div className="auth-wrapper">
       <div className="auth-card">
@@ -310,36 +339,36 @@ export default function App() {
           <p>{isS ? 'Create an authorized account' : 'Enter security credentials to open dashboard'}</p>
         </div>
 
-                  <form onSubmit={hAuth}>
+        <form onSubmit={hAuth}>
           {isS && (
             <>
               <div className="auth-form-group">
                 <label>First Name</label>
-                <input required className="auth-input" placeholder="First Name" onChange={e => setAuth({...auth, first_name: e.target.value})}/>
+                <input required className="auth-input" placeholder="First Name" onChange={e => setAuth({ ...auth, first_name: e.target.value })} />
               </div>
               <div className="auth-form-group">
                 <label>Middle Name</label>
-                <input className="auth-input" placeholder="Middle Name" onChange={e => setAuth({...auth, middle_name: e.target.value})}/>
+                <input className="auth-input" placeholder="Middle Name" onChange={e => setAuth({ ...auth, middle_name: e.target.value })} />
               </div>
             </>
           )}
-          
+
           {/* ⚡ PERMANENT PASSCODE GATEWAY FIELD FOR BOTH LOGIN & REGISTRATION */}
           <div className="auth-form-group">
             <label style={{ color: '#C52528' }}>Station Administration Passcode</label>
-            <input required className="auth-input" type="password" placeholder="Enter corporate security key" onChange={e => setAuth({...auth, station_key: e.target.value})}/>
+            <input required className="auth-input" type="password" placeholder="Enter corporate security key" onChange={e => setAuth({ ...auth, station_key: e.target.value })} />
           </div>
 
           <div className="auth-form-group">
             <label>Username</label>
-            <input required className="auth-input" type="text" placeholder="Enter username" onChange={e => setAuth({...auth, username: e.target.value})}/>
+            <input required className="auth-input" type="text" placeholder="Enter username" onChange={e => setAuth({ ...auth, username: e.target.value })} />
           </div>
-          
+
           <div className="auth-form-group">
             <label>Security Password</label>
-            <input required className="auth-input" type="password" placeholder="••••••••" onChange={e => setAuth({...auth, password: e.target.value})}/>
+            <input required className="auth-input" type="password" placeholder="••••••••" onChange={e => setAuth({ ...auth, password: e.target.value })} />
           </div>
-          
+
           <button type="submit" className="auth-submit-btn">
             {isS ? 'Register Account' : 'Sign In'}
           </button>
@@ -358,112 +387,114 @@ export default function App() {
   return (
     <div>
       <nav className="navbar">
-        <h2><img src={logo} alt="Ethiopian" style={{ width: '200px', height: '70px' }}/></h2>
+        <h2><img src={logo} alt="Ethiopian" style={{ width: '200px', height: '70px' }} /></h2>
         <div className="nav-links">{['All', 'Delayed', 'Damaged', 'Onhand'].map(t => <button key={t} className={tab === t ? 'active' : ''} onClick={() => setTab(t)}>{t} ({recs.filter(r => t === 'All' || r.irregularity_type === t).length})</button>)}
-        <div className="avatar-badge" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '36px', height: '36px', borderRadius: '50%', fontWeight: 'bold', marginLeft: '10px' }}>{getI(`${u.first_name} ${u.middle_name||''}`)}</div>
-        <button onClick={() => { localStorage.removeItem('bagtrack_user'); setU(null); }} className="link-btn">Sign Out</button>
+          <div className="avatar-badge" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '36px', height: '36px', borderRadius: '50%', fontWeight: 'bold', marginLeft: '10px' }}>{getI(`${u.first_name} ${u.middle_name || ''}`)}</div>
+          <button onClick={() => { localStorage.removeItem('bagtrack_user'); setU(null); }} className="link-btn">Sign Out</button>
         </div>
-     </nav>
-            <div className="utility-bar" style={{ display: 'flex', gap: '10px', margin: '10px 0', flexWrap: 'wrap' }}>
-          {/* 📅 COLOR-MATCHED DATE RANGE PANEL */}
-          <div className="date-filter-panel">
-            <span>From:</span>
-            <input 
-              type="date" 
-              className="date-filter-input" 
-              value={sd} 
-              onChange={e => setSd(e.target.value)} 
-            />
-            
-            <span>To:</span>
-            <input 
-              type="date" 
-              className="date-filter-input" 
-              value={ed} 
-              onChange={e => setEd(e.target.value)} 
-            />
-            
-            {(sd || ed) && (
-              <button 
-                className="date-clear-btn" 
-                onClick={() => { setSd(''); setEd(''); }}
-              >
-                ✕
-              </button>
-            )}
-          </div>
+      </nav>
+      <div className="utility-bar" style={{ display: 'flex', gap: '10px', margin: '10px 0', flexWrap: 'wrap' }}>
+        {/* 📅 COLOR-MATCHED DATE RANGE PANEL */}
+        <div className="date-filter-panel">
+          <span>From:</span>
+          <input
+            type="date"
+            className="date-filter-input"
+            value={sd}
+            onChange={e => setSd(e.target.value)}
+          />
 
-          <button className="btn" onClick={() => setDash(!dash)} >{dash ? '📋 Display Records' : '📊 Analytics'}</button>
+          <span>To:</span>
+          <input
+            type="date"
+            className="date-filter-input"
+            value={ed}
+            onChange={e => setEd(e.target.value)}
+          />
+
+          {(sd || ed) && (
+            <button
+              className="date-clear-btn"
+              onClick={() => { setSd(''); setEd(''); }}
+            >
+              ✕
+            </button>
+          )}
         </div>
-        {dash ? <BaggageCharts recs={fil} getI={getI} /> : <>
-          <div className="card" style={{ margin: '15px 0' }}><form onSubmit={hRec} style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'flex-end' }}>
-            <select value={form.irregularity_type || 'Delayed'} onChange={e => setForm({...form, irregularity_type: e.target.value})} style={{ height: '38px' }}><option value="Delayed">Delayed</option><option value="Damaged">Damaged</option><option value="Onhand">Onhand</option></select>
-            {flds.map(f => <input key={f} placeholder={f === 'file_number' ? `File Num ${reqFn ? '' : '(Opt)'}` : f.replace(/_/g, ' ')} required={f === 'file_number' ? reqFn : ['bag_tag_number', 'passenger_last_name', 'passenger_first_name'].includes(f)} maxLength={f==='ticket_number'||f==='phone_number'?13:undefined} minLength={f==='ticket_number'?13:undefined} pattern={f==='phone_number'?"[0-9]*":undefined} value={form[f] || ''} onChange={e => setForm({...form, [f]: e.target.value})} style={{ flex: '1', minWidth: '120px', height: '38px' }}/>)}
-            <button className="btn" style={{ width: 'auto', height: '38px' }}>Register</button>
-          </form></div>
-          <div className="card table-wrapper"><table>
-            <thead><tr>{['Tag','Last Name','First Name','File Num','Ticket Num','Phone','Type','Agent','Status','Tracer','Actions'].map(h => <th key={h}>{h}</th>)}</tr></thead>
-            <tbody>{fil.map(b => { const isEd = edId === b.id, it = isEd ? edF : b; return (
+
+        <button className="btn" onClick={() => setDash(!dash)} >{dash ? '📋 Display Records' : '📊 Analytics'}</button>
+      </div>
+      {dash ? <BaggageCharts recs={fil} getI={getI} /> : <>
+        <div className="card" style={{ margin: '15px 0' }}><form onSubmit={hRec} style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'flex-end' }}>
+          <select value={form.irregularity_type || 'Delayed'} onChange={e => setForm({ ...form, irregularity_type: e.target.value })} style={{ height: '38px' }}><option value="Delayed">Delayed</option><option value="Damaged">Damaged</option><option value="Onhand">Onhand</option></select>
+          {flds.map(f => <input key={f} placeholder={f === 'file_number' ? `File Num ${reqFn ? '' : '(Opt)'}` : f.replace(/_/g, ' ')} required={f === 'file_number' ? reqFn : ['bag_tag_number', 'passenger_last_name', 'passenger_first_name'].includes(f)} maxLength={f === 'ticket_number' || f === 'phone_number' ? 13 : undefined} minLength={f === 'ticket_number' ? 13 : undefined} pattern={f === 'phone_number' ? "[0-9]*" : undefined} value={form[f] || ''} onChange={e => setForm({ ...form, [f]: e.target.value })} style={{ flex: '1', minWidth: '120px', height: '38px' }} />)}
+          <button className="btn" style={{ width: 'auto', height: '38px' }}>Register</button>
+        </form></div>
+        <div className="card table-wrapper"><table>
+          <thead><tr>{['Tag', 'Last Name', 'First Name', 'File Num', 'Ticket Num', 'Phone', 'Type', 'Agent', 'Status', 'Tracer', 'Actions'].map(h => <th key={h}>{h}</th>)}</tr></thead>
+          <tbody>{fil.map(b => {
+            const isEd = edId === b.id, it = isEd ? edF : b; return (
               <tr key={b.id}>
-                <td>{isEd ? <input value={it.bag_tag_number || ''} onChange={e => setEdF({...edF, bag_tag_number: e.target.value})}/> : <span className="tag-badge" title={b.bag_tag_number}>{b.bag_tag_number}</span>}</td>
-                <td>{isEd ? <input value={it.passenger_last_name || ''} onChange={e => setEdF({...edF, passenger_last_name: e.target.value})}/> : b.passenger_last_name}</td>
-                <td>{isEd ? <input value={it.passenger_first_name || ''} onChange={e => setEdF({...edF, passenger_first_name: e.target.value})}/> : b.passenger_first_name}</td>
-                <td>{isEd ? <input value={it.file_number || ''} onChange={e => setEdF({...edF, file_number: e.target.value})}/> : b.file_number || '—'}</td>
-                <td>{isEd ? <input maxLength={13} minLength={13} value={it.ticket_number || ''} onChange={e => setEdF({...edF, ticket_number: e.target.value})}/> : b.ticket_number || '—'}</td>
-                <td>{isEd ? <input maxLength={13} pattern="[0-9]*" value={it.phone_number || ''} onChange={e => setEdF({...edF, phone_number: e.target.value})}/> : b.phone_number || '—'}</td>
-                 {/* ⚡ REPLACE YOUR OLD 7th CELL WITH THIS DYNAMIC VERSION */}
-  <td style={cellStyle}>
-    {isEd ? (
-      <select style={{ width: '100%', padding: '4px' }} value={it.irregularity_type || ''} onChange={e => setEdF({ ...edF, irregularity_type: e.target.value })}>
-        <option value="Delayed">Delayed</option>
-        <option value="Damaged">Damaged</option>
-        <option value="Onhand">Onhand</option>
-      </select>
-    ) : (
-      <span style={getTypeBadgeStyle(b.irregularity_type)}>{b.irregularity_type}</span>
-    )}
-  </td>
+                <td>{isEd ? <input value={it.bag_tag_number || ''} onChange={e => setEdF({ ...edF, bag_tag_number: e.target.value })} /> : <span className="tag-badge" title={b.bag_tag_number}>{b.bag_tag_number}</span>}</td>
+                <td>{isEd ? <input value={it.passenger_last_name || ''} onChange={e => setEdF({ ...edF, passenger_last_name: e.target.value })} /> : b.passenger_last_name}</td>
+                <td>{isEd ? <input value={it.passenger_first_name || ''} onChange={e => setEdF({ ...edF, passenger_first_name: e.target.value })} /> : b.passenger_first_name}</td>
+                <td>{isEd ? <input value={it.file_number || ''} onChange={e => setEdF({ ...edF, file_number: e.target.value })} /> : b.file_number || '—'}</td>
+                <td>{isEd ? <input maxLength={13} minLength={13} value={it.ticket_number || ''} onChange={e => setEdF({ ...edF, ticket_number: e.target.value })} /> : b.ticket_number || '—'}</td>
+                <td>{isEd ? <input maxLength={13} pattern="[0-9]*" value={it.phone_number || ''} onChange={e => setEdF({ ...edF, phone_number: e.target.value })} /> : b.phone_number || '—'}</td>
+                {/* ⚡ REPLACE YOUR OLD 7th CELL WITH THIS DYNAMIC VERSION */}
+                <td style={cellStyle}>
+                  {isEd ? (
+                    <select style={{ width: '100%', padding: '4px' }} value={it.irregularity_type || ''} onChange={e => setEdF({ ...edF, irregularity_type: e.target.value })}>
+                      <option value="Delayed">Delayed</option>
+                      <option value="Damaged">Damaged</option>
+                      <option value="Onhand">Onhand</option>
+                    </select>
+                  ) : (
+                    <span style={getTypeBadgeStyle(b.irregularity_type)}>{b.irregularity_type}</span>
+                  )}
+                </td>
 
                 <td>👤 {getI(b.agent_name)}</td>
-                <td><select value={it.bag_status || 'Open'} onChange={e => isEd ? setEdF({...edF, bag_status: e.target.value}) : sb.from('baggage_records').update({ bag_status: e.target.value }).eq('id', b.id)}>{['Open', 'Arrived', 'Delivered', 'Suspended', 'File Closed'].map(s => <option key={s} value={s}>{s}</option>)}</select></td>
+                <td><select value={it.bag_status || 'Open'} onChange={e => isEd ? setEdF({ ...edF, bag_status: e.target.value }) : sb.from('baggage_records').update({ bag_status: e.target.value }).eq('id', b.id)}>{['Open', 'Arrived', 'Delivered', 'Suspended', 'File Closed'].map(s => <option key={s} value={s}>{s}</option>)}</select></td>
                 <td><a href="https://desktop.worldtracer.aero/desktop/index.html#!/index/login" target="_blank" rel="noreferrer"><button className="btn btn-sm" style={{ background: '#0284c7', color: '#fff' }}>Trace</button></a></td>
-                
-                <td>{isEd ? <><button className="btn btn-sm" onClick={async () => { await sb.from('baggage_records').update({ ...edF, bag_tag_number: edF.bag_tag_number.toUpperCase().trim(), file_number: edF.file_number ? edF.file_number.toUpperCase().trim() : null }).eq('id', b.id); setEdId(null); }}>✓</button><button className="btn btn-sm" onClick={() => setEdId(null)}>X</button></> : 
-                             <><button className="btn btn-sm" onClick={() => { setEdId(b.id); setEdF({...b}); }}>Edit</button>
-                             {/* ⚡ REPLACE YOUR EXISTING "DEL" BUTTON ROW WITH THIS SECURE VERSION */}
-                              <button className="btn btn-sm" 
-                                onClick={async () => {
-                                  // 🕵️‍♂️ SECURITY AUTONOMY CHECK: Trims and compares full names to block unauthorized deletions
-                                  const currentAgentName = `${u.first_name} ${u.middle_name || ''}`.trim().toLowerCase();
-                                  const recordCreatorName = (b.agent_name || '').trim().toLowerCase();
 
-                                  if (currentAgentName !== recordCreatorName) {
-                                    return alert(`🚫 Action Blocked: You can only delete baggage records that you personally registered. This file belongs to Agent: ${b.agent_name || 'System Master'}.`);
-                                  }
+                <td>{isEd ? <><button className="btn btn-sm" onClick={async () => { await sb.from('baggage_records').update({ ...edF, bag_tag_number: edF.bag_tag_number.toUpperCase().trim(), file_number: edF.file_number ? edF.file_number.toUpperCase().trim() : null }).eq('id', b.id); setEdId(null); }}>✓</button><button className="btn btn-sm" onClick={() => setEdId(null)}>X</button></> :
+                  <><button className="btn btn-sm" onClick={() => { setEdId(b.id); setEdF({ ...b }); }}>Edit</button>
+                    {/* ⚡ REPLACE YOUR EXISTING "DEL" BUTTON ROW WITH THIS SECURE VERSION */}
+                    <button className="btn btn-sm"
+                      onClick={async () => {
+                        // 🕵️‍♂️ SECURITY AUTONOMY CHECK: Trims and compares full names to block unauthorized deletions
+                        const currentAgentName = `${u.first_name} ${u.middle_name || ''}`.trim().toLowerCase();
+                        const recordCreatorName = (b.agent_name || '').trim().toLowerCase();
 
-                                  // If the identity matches, prompt for final physical confirmation
-                                  if (window.confirm(`⚠️ Are you sure you want to permanently delete Tag File ${b.bag_tag_number}?`)) {
-                                    const { error } = await sb.from('baggage_records').delete().eq('id', b.id);
-                                    if (error) {
-                                      alert('❌ Database Error: Unable to remove record from cloud registry.');
-                                    } else {
-                                      alert('✅ Record deleted successfully!');
-                                    }
-                                  }
-                                }}
-                              >
-                                Del
-                              </button>
-                              </>}</td>
+                        if (currentAgentName !== recordCreatorName) {
+                          return alert(`🚫 Action Blocked: You can only delete baggage records that you personally registered. This file belongs to Agent: ${b.agent_name || 'System Master'}.`);
+                        }
 
-                  <td>{isEd ? <><button className="btn btn-sm" onClick={async () => { await sb.from('baggage_records').update({ ...edF, bag_tag_number: edF.bag_tag_number.toUpperCase().trim(), file_number: edF.file_number ? edF.file_number.toUpperCase().trim() : null }).eq('id', b.id); setEdId(null); }}>✓</button><button className="btn btn-sm" onClick={() => setEdId(null)}>X</button></> : 
-                <><button className="btn btn-sm" onClick={() => hPrnt(b)}>Print</button></>}</td>
-           
-              </tr>); })}
-            </tbody>
-          </table></div>
-        </>}
-      </div>
-   
+                        // If the identity matches, prompt for final physical confirmation
+                        if (window.confirm(`⚠️ Are you sure you want to permanently delete Tag File ${b.bag_tag_number}?`)) {
+                          const { error } = await sb.from('baggage_records').delete().eq('id', b.id);
+                          if (error) {
+                            alert('❌ Database Error: Unable to remove record from cloud registry.');
+                          } else {
+                            alert('✅ Record deleted successfully!');
+                          }
+                        }
+                      }}
+                    >
+                      Del
+                    </button>
+                  </>}</td>
+
+                <td>{isEd ? <><button className="btn btn-sm" onClick={async () => { await sb.from('baggage_records').update({ ...edF, bag_tag_number: edF.bag_tag_number.toUpperCase().trim(), file_number: edF.file_number ? edF.file_number.toUpperCase().trim() : null }).eq('id', b.id); setEdId(null); }}>✓</button><button className="btn btn-sm" onClick={() => setEdId(null)}>X</button></> :
+                  <><button className="btn btn-sm" onClick={() => hPrnt(b)}>Print</button></>}</td>
+
+              </tr>);
+          })}
+          </tbody>
+        </table></div>
+      </>}
+    </div>
+
   );
 }
