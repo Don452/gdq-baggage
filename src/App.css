@@ -353,6 +353,86 @@ tr:hover td { background: #f8fafc; }
 }
 
 
+/* ==========================================================================
+   📱 MOBILE RESPONSIVE NAVIGATION & HEADER MANAGEMENT
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  /* 1. Transform Nav Row into a Clean Stacked Layout */
+  .navbar {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 15px 10px !important;
+    text-align: center !important;
+    height: auto !important;
+  }
+
+  /* 2. Scale down Nav Bar title to prevent clipping */
+  .navbar h2 {
+    font-size: 20px !important;
+    margin: 0 !important;
+  }
+
+  /* 3. Wrap Nav Links into an aligned touch grid */
+  .nav-links {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  /* 4. Optimize Tab Button sizes for finger taps */
+  .nav-links button {
+    padding: 6px 12px !important;
+    font-size: 12px !important;
+    flex: 1 1 auto !important; /* Forces buttons to evenly share horizontal row space */
+    min-width: 70px !important;
+    text-align: center !important;
+  }
+
+  /* 5. Keep Avatar Badge cleanly positioned next to Action Buttons */
+  .avatar-badge {
+    margin: 0 4px !important;
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 12px !important;
+  }
+
+  /* 6. Push Exit Button layout cleanly into row balance */
+  .link-btn {
+    margin-left: 8px !important;
+    font-size: 13px !important;
+    padding: 6px 10px !important;
+  }
+
+  /* 7. Re-align Main Section Utilities (Search bar & date picker columns) */
+  .utility-bar {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+    margin: 15px 0 !important;
+  }
+
+  /* 8. Force Search Bar and buttons to stretch full width */
+  .search-input, 
+  .date-filter-panel, 
+  .utility-bar .btn {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 9. Format Date inputs to share half-widths cleanly on mobile views */
+  .date-filter-panel {
+    justify-content: space-between !important;
+    padding: 8px 12px !important;
+  }
+}
+
+
 
 
 
