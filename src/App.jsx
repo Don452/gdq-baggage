@@ -6,7 +6,49 @@ import logo from './assets/logo.webp';
 
 const sb = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_ANON_KEY), flds = ['bag_tag_number', 'passenger_last_name', 'passenger_first_name', 'file_number', 'ticket_number', 'phone_number'];
 export default function App() {
-  const [u, setU] = useState(() => JSON.parse(localStorage.getItem('bagtrack_user'))), [tab, setTab] = useState('All'), [recs, setRecs] = useState([]), [srch, setSrch] = useState(''), [isS, setIsS] = useState(false), [auth, setAuth] = useState({}), [form, setForm] = useState({ irregularity_type: 'Delayed' }), [edId, setEdId] = useState(null), [edF, setEdF] = useState({}), [dash, setDash] = useState(false), [sd, setSd] = useState(''), [ed, setEd] = useState('');
+  const [u, setU] = useState(() => JSON.parse(localStorage.getItem('bagtrack_user'))), 
+  [tab, setTab] = useState('All'), 
+  [recs, setRecs] = useState([]), 
+  [srch, setSrch] = useState(''), 
+  [isS, setIsS] = useState(false),
+  [auth, setAuth] = useState({}),
+  [form, setForm] = useState({ irregularity_type: 'Delayed' }),
+  [edId, setEdId] = useState(null), [edF, setEdF] = useState({}),
+  [dash, setDash] = useState(false),
+  [sd, setSd] = useState(''), 
+  [ed, setEd] = useState('');
+    // ⏱️ 10-SECOND AUTOMATIC INACTIVITY LOGOUT ENGINE FOR TESTING
+  useEffect(() => {
+    if (!u) return; // Only track activity if an agent is securely signed in
+
+    let timeoutId;
+    const INACTIVITY_TIME = 10 * 1000; // ⚡ SET TO EXACTLY 10 SECONDS
+
+    const handleLogout = () => {
+      localStorage.removeItem('bagtrack_user');
+      setU(null);
+      alert('🔒 Session Expired: You have been logged out automatically due to 10 seconds of inactivity.');
+    };
+
+    const resetTimer = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(handleLogout, INACTIVITY_TIME);
+    };
+
+    // Global interaction listeners
+    const events = ['mousemove', 'mousedown', 'keypress', 'touchstart', 'scroll'];
+    events.forEach(event => window.addEventListener(event, resetTimer));
+
+    // Start countdown immediately
+    resetTimer();
+
+    // Cleanup listeners on unmount
+    return () => {
+      clearTimeout(timeoutId);
+      events.forEach(event => window.removeEventListener(event, resetTimer));
+    };
+  }, [u]);
+
   useEffect(() => { if (!u) return; const f = async () => { let q = sb.from('baggage_records').select('*').order('created_at', { ascending: true }); const { data } = await (tab !== 'All' ? q.eq('irregularity_type', tab) : q); if (data) setRecs(data); }; f(); const ch = sb.channel('db').on('postgres_changes', { event: '*', schema: 'public', table: 'baggage_records' }, f).subscribe(); return () => sb.removeChannel(ch); }, [u, tab]);
     // ⚡ UPDATED AUTHENTICATION FUNCTION WITH UNIQUE USERNAME & UNIQUE FULL NAME CHECKS
   const hAuth = (e) => {
@@ -213,7 +255,7 @@ export default function App() {
     w.document.close();
   };
 
-
+  
 
 
     // ⚡ FIND AND REPLACE YOUR OLD AUTH RETURNING BLOCK WITH This:
