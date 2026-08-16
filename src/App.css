@@ -303,4 +303,61 @@ tr:hover td { background: #f8fafc; }
   color: #ffffff !important;
 }
 
+/* ==========================================================================
+   📱 CROSS-PLATFORM MOBILE KEYBOARD ACCESSIBILITY OVERRIDES (iOS & ANDROID)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  /* 1. Prevents the screen container from collapsing or hiding when keyboard slides up */
+  .auth-wrapper {
+    min-height: -webkit-fill-available !important; /* Fixes Safari window scaling */
+    height: auto !important;
+    padding: 15px !important;
+    display: flex !important;
+    align-items: flex-start !important; /* Prevents card from sliding under screen center */
+    padding-top: 30px !important;
+  }
+
+  /* 2. Keeps the card structurally rigid and readable on tiny screens */
+  .auth-card {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 24px 20px !important;
+    margin: 0 auto !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 3. THE CRITICAL INPUT UNLOCKER FOR TOUCH KEYBOARDS */
+  .auth-input {
+    font-size: 16px !important; /* ⚠️ CRITICAL: Must be exactly 16px to block mobile auto-zoom window clipping */
+    height: 48px !important;   /* Safe target size for fingers */
+    padding: 12px 14px !important;
+    background: #ffffff !important;
+    color: #000000 !important;  /* Guarantees typed letters are highly visible */
+    border: 1px solid var(--primary) !important;
+    border-radius: 6px !important;
+    display: block !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    
+    /* Forces phone operating systems to unlock hardware focus & entry permissions */
+    -webkit-user-select: text !important;
+    user-select: text !important;
+    pointer-events: auto !important;
+    content-visibility: auto !important;
+  }
+
+  /* 4. Keeps the text labels legible right above the text boxes */
+  .auth-form-group label {
+    font-size: 11px !important;
+    margin-bottom: 4px !important;
+  }
+
+  /* 5. Clean, touchable size for buttons on mobile viewports */
+  .auth-submit-btn {
+    height: 48px !important;
+    font-size: 16px !important;
+  }
+}
+
 
