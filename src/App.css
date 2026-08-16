@@ -296,83 +296,62 @@ tr:hover td { background: #f8fafc; }
   color: #ffffff !important;
 }
 /* ==========================================================================
-   📱 MOBILE RESPONSIVE NAVIGATION & HEADER MANAGEMENT
+   📱 CROSS-PLATFORM MOBILE KEYBOARD ACCESSIBILITY OVERRIDES (iOS & ANDROID)
    ========================================================================== */
 
 @media (max-width: 768px) {
-  /* 1. Transform Nav Row into a Clean Stacked Layout */
-  .navbar {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    gap: 12px !important;
-    padding: 15px 10px !important;
-    text-align: center !important;
+  /* 1. Prevents the screen container from collapsing or hiding when keyboard slides up */
+  .auth-wrapper {
+    min-height: -webkit-fill-available !important; /* Fixes Safari window scaling */
     height: auto !important;
-  }
-
-  /* 2. Scale down Nav Bar title to prevent clipping */
-  .navbar h2 {
-    font-size: 20px !important;
-    margin: 0 !important;
-  }
-
-  /* 3. Wrap Nav Links into an aligned touch grid */
-  .nav-links {
+    padding: 15px !important;
     display: flex !important;
-    flex-wrap: wrap !important;
-    justify-content: center !important;
-    align-items: center !important;
-    gap: 8px !important;
+    align-items: flex-start !important; /* Prevents card from sliding under screen center */
+    padding-top: 30px !important;
+  }
+
+  /* 2. Keeps the card structurally rigid and readable on tiny screens */
+  .auth-card {
+    max-width: 100% !important;
     width: 100% !important;
-  }
-
-  /* 4. Optimize Tab Button sizes for finger taps */
-  .nav-links button {
-    padding: 6px 12px !important;
-    font-size: 12px !important;
-    flex: 1 1 auto !important; /* Forces buttons to evenly share horizontal row space */
-    min-width: 70px !important;
-    text-align: center !important;
-  }
-
-  /* 5. Keep Avatar Badge cleanly positioned next to Action Buttons */
-  .avatar-badge {
-    margin: 0 4px !important;
-    width: 32px !important;
-    height: 32px !important;
-    font-size: 12px !important;
-  }
-
-  /* 6. Push Exit Button layout cleanly into row balance */
-  .link-btn {
-    margin-left: 8px !important;
-    font-size: 13px !important;
-    padding: 6px 10px !important;
-  }
-
-  /* 7. Re-align Main Section Utilities (Search bar & date picker columns) */
-  .utility-bar {
-    flex-direction: column !important;
-    align-items: stretch !important;
-    gap: 10px !important;
-    margin: 15px 0 !important;
-  }
-
-  /* 8. Force Search Bar and buttons to stretch full width */
-  .search-input, 
-  .date-filter-panel, 
-  .utility-bar .btn {
-    width: 100% !important;
+    padding: 24px 20px !important;
+    margin: 0 auto !important;
     box-sizing: border-box !important;
   }
 
-  /* 9. Format Date inputs to share half-widths cleanly on mobile views */
-  .date-filter-panel {
-    justify-content: space-between !important;
-    padding: 8px 12px !important;
+  /* 3. THE CRITICAL INPUT UNLOCKER FOR TOUCH KEYBOARDS */
+  .auth-input {
+    font-size: 16px !important; /* ⚠️ CRITICAL: Must be exactly 16px to block mobile auto-zoom window clipping */
+    height: 48px !important;   /* Safe target size for fingers */
+    padding: 12px 14px !important;
+    background: #ffffff !important;
+    color: #000000 !important;  /* Guarantees typed letters are highly visible */
+    border: 1px solid var(--primary) !important;
+    border-radius: 6px !important;
+    display: block !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    
+    /* Forces phone operating systems to unlock hardware focus & entry permissions */
+    -webkit-user-select: text !important;
+    user-select: text !important;
+    pointer-events: auto !important;
+    content-visibility: auto !important;
+  }
+
+  /* 4. Keeps the text labels legible right above the text boxes */
+  .auth-form-group label {
+    font-size: 11px !important;
+    margin-bottom: 4px !important;
+  }
+
+  /* 5. Clean, touchable size for buttons on mobile viewports */
+  .auth-submit-btn {
+    height: 48px !important;
+    font-size: 16px !important;
   }
 }
+
 
 
 
