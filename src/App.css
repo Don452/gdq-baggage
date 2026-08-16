@@ -211,5 +211,9 @@ tr:hover td { background: #f8fafc; }
 
 .card input{
   border-color: var(--primary);
+  
+}
+.card input:hover{
+  border-color:#FFC92D ;
 }
 
