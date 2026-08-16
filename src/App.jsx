@@ -245,7 +245,7 @@ export default function App() {
         <div class="hd">
           <p style="font-size: 15px;">የኢትዮጵያ አየር መንገድ Ethiopian Airlines</p>
           <p style="font-size: 13px;">ጊዜያዊ የሻንጣ መጠየቂያ ሠነድ Temporary Property Irregularity Report</p>
-          <p style="font-size: 12px;">GDQ BAGGAGE SERVICE TEL: +251916156921</p>
+          <p style="font-size: 12px;">GDQ BAGGAGE SERVICE TEL: +251991343796</p>
           <p style="font-size: 12px;">EMAIL: GDQAPT@ethiopianairlines.com</p>
           <p style="margin-top: 6px; font-size: 11px; color: #64748b; font-weight: 500; white-space: nowrap;">Issued Date: ${new Date(b.created_at || Date.now()).toLocaleString()}</p>
         </div>
