@@ -209,5 +209,7 @@ tr:hover td { background: #f8fafc; }
   margin-top: 20px;
 }
 
-
+.card input{
+  border: var(--primary);
+}
 
