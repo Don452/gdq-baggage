@@ -51,11 +51,10 @@ export default function App() {
 
 
   useEffect(() => { if (!u) return; const f = async () => { let q = sb.from('baggage_records').select('*').order('created_at', { ascending: true }); const { data } = await (tab !== 'All' ? q.eq('irregularity_type', tab) : q); if (data) setRecs(data); }; f(); const ch = sb.channel('db').on('postgres_changes', { event: '*', schema: 'public', table: 'baggage_records' }, f).subscribe(); return () => sb.removeChannel(ch); }, [u, tab]);
-    // 🔐 CLOUD AUTHENTICATION ENGINE: Syncs logins instantly between mobile phones and PCs via Supabase
+    // 🔐 CLOUD AUTHENTICATION ENGINE WITH SECURE PRE-AUTHORIZATION KEY
   const hAuth = async (e) => {
     e.preventDefault();
     
-    // Clean up tracking values
     const currentUsername = auth.username?.toLowerCase().trim();
     const currentFirst = auth.first_name?.trim() || '';
     const currentMiddle = auth.middle_name?.trim() || '';
@@ -66,7 +65,44 @@ export default function App() {
     }
 
     if (isS) {
-      // 🕵️‍♂️ CLOUD CHECK 1: Query Supabase to see if this agent ID is already claimed
+              <form onSubmit={hAuth}>
+          {isS && (
+            <>
+              <div className="auth-form-group">
+                <label>First Name</label>
+                <input required className="auth-input" placeholder="e.g. Yohannes" onChange={e => setAuth({...auth, first_name: e.target.value})}/>
+              </div>
+              <div className="auth-form-group">
+                <label>Middle Name (Optional)</label>
+                <input className="auth-input" placeholder="e.g. Abebe" onChange={e => setAuth({...auth, middle_name: e.target.value})}/>
+              </div>
+              {/* ⚡ NEW PRE-AUTHORIZATION PASSCODE GATEWAY FIELD */}
+              <div className="auth-form-group">
+                <label style={{ color: '#C52528' }}>Station Administration Passcode</label>
+                <input required className="auth-input" type="password" placeholder="Enter corporate security key" onChange={e => setAuth({...auth, station_key: e.target.value})}/>
+              </div>
+            </>
+          )}
+          <div className="auth-form-group">
+            <label>Username / Agent ID</label>
+            <input required className="auth-input" type="text" placeholder="Enter username" onChange={e => setAuth({...auth, username: e.target.value})}/>
+          </div>
+          <div className="auth-form-group">
+            <label>Security Password</label>
+            <input required className="auth-input" type="password" placeholder="••••••••" onChange={e => setAuth({...auth, password: e.target.value})}/>
+          </div>
+          <button type="submit" className="auth-submit-btn">
+            {isS ? 'Register Station Account ✓' : 'Secure Sign In 🔑'}
+          </button>
+        </form>
+
+      // 🕵️‍♂️ SECURITY PRE-AUTHORIZATION CONSTRAINT: Matches against your master corporate passcode
+      const MASTER_STATION_KEY = "ETGDQ"; 
+      if (auth.station_key !== MASTER_STATION_KEY) {
+        return alert("🚫 Access Denied: Invalid Station Administration Passcode. You are not authorized to register terminal accounts.");
+      }
+
+      // Query Supabase to see if this agent ID is already claimed
       const { data: userCheck } = await sb
         .from('agents')
         .select('username')
@@ -77,7 +113,7 @@ export default function App() {
         return alert(`🚫 Registration Failed: The username "${auth.username}" is already claimed by another station agent.`);
       }
 
-      // 🕵️‍♂️ CLOUD CHECK 2: Query Supabase to stop duplicate real names from creating extra accounts
+      // Query Supabase to stop duplicate real names from creating extra accounts
       const { data: nameCheck } = await sb
         .from('agents')
         .select('first_name, middle_name')
@@ -117,11 +153,11 @@ export default function App() {
         return alert('❌ Portal Access Denied: Invalid agent credentials or incorrect password.');
       }
 
-      // Persist session to local memory so you don't have to re-login on refresh
       localStorage.setItem('bagtrack_user', JSON.stringify(matchingAgent));
       setU(matchingAgent);
     }
   };
+
 
 
   const hRec = async (e) => { e.preventDefault(); const t = form.irregularity_type || 'Delayed', req = t !== 'Delayed'; if (!form.bag_tag_number || !form.passenger_last_name || !form.passenger_first_name || (req && !form.file_number?.trim())) return alert('Missing fields.'); const { error } = await sb.from('baggage_records').insert([{ ...form, agent_name: `${u.first_name} ${u.middle_name || ''}`.trim(), bag_tag_number: form.bag_tag_number.toUpperCase().trim(), file_number: form.file_number?.trim() ? form.file_number.toUpperCase().trim() : null, bag_status: 'Open' }]); if (error) alert('Error'); else setForm({ irregularity_type: t }); };
