@@ -328,42 +328,12 @@ export default function App() {
           </div>
           <button className="btn" onClick={() => setDash(!dash)} >{dash ? '📋 Display Records' : '📊 Analytics'}</button>
         </div>
-      {dash ? <BaggageCharts recs={fil} getI={getI} /> : <>
-      {/* 🎨 CLEAN SYSTEM DESIGN CONTAINER */}
-      <div className="card form-card-container">
-        <form onSubmit={hRec} className="form-layout-row">
-          
-          <select 
-            className="form-theme-select"
-            value={form.irregularity_type || 'Delayed'} 
-            onChange={e => setForm({...form, irregularity_type: e.target.value})}
-          >
-            <option value="Delayed">Delayed</option>
-            <option value="Damaged">Damaged</option>
-            <option value="Onhand">Onhand</option>
-          </select>
-          
-          {flds.map(f => (
-            <input 
-              key={f} 
-              className="form-theme-input"
-              placeholder={f === 'file_number' ? `File Num ${reqFn ? '' : '(Opt)'}` : f.replace(/_/g, ' ')} 
-              required={f === 'file_number' ? reqFn : ['bag_tag_number', 'passenger_last_name', 'passenger_first_name'].includes(f)} 
-              maxLength={f==='ticket_number'||f==='phone_number'?13:undefined} 
-              minLength={f==='ticket_number'?13:undefined} 
-              pattern={f==='phone_number'?"[0-9]*":undefined} 
-              value={form[f] || ''} 
-              onChange={e => setForm({...form, [f]: e.target.value})}
-            />
-          ))}
-          
-          <button type="submit" className="form-theme-submit-btn">
-            Register File
-          </button>
-        </form>
-      </div>
-    </>}
-
+        {dash ? <BaggageCharts recs={fil} getI={getI} /> : <>
+          <div className="card" style={{ margin: '15px 0' }}><form onSubmit={hRec} style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'flex-end' }}>
+            <select value={form.irregularity_type || 'Delayed'} onChange={e => setForm({...form, irregularity_type: e.target.value})} style={{ height: '38px' }}><option value="Delayed">Delayed</option><option value="Damaged">Damaged</option><option value="Onhand">Onhand</option></select>
+            {flds.map(f => <input key={f} placeholder={f === 'file_number' ? `File Num ${reqFn ? '' : '(Opt)'}` : f.replace(/_/g, ' ')} required={f === 'file_number' ? reqFn : ['bag_tag_number', 'passenger_last_name', 'passenger_first_name'].includes(f)} maxLength={f==='ticket_number'||f==='phone_number'?13:undefined} minLength={f==='ticket_number'?13:undefined} pattern={f==='phone_number'?"[0-9]*":undefined} value={form[f] || ''} onChange={e => setForm({...form, [f]: e.target.value})} style={{ flex: '1', minWidth: '120px', height: '38px' }}/>)}
+            <button className="btn" style={{ width: 'auto', height: '38px' }}>Register</button>
+          </form></div>
           <div className="card table-wrapper"><table>
             <thead><tr>{['Tag','Last Name','First Name','File Num','Ticket Num','Phone','Type','Agent','Status','Tracer','Actions'].map(h => <th key={h}>{h}</th>)}</tr></thead>
             <tbody>{fil.map(b => { const isEd = edId === b.id, it = isEd ? edF : b; return (
