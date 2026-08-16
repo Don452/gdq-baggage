@@ -65,37 +65,7 @@ export default function App() {
     }
 
     if (isS) {
-              <form onSubmit={hAuth}>
-          {isS && (
-            <>
-              <div className="auth-form-group">
-                <label>First Name</label>
-                <input required className="auth-input" placeholder="e.g. Yohannes" onChange={e => setAuth({...auth, first_name: e.target.value})}/>
-              </div>
-              <div className="auth-form-group">
-                <label>Middle Name (Optional)</label>
-                <input className="auth-input" placeholder="e.g. Abebe" onChange={e => setAuth({...auth, middle_name: e.target.value})}/>
-              </div>
-              {/* ⚡ NEW PRE-AUTHORIZATION PASSCODE GATEWAY FIELD */}
-              <div className="auth-form-group">
-                <label style={{ color: '#C52528' }}>Station Administration Passcode</label>
-                <input required className="auth-input" type="password" placeholder="Enter corporate security key" onChange={e => setAuth({...auth, station_key: e.target.value})}/>
-              </div>
-            </>
-          )}
-          <div className="auth-form-group">
-            <label>Username / Agent ID</label>
-            <input required className="auth-input" type="text" placeholder="Enter username" onChange={e => setAuth({...auth, username: e.target.value})}/>
-          </div>
-          <div className="auth-form-group">
-            <label>Security Password</label>
-            <input required className="auth-input" type="password" placeholder="••••••••" onChange={e => setAuth({...auth, password: e.target.value})}/>
-          </div>
-          <button type="submit" className="auth-submit-btn">
-            {isS ? 'Register Station Account ✓' : 'Secure Sign In 🔑'}
-          </button>
-        </form>
-
+      
       // 🕵️‍♂️ SECURITY PRE-AUTHORIZATION CONSTRAINT: Matches against your master corporate passcode
       const MASTER_STATION_KEY = "ETGDQ"; 
       if (auth.station_key !== MASTER_STATION_KEY) {
@@ -335,34 +305,37 @@ export default function App() {
           <p>{isS ? 'Create an authorized account' : 'Enter security credentials to open dashboard'}</p>
         </div>
 
-        <form onSubmit={hAuth}>
+                <form onSubmit={hAuth}>
           {isS && (
             <>
               <div className="auth-form-group">
                 <label>First Name</label>
-                <input required className="auth-input" placeholder="First Name" onChange={e => setAuth({...auth, first_name: e.target.value})}/>
+                <input required className="auth-input" placeholder="e.g. Yohannes" onChange={e => setAuth({...auth, first_name: e.target.value})}/>
               </div>
               <div className="auth-form-group">
-                <label>Middle Name</label>
-                <input className="auth-input" placeholder="Middle Name" onChange={e => setAuth({...auth, middle_name: e.target.value})}/>
+                <label>Middle Name (Optional)</label>
+                <input className="auth-input" placeholder="e.g. Abebe" onChange={e => setAuth({...auth, middle_name: e.target.value})}/>
+              </div>
+              {/* ⚡ NEW PRE-AUTHORIZATION PASSCODE GATEWAY FIELD */}
+              <div className="auth-form-group">
+                <label style={{ color: '#C52528' }}>Station Administration Passcode</label>
+                <input required className="auth-input" type="password" placeholder="Enter corporate security key" onChange={e => setAuth({...auth, station_key: e.target.value})}/>
               </div>
             </>
           )}
-
           <div className="auth-form-group">
-            <label>Username</label>
-            <input required className="auth-input" type="text" placeholder="Username"  onChange={e => setAuth({...auth, username: e.target.value})}/>
+            <label>Username / Agent ID</label>
+            <input required className="auth-input" type="text" placeholder="Enter username" onChange={e => setAuth({...auth, username: e.target.value})}/>
           </div>
-
           <div className="auth-form-group">
-            <label>Password</label>
+            <label>Security Password</label>
             <input required className="auth-input" type="password" placeholder="••••••••" onChange={e => setAuth({...auth, password: e.target.value})}/>
           </div>
-
-          <button className="auth-submit-btn" style={{ background: isS ? '#5E8F4D' : '#5E8F4D' }}>
-            {isS ? 'Register Account' : 'Sign In'}
+          <button type="submit" className="auth-submit-btn">
+            {isS ? 'Register Station Account ✓' : 'Secure Sign In 🔑'}
           </button>
         </form>
+
 
         <button className="auth-toggle-link" style={{ color: '#C52528' }} onClick={() => setIsS(!isS)}>
           {isS ? 'Already registered? Sign In Instead' : 'New station agent? Create account here'}
