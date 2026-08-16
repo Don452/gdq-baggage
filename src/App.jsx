@@ -17,7 +17,6 @@ export default function App() {
   [dash, setDash] = useState(false),
   [sd, setSd] = useState(''), 
   [ed, setEd] = useState('');
-  
   // ⏱️ 5-MINUTE AUTOMATIC INACTIVITY LOGOUT ENGINE (PRODUCTION BASELINE)
   useEffect(() => {
     if (!u) return; // Only track activity if an agent is securely signed in
@@ -332,7 +331,7 @@ export default function App() {
         {dash ? <BaggageCharts recs={fil} getI={getI} /> : <>
           <div className="card" style={{ margin: '15px 0' }}><form onSubmit={hRec} style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'flex-end' }}>
             <select value={form.irregularity_type || 'Delayed'} onChange={e => setForm({...form, irregularity_type: e.target.value})} style={{ height: '38px' }}><option value="Delayed">Delayed</option><option value="Damaged">Damaged</option><option value="Onhand">Onhand</option></select>
-            {flds.map(f => <input key={f} placeholder={f === 'File_Number' ? `File Num ${reqFn ? '' : '(Opt)'}` : f.replace(/_/g, ' ')} required={f === 'file_number' ? reqFn : ['bag_tag_number', 'passenger_last_name', 'passenger_first_name'].includes(f)} maxLength={f==='ticket_number'||f==='phone_number'?13:undefined} minLength={f==='ticket_number'?13:undefined} pattern={f==='phone_number'?"[0-9]*":undefined} value={form[f] || ''} onChange={e => setForm({...form, [f]: e.target.value})} style={{ flex: '1', minWidth: '120px', height: '38px' }}/>)}
+            {flds.map(f => <input key={f} placeholder={f === 'file_number' ? `File Num ${reqFn ? '' : '(Opt)'}` : f.replace(/_/g, ' ')} required={f === 'file_number' ? reqFn : ['bag_tag_number', 'passenger_last_name', 'passenger_first_name'].includes(f)} maxLength={f==='ticket_number'||f==='phone_number'?13:undefined} minLength={f==='ticket_number'?13:undefined} pattern={f==='phone_number'?"[0-9]*":undefined} value={form[f] || ''} onChange={e => setForm({...form, [f]: e.target.value})} style={{ flex: '1', minWidth: '120px', height: '38px' }}/>)}
             <button className="btn" style={{ width: 'auto', height: '38px' }}>Register</button>
           </form></div>
           <div className="card table-wrapper"><table>
