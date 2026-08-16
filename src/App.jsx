@@ -328,12 +328,109 @@ export default function App() {
           </div>
           <button className="btn" onClick={() => setDash(!dash)} >{dash ? '📋 Display Records' : '📊 Analytics'}</button>
         </div>
-        {dash ? <BaggageCharts recs={fil} getI={getI} /> : <>
-          <div className="card" style={{ margin: '15px 0' }}><form onSubmit={hRec} style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'flex-end' }}>
-            <select value={form.irregularity_type || 'Delayed'} onChange={e => setForm({...form, irregularity_type: e.target.value})} style={{ height: '38px' }}><option value="Delayed">Delayed</option><option value="Damaged">Damaged</option><option value="Onhand">Onhand</option></select>
-            {flds.map(f => <input key={f} placeholder={f === 'file_number' ? `File Num ${reqFn ? '' : '(Opt)'}` : f.replace(/_/g, ' ')} required={f === 'file_number' ? reqFn : ['bag_tag_number', 'passenger_last_name', 'passenger_first_name'].includes(f)} maxLength={f==='ticket_number'||f==='phone_number'?13:undefined} minLength={f==='ticket_number'?13:undefined} pattern={f==='phone_number'?"[0-9]*":undefined} value={form[f] || ''} onChange={e => setForm({...form, [f]: e.target.value})} style={{ flex: '1', minWidth: '120px', height: '38px' }}/>)}
-            <button className="btn" style={{ width: 'auto', height: '38px' }}>Register</button>
-          </form></div>
+      {dash ? <BaggageCharts recs={fil} getI={getI} /> : <>
+    {/* 🎨 COLOR-MATCHED FORM CARD CONTAINER PANEL */}
+    <div className="card" style={{ 
+      margin: '15px 0 25px 0', 
+      background: '#ffffff', 
+      border: '1px solid #cbd5e1', 
+      borderRadius: '8px', 
+      padding: '20px',
+      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
+    }}>
+      <form onSubmit={hRec} style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', alignItems: 'flex-end' }}>
+        
+        {/* Dynamic Selector Field matching system colors */}
+        <select 
+          value={form.irregularity_type || 'Delayed'} 
+          onChange={e => setForm({...form, irregularity_type: e.target.value})} 
+          style={{ 
+            height: '42px', 
+            flex: '1', 
+            minWidth: '130px', 
+            background: '#ffffff', 
+            color: '#1e293b', 
+            border: '1px solid #cbd5e1', 
+            borderRadius: '6px', 
+            padding: '0 10px',
+            fontWeight: '500',
+            outline: 'none'
+          }}
+          onFocus={(e) => {
+            e.target.style.borderColor = '#5E8F4D';
+            e.target.style.boxShadow = '0 0 0 3px rgba(94, 143, 77, 0.15)';
+          }}
+          onBlur={(e) => {
+            e.target.style.borderColor = '#cbd5e1';
+            e.target.style.boxShadow = 'none';
+          }}
+        >
+          <option value="Delayed">Delayed</option>
+          <option value="Damaged">Damaged</option>
+          <option value="Onhand">Onhand</option>
+        </select>
+        
+        {/* Dynamic Text Input Mapping Array with focused border-color animations */}
+        {flds.map(f => (
+          <input 
+            key={f} 
+            placeholder={f === 'file_number' ? `File Num ${reqFn ? '' : '(Opt)'}` : f.replace(/_/g, ' ')} 
+            required={f === 'file_number' ? reqFn : ['bag_tag_number', 'passenger_last_name', 'passenger_first_name'].includes(f)} 
+            maxLength={f==='ticket_number'||f==='phone_number'?13:undefined} 
+            minLength={f==='ticket_number'?13:undefined} 
+            pattern={f==='phone_number'?"[0-9]*":undefined} 
+            value={form[f] || ''} 
+            onChange={e => setForm({...form, [f]: e.target.value})} 
+            style={{ 
+              flex: '2', 
+              minWidth: '140px', 
+              height: '42px', 
+              background: '#ffffff', 
+              color: '#1e293b', 
+              border: '1px solid #cbd5e1', 
+              borderRadius: '6px', 
+              padding: '0 14px',
+              boxSize: 'border-box',
+              outline: 'none',
+              transition: 'all 0.2s ease-in-out'
+            }}
+            onFocus={(e) => {
+              e.target.style.borderColor = '#5E8F4D'; // Primary Green focus ring
+              e.target.style.boxShadow = '0 0 0 3px rgba(94, 143, 77, 0.15)';
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = '#cbd5e1';
+              e.target.style.boxShadow = 'none';
+            }}
+          />
+        ))}
+        
+        {/* Dedicated Primary Green Submission Command Action Button */}
+        <button 
+          type="submit" 
+          className="btn" 
+          style={{ 
+            width: 'auto', 
+            height: '42px', 
+            padding: '0 25px', 
+            background: '#5E8F4D', // Strict Primary Green Base Color
+            color: '#ffffff', 
+            border: 'none', 
+            borderRadius: '6px', 
+            fontWeight: '700', 
+            cursor: 'pointer',
+            whiteSpace: 'nowrap',
+            transition: 'opacity 0.2s'
+          }}
+          onMouseOver={(e) => e.target.style.opacity = '0.9'}
+          onMouseOut={(e) => e.target.style.opacity = '1'}
+        >
+          Register File
+        </button>
+      </form>
+    </div>
+  </>}
+
           <div className="card table-wrapper"><table>
             <thead><tr>{['Tag','Last Name','First Name','File Num','Ticket Num','Phone','Type','Agent','Status','Tracer','Actions'].map(h => <th key={h}>{h}</th>)}</tr></thead>
             <tbody>{fil.map(b => { const isEd = edId === b.id, it = isEd ? edF : b; return (
