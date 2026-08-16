@@ -48,7 +48,7 @@ export default function BaggageCharts({ recs, getI }) {
       
       {/* 🍩 CHART 1: ORIGINAL GLOBAL BALANCE */}
       <div className="card" style={{ background: '#fff', padding: '25px', borderRadius: '12px', textAlign: 'center' }}>
-        <h4>🍩 1. Global Balance</h4>
+        <h4> 1. Overall GDQ Files Created</h4>
         {recs.length === 0 ? <p style={{ color: '#64748b', padding: '20px 0' }}>No records inside timeframe.</p> : <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px' }}>
           <div style={{ position: 'relative', width: '130px', height: '130px' }}>
             <svg width="130" height="130" viewBox="0 0 140 140" style={{ transform: 'rotate(-90deg)' }}><circle cx="70" cy="70" r={radius} fill="transparent" stroke="#f1f5f9" strokeWidth="14" />
@@ -61,7 +61,7 @@ export default function BaggageCharts({ recs, getI }) {
 
       {/* 📈 CHART 2: ORIGINAL RESOLUTION RATE */}
       <div className="card" style={{ background: '#fff', padding: '25px', borderRadius: '12px', textAlign: 'center' }}>
-        <h4>📈 2. Station Resolution Performance</h4>
+        <h4>📈 2. Overall GDQ Performance</h4>
         <div style={{ fontSize: '36px', fontWeight: '800', color: rate >= 70 ? '#22c55e' : '#eab308' }}>{recs.length ? rate : 0}%</div>
         <div style={{ width: '100%', background: '#fee2e2', borderRadius: '10px', height: '16px', overflow: 'hidden', margin: '15px 0' }}><div style={{ width: `${recs.length ? rate : 0}%`, background: '#22c55e', height: '100%' }} /></div>
         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', fontWeight: 'bold' }}><span>✅ Closed: {res.R}</span><span>⚠️ Active: {res.A}</span></div>
@@ -93,7 +93,7 @@ export default function BaggageCharts({ recs, getI }) {
 
       {/* 📈 CHART 5: DYNAMIC TIME WINDOWS METRIC & STATUS REPORT */}
       <div className="card" style={{ background: '#fff', padding: '25px', borderRadius: '12px', gridColumn: '1 / -1' }}>
-        <h4>📊 5. Dynamic Time Windows Metric & Status Report</h4>
+        <h4>📊 5. Daily Weekly snd Monthly Metric & Status Report</h4>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '15px', marginTop: '15px' }}>
           {[
             { label: 'Daily Window (Today) 🗓️', data: periodStats.D, barClr: '#3b82f6' },
