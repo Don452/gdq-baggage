@@ -177,7 +177,7 @@ export default function App() {
     return { background: '#ffffff', color: '#1e293b' };
   };
 
-    const hPrnt = (b) => {
+     const hPrnt = (b) => {
     const w = window.open('', '_blank');
     w.document.write(`
       <html>
@@ -220,7 +220,7 @@ export default function App() {
           }
           .section-title {
             color: #1e293b;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -235,7 +235,7 @@ export default function App() {
             border: 1px solid #cbd5e1;
           } 
           th, td {
-            padding: 12px 16px;
+            padding: 10px 14px;
             font-size: 13px;
             border: 1px solid #cbd5e1;
             text-align: left;
@@ -246,13 +246,16 @@ export default function App() {
             color: #334155;
             font-weight: 700;
             width: 25%;
+            font-size: 12px;
+            white-space: nowrap;
           }
+          /* ⚡ HORIZONTAL LABEL TRANSLATION DESIGN STYLE */
           th span {
-            display: block;
-            color: #64748b;
-            font-weight: 500;
-            font-size: 11px;
-            margin-top: 2px;
+            display: inline !important;
+            color: #64748b !important;
+            font-weight: 500 !important;
+            font-size: 11px !important;
+            margin-left: 5px !important;
           }
           td {
             color: #334155;
@@ -261,7 +264,7 @@ export default function App() {
           .badge {
             background: #FFC92D;
             color: #1e293b;
-            padding: 5px 12px;
+            padding: 4px 10px;
             border-radius: 4px;
             font-weight: 700;
             font-size: 11px;
@@ -272,7 +275,7 @@ export default function App() {
           .status-badge {
             background: #e0f2fe;
             color: #0369a1;
-            padding: 5px 12px;
+            padding: 4px 10px;
             border-radius: 4px;
             font-weight: 700;
             font-size: 11px;
@@ -328,37 +331,37 @@ export default function App() {
         <div class="section-title">የመዝገብ መግለጫ ዝርዝር / Case File Details</div>
         <table>
           <tr>
-            <th>የሻንጣ መለያ ቁጥር <span>Tag Number</span></th>
+            <th>የሻንጣ መለያ ቁጥር <span>&bull; Tag Number</span></th>
             <td><b style="font-size: 15px; color: #0f172a; font-family: monospace; letter-spacing: 0.5px;">${b.bag_tag_number}</b></td>
-            <th>የፋይል መለያ ቁጥር <span>File Reference</span></th>
+            <th>የማውጫ ፋይል መለያ <span>&bull; File Reference</span></th>
             <td><span style="font-family: monospace; font-size: 14px; font-weight: 700; color: #0f172a;">${b.file_number || '—'}</span></td>
           </tr>
           <tr>
-            <th>የአያት ስም <span>Last Name</span></th>
+            <th>የአያት ስም <span>&bull; Last Name</span></th>
             <td>${b.passenger_last_name}</td>
-            <th>ስም <span>First Name</span></th>
+            <th>ስም <span>&bull; First Name</span></th>
             <td>${b.passenger_first_name}</td>
           </tr>
           <tr>
-            <th>የቲኬት ቁጥር<span>Ticket Code</span></th>
+            <th>የአውሮፕላን ቲኬት ኮድ <span>&bull; Ticket Code</span></th>
             <td><span style="font-family: monospace; font-size: 13px;">${b.ticket_number || '—'}</span></td>
-            <th>የስልክ ቁጥር <span>Contact Phone</span></th>
+            <th>የስልክ ቁጥር <span>&bull; Contact Phone</span></th>
             <td>${b.phone_number || '—'}</td>
           </tr>
           <tr>
-            <th>የሻንጣው ቀለም <span>Bag Color</span></th>
+            <th>የሻንጣው ቀለም <span>&bull; Bag Color</span></th>
             <td>${b.bag_color || '—'}</td>
-            <th>የሻንጣው ክብደት <span>Bag Weight</span></th>
+            <th>የሻንጣው ክብደት <span>&bull; Bag Weight</span></th>
             <td>${b.bag_kilos ? '<b style="font-size:13px; color:#0f172a;">' + b.bag_kilos + ' KG</b>' : '—'}</td>
           </tr>
           <tr>
-            <th>የተመዘገበት ምክኒያት <span>Incident Type</span></th>
+            <th>የችግሩ አይነት <span>&bull; Incident Type</span></th>
             <td><span class="badge">${b.irregularity_type}</span></td>
-            <th>ያለበት ወቅታዊ ሁኔታ <span>Current Status</span></th>
+            <th>ያለበት ሁኔታ <span>&bull; Current Status</span></th>
             <td><span class="status-badge">${b.bag_status || 'Open'}</span></td>
           </tr>
           <tr>
-            <th>መረጃውን የመዘገበው ሰራተኛ <span>Logged By Agent</span></th>
+            <th>የመዘገበው ሰራተኛ <span>&bull; Logged By Agent</span></th>
             <td colspan="3" class="agent-cell">
               <div class="agent-info">
                 👤 <span>የጣቢያው ተረኛ ሰራተኛ / Station Handler:</span> <strong style="color: #1e293b; font-weight: 700;">${b.agent_name || 'System Authorized'}</strong>
@@ -382,6 +385,7 @@ export default function App() {
     `);
     w.document.close();
   };
+
 
 
   if (!u) return (
