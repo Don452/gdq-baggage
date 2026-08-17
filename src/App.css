@@ -481,15 +481,30 @@ tr:hover td { background: #f8fafc; }
    ========================================================================== */
 
 /* Forces the container inside the cell to stretch to full cell boundaries */
+/* ==========================================================================
+   🎯 PERFECT CENTER ELEMENT LOCK ENGINE
+   ========================================================================== */
+
 .table-action-container {
   display: flex !important;
   gap: 4px !important;
-  align-items: center !important;
-  justify-content: center !important;
+  
+  /* ⚡ THE CENTERING ENGINE */
+  align-items: center !important;         /* Centers vertically (Perfect Middle) */
+  justify-content: center !important;     /* Centers horizontally (Perfect Center) */
+  
   width: 100% !important;
-  height: 24px !important; /* Forces uniform explicit box baseline height */
+  height: 24px !important;                /* Safe, uniform box height */
+  margin: 0 !important;                   /* ❌ WIPE OUT MARGINS TO PREVENT LIFTING */
   box-sizing: border-box !important;
 }
+
+/* Ensure the wrapper cell has a matching padding anchor */
+.table-wrapper table tbody tr td {
+  padding: 12px 8px !important;           /* Identical padding on all cells forces equal row height */
+  vertical-align: middle !important;
+}
+
 
 /* Normalizes all three action buttons to occupy full height space uniformly */
 .table-action-container .btn-sm {
