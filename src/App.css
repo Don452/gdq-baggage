@@ -432,6 +432,28 @@ tr:hover td { background: #f8fafc; }
   }
 }
 
+/* ==========================================================================
+   📊 DISPLAY TABLE BADGE COLORS SYNC
+   ========================================================================== */
+
+.color-label {
+  padding: 3px 8px !important;
+  border-radius: 4px !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  color: #475569;
+}
+
+.color-black { background-color: #1e293b !important; color: #ffffff !important; border: none !important; }
+.color-red   { background-color: #fee2e2 !important; color: #c52528 !important; border: 1px solid #fca5a5 !important; }
+.color-blue  { background-color: #dbeafe !important; color: #1d4ed8 !important; border: 1px solid #93c5fd !important; }
+.color-brown { background-color: #fef3c7 !important; color: #78350f !important; border: 1px solid #fcd34d !important; }
+.color-grey  { background-color: #f1f5f9 !important; color: #475569 !important; border: 1px solid #cbd5e1 !important; }
+.color-green { background-color: #dcfce7 !important; color: #15803d !important; border: 1px solid #86efac !important; }
+
 
 
 

@@ -51,8 +51,8 @@ export default function App() {
 
 
   useEffect(() => { if (!u) return; const f = async () => { let q = sb.from('baggage_records').select('*').order('created_at', { ascending: true }); const { data } = await (tab !== 'All' ? q.eq('irregularity_type', tab) : q); if (data) setRecs(data); }; f(); const ch = sb.channel('db').on('postgres_changes', { event: '*', schema: 'public', table: 'baggage_records' }, f).subscribe(); return () => sb.removeChannel(ch); }, [u, tab]);
-  //HARDENED CLOUD AUTHENTICATION ENGINE: Requires master passcode for both Login and Registration
-   // 🔐 ENTERPRISE CLOUD AUTHENTICATION ENGINE: Validates passcodes dynamically via Supabase config vault
+
+   //ENTERPRISE CLOUD AUTHENTICATION ENGINE: Validates passcodes dynamically via Supabase config vault
   const hAuth = async (e) => {
     e.preventDefault();
     
@@ -161,10 +161,10 @@ export default function App() {
       // Triggers the comprehensive descriptive layout window alert
       return alert([errorHeading, errorCode, errorMessage, errorDetails, errorHint].filter(Boolean).join('\n\n'));
     } else { 
-      // Clean clear reset on absolute success loops
-      setForm({ irregularity_type: t }); 
+      // ⚡ RESET THE NEW FORM FIELDS ALONG WITH CORE DATA
+      setForm({ irregularity_type: t, bag_color: '', bag_kilos: '' }); 
       alert('✅ Baggage file logged securely to cloud registry database!');
-    } 
+    }
   };
 
 
@@ -428,71 +428,119 @@ export default function App() {
         <div className="card" style={{ margin: '15px 0' }}><form onSubmit={hRec} style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'flex-end' }}>
           <select value={form.irregularity_type || 'Delayed'} onChange={e => setForm({ ...form, irregularity_type: e.target.value })} style={{ height: '38px' }}><option value="Delayed">Delayed</option><option value="Damaged">Damaged</option><option value="Onhand">Onhand</option></select>
           {flds.map(f => <input key={f} placeholder={f === 'file_number' ? `File Num ${reqFn ? '' : '(Opt)'}` : f.replace(/_/g, ' ')} required={f === 'file_number' ? reqFn : ['bag_tag_number', 'passenger_last_name', 'passenger_first_name'].includes(f)} maxLength={f === 'ticket_number' || f === 'phone_number' ? 13 : undefined} minLength={f === 'ticket_number' ? 13 : undefined} pattern={f === 'phone_number' ? "[0-9]*" : undefined} value={form[f] || ''} onChange={e => setForm({ ...form, [f]: e.target.value })} style={{ flex: '1', minWidth: '120px', height: '38px' }} />)}
+                        {/* 🎨 NEW: BRANDED BAG COLOR DROPDOWN SELECTOR */}
+              <select 
+                className="form-theme-select"
+                value={form.bag_color || ''} 
+                onChange={e => setForm({...form, bag_color: e.target.value})}
+                style={{ minWidth: '130px' }}
+              >
+                <option value="">Select Color...</option>
+                <option value="Black">Black (BK)</option>
+                <option value="Red">Red (RD)</option>
+                <option value="Blue">Blue (BL)</option>
+                <option value="Brown">Brown (BR)</option>
+                <option value="Grey">Grey (GY)</option>
+                <option value="Green">Green (GR)</option>
+                <option value="Other">Other Color</option>
+              </select>
+
+              {/* ⚖️ NEW: NUMERIC BAG WEIGHT KILOS INPUT */}
+              <input 
+                type="number"
+                className="form-theme-input"
+                placeholder="Weight (KG)" 
+                min="1"
+                max="100"
+                value={form.bag_kilos || ''} 
+                onChange={e => setForm({...form, bag_kilos: e.target.value})}
+                style={{ flex: '1', minWidth: '110px' }}
+              />
+
           <button className="btn" style={{ width: 'auto', height: '38px' }}>Register</button>
         </form></div>
-        <div className="card table-wrapper"><table>
-          <thead><tr>{['Tag', 'Last Name', 'First Name', 'File Num', 'Ticket Num', 'Phone', 'Type', 'Agent', 'Status', 'Tracer', 'Actions'].map(h => <th key={h}>{h}</th>)}</tr></thead>
-          <tbody>{fil.map(b => {
-            const isEd = edId === b.id, it = isEd ? edF : b; return (
-              <tr key={b.id}>
-                <td>{isEd ? <input value={it.bag_tag_number || ''} onChange={e => setEdF({ ...edF, bag_tag_number: e.target.value })} /> : <span className="tag-badge" title={b.bag_tag_number}>{b.bag_tag_number}</span>}</td>
-                <td>{isEd ? <input value={it.passenger_last_name || ''} onChange={e => setEdF({ ...edF, passenger_last_name: e.target.value })} /> : b.passenger_last_name}</td>
-                <td>{isEd ? <input value={it.passenger_first_name || ''} onChange={e => setEdF({ ...edF, passenger_first_name: e.target.value })} /> : b.passenger_first_name}</td>
-                <td>{isEd ? <input value={it.file_number || ''} onChange={e => setEdF({ ...edF, file_number: e.target.value })} /> : b.file_number || '—'}</td>
-                <td>{isEd ? <input maxLength={13} minLength={13} value={it.ticket_number || ''} onChange={e => setEdF({ ...edF, ticket_number: e.target.value })} /> : b.ticket_number || '—'}</td>
-                <td>{isEd ? <input maxLength={13} pattern="[0-9]*" value={it.phone_number || ''} onChange={e => setEdF({ ...edF, phone_number: e.target.value })} /> : b.phone_number || '—'}</td>
-                {/* ⚡ REPLACE YOUR OLD 7th CELL WITH THIS DYNAMIC VERSION */}
-                <td style={cellStyle}>
-                  {isEd ? (
-                    <select style={{ width: '100%', padding: '4px' }} value={it.irregularity_type || ''} onChange={e => setEdF({ ...edF, irregularity_type: e.target.value })}>
-                      <option value="Delayed">Delayed</option>
-                      <option value="Damaged">Damaged</option>
-                      <option value="Onhand">Onhand</option>
-                    </select>
-                  ) : (
-                    <span style={getTypeBadgeStyle(b.irregularity_type)}>{b.irregularity_type}</span>
-                  )}
-                </td>
+                {/* 📊 MASTER DATA TABLE MATRIX WITH COLOR & WEIGHT SYNC */}
+          <div className="card table-wrapper" style={{ width: '100%', margin: '15px 0', padding: '0', overflowX: 'auto' }}>
+            <table style={{ tableLayout: 'fixed', width: '1250px', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr style={{ background: '#f8fafc' }}>
+                  {['Tag','Last','First','File','Ticket','Phone','Color','Weight','Type','Agent','Status','WT','Actions'].map(h => (
+                    <th key={h} style={{ 
+                      width: h==='Tag'?'10%':h==='Actions'?'12%':h==='Color'?'7%':h==='Weight'?'6%':'8%', 
+                      textAlign:'center', padding:'12px 8px', fontSize:'12px', color:'#475569', borderBottom:'2px solid #e2e8f0' 
+                    }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {fil.map(b => { 
+                  const isEd = edId === b.id, it = isEd ? edF : b; 
+                  return (
+                    <tr key={b.id} style={{ borderBottom: '1px solid #e2e8f0' }}>
+                      <td style={cellStyle}>{isEd ? <input style={{width:'100%', textAlign:'center'}} value={it.bag_tag_number || ''} onChange={e => setEdF({...edF, bag_tag_number: e.target.value})}/> : <span className="tag-badge" style={{background:'#ffffff', color:'#1e293b', border:'1px solid #cbd5e1', padding:'3px 8px', borderRadius:'4px', fontWeight:'700', fontSize:'12px'}} title={b.bag_tag_number}>{b.bag_tag_number}</span>}</td>
+                      <td style={cellStyle}>{isEd ? <input style={{width:'100%', textAlign:'center'}} value={it.passenger_last_name || ''} onChange={e => setEdF({...edF, passenger_last_name: e.target.value})}/> : b.passenger_last_name}</td>
+                      <td style={cellStyle}>{isEd ? <input style={{width:'100%', textAlign:'center'}} value={it.passenger_first_name || ''} onChange={e => setEdF({...edF, passenger_first_name: e.target.value})}/> : b.passenger_first_name}</td>
+                      <td style={cellStyle}>{isEd ? <input style={{width:'100%', textAlign:'center'}} value={it.file_number || ''} onChange={e => setEdF({...edF, file_number: e.target.value})}/> : b.file_number || '—'}</td>
+                      <td style={cellStyle}>{isEd ? <input style={{width:'100%', textAlign:'center'}} maxLength={13} minLength={13} value={it.ticket_number || ''} onChange={e => setEdF({...edF, ticket_number: e.target.value})}/> : b.ticket_number || '—'}</td>
+                      <td style={cellStyle}>{isEd ? <input style={{width:'100%', textAlign:'center'}} maxLength={13} pattern="[0-9]*" value={it.phone_number || ''} onChange={e => setEdF({...edF, phone_number: e.target.value})}/> : b.phone_number || '—'}</td>
+                      
+                      {/* 🎨 SYNCED NATIVE BAG COLOR COLUMN DATA CELL */}
+                      <td style={cellStyle}>
+                        {isEd ? (
+                          <select style={{width:'100%'}} value={it.bag_color || ''} onChange={e => setEdF({...edF, bag_color: e.target.value})}>
+                            <option value="">None</option>
+                            <option value="Black">Black</option>
+                            <option value="Red">Red</option>
+                            <option value="Blue">Blue</option>
+                            <option value="Brown">Brown</option>
+                            <option value="Grey">Grey</option>
+                            <option value="Green">Green</option>
+                            <option value="Other">Other</option>
+                          </select>
+                        ) : (
+                          <span className={`color-label color-${(b.bag_color || 'none').toLowerCase()}`}>{b.bag_color || '—'}</span>
+                        )}
+                      </td>
 
-                <td>👤 {getI(b.agent_name)}</td>
-                <td><select value={it.bag_status || 'Open'} onChange={e => isEd ? setEdF({ ...edF, bag_status: e.target.value }) : sb.from('baggage_records').update({ bag_status: e.target.value }).eq('id', b.id)}>{['Open', 'Arrived', 'Delivered', 'Suspended', 'File Closed'].map(s => <option key={s} value={s}>{s}</option>)}</select></td>
-                <td><a href="https://desktop.worldtracer.aero/desktop/index.html#!/index/login" target="_blank" rel="noreferrer"><button className="btn btn-sm" style={{ background: '#0284c7', color: '#fff' }}>Trace</button></a></td>
+                      {/* ⚖️ SYNCED NATIVE BAG KILOS COLUMN DATA CELL */}
+                      <td style={cellStyle}>
+                        {isEd ? (
+                          <input type="number" style={{width:'100%', textAlign:'center'}} value={it.bag_kilos || ''} onChange={e => setEdF({...edF, bag_kilos: e.target.value})}/>
+                        ) : (
+                          b.bag_kilos ? <b>{b.bag_kilos} KG</b> : '—'
+                        )}
+                      </td>
 
-                <td>{isEd ? <><button className="btn btn-sm" onClick={async () => { await sb.from('baggage_records').update({ ...edF, bag_tag_number: edF.bag_tag_number.toUpperCase().trim(), file_number: edF.file_number ? edF.file_number.toUpperCase().trim() : null }).eq('id', b.id); setEdId(null); }}>✓</button><button className="btn btn-sm" onClick={() => setEdId(null)}>X</button></> :
-                  <><button className="btn btn-sm" onClick={() => { setEdId(b.id); setEdF({ ...b }); }}>Edit</button>
-                    {/* ⚡ REPLACE YOUR EXISTING "DEL" BUTTON ROW WITH THIS SECURE VERSION */}
-                    <button className="btn btn-sm"
-                      onClick={async () => {
-                        // 🕵️‍♂️ SECURITY AUTONOMY CHECK: Trims and compares full names to block unauthorized deletions
-                        const currentAgentName = `${u.first_name} ${u.middle_name || ''}`.trim().toLowerCase();
-                        const recordCreatorName = (b.agent_name || '').trim().toLowerCase();
+                      <td style={cellStyle}>{isEd ? <select className="table-edit-select" value={it.irregularity_type || ''} onChange={e => setEdF({...edF, irregularity_type: e.target.value})}><option value="Delayed">Delayed</option><option value="Damaged">Damaged</option><option value="Onhand">Onhand</option></select> : <span style={getTypeBadgeStyle(b.irregularity_type)}>{b.irregularity_type}</span>}</td>
+                      <td style={cellStyle}>👤 {getI(b.agent_name)}</td>
+                      <td style={cellStyle}><select style={{width:'100%', padding:'4px', textAlign:'center'}} value={it.bag_status || 'Open'} onChange={e => isEd ? setEdF({...edF, bag_status: e.target.value}) : sb.from('baggage_records').update({ bag_status: e.target.value }).eq('id', b.id)}>{['Open', 'Arrived', 'Delivered', 'Suspended', 'File Closed'].map(s => <option key={s} value={s}>{s}</option>)}</select></td>
+                      <td style={cellStyle}><a href="https://worldtracer.aero" target="_blank" rel="noreferrer"><button className="btn btn-sm" style={{ background: '#5E8F4D', color: '#fff', width:'100%', padding:'5px 2px', fontSize:'11px', border:'none' }}>WT Login</button></a></td>
+                      
+                      <td style={{ padding:'10px 8px', display:'flex', gap:'4px', alignItems:'center', justifyContext:'center', height:'38px' }}>
+                        {isEd ? (
+                          <>
+                            <button className="btn btn-sm" style={{background:'#5E8F4D',color:'#fff'}} onClick={async () => { await sb.from('baggage_records').update({ ...edF, bag_tag_number: edF.bag_tag_number.toUpperCase().trim(), file_number: edF.file_number ? edF.file_number.toUpperCase().trim() : null }).eq('id', b.id); setEdId(null); }}>✓</button>
+                            <button className="btn btn-sm" style={{background:'#C52528',color:'#fff'}} onClick={() => setEdId(null)}>X</button>
+                          </>
+                        ) : (
+                          <>
+                            <button className="btn btn-sm" style={{background:'#5E8F4D',color:'#fff',flex:1}} onClick={() => hPrnt(b)}>Print</button>
+                            <button className="btn btn-sm" style={{background:'#FFC92D',color:'#1e293b',flex:1}} onClick={() => { setEdId(b.id); setEdF({...b}); }}>Edit</button>
+                            <button className="btn btn-sm" style={{background:'#C52528',color:'#fff',flex:1}} onClick={async () => {
+                              const currentAgentName = `${u.first_name} ${u.middle_name || ''}`.trim().toLowerCase();
+                              if (currentAgentName !== (b.agent_name || '').trim().toLowerCase()) return alert(`🚫 Action Blocked: Deletions limited to creator. Creator: ${b.agent_name}`);
+                              if (window.confirm('Del?')) await sb.from('baggage_records').delete().eq('id', b.id);
+                            }}>Del</button>
+                          </>
+                        )}
+                      </td>
+                    </tr>
+                  ); 
+                })}
+              </tbody>
+            </table>
+          </div>
 
-                        if (currentAgentName !== recordCreatorName) {
-                          return alert(`🚫 Action Blocked: You can only delete baggage records that you personally registered. This file belongs to Agent: ${b.agent_name || 'System Master'}.`);
-                        }
-
-                        // If the identity matches, prompt for final physical confirmation
-                        if (window.confirm(`⚠️ Are you sure you want to permanently delete Tag File ${b.bag_tag_number}?`)) {
-                          const { error } = await sb.from('baggage_records').delete().eq('id', b.id);
-                          if (error) {
-                            alert('❌ Database Error: Unable to remove record from cloud registry.');
-                          } else {
-                            alert('✅ Record deleted successfully!');
-                          }
-                        }
-                      }}
-                    >
-                      Del
-                    </button>
-                  </>}</td>
-
-                <td>{isEd ? <><button className="btn btn-sm" onClick={async () => { await sb.from('baggage_records').update({ ...edF, bag_tag_number: edF.bag_tag_number.toUpperCase().trim(), file_number: edF.file_number ? edF.file_number.toUpperCase().trim() : null }).eq('id', b.id); setEdId(null); }}>✓</button><button className="btn btn-sm" onClick={() => setEdId(null)}>X</button></> :
-                  <><button className="btn btn-sm" onClick={() => hPrnt(b)}>Print</button></>}</td>
-
-              </tr>);
-          })}
-          </tbody>
-        </table></div>
       </>}
     </div>
 
