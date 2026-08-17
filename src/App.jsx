@@ -433,7 +433,7 @@ export default function App() {
                 className="form-theme-select"
                 value={form.bag_color || ''} 
                 onChange={e => setForm({...form, bag_color: e.target.value})}
-                style={{ minWidth: '130px', height:'100%' }}
+                style={{ minWidth: '100px', height: '38px' }} 
               >
                 <option value="">Select Color...</option>
                 <option value="Black">Black (BK)</option>
@@ -514,7 +514,7 @@ export default function App() {
                       <td style={cellStyle}>{isEd ? <select className="table-edit-select" value={it.irregularity_type || ''} onChange={e => setEdF({...edF, irregularity_type: e.target.value})}><option value="Delayed">Delayed</option><option value="Damaged">Damaged</option><option value="Onhand">Onhand</option></select> : <span style={getTypeBadgeStyle(b.irregularity_type)}>{b.irregularity_type}</span>}</td>
                       <td style={cellStyle}>👤 {getI(b.agent_name)}</td>
                       <td style={cellStyle}><select style={{width:'100%', padding:'4px', textAlign:'center'}} value={it.bag_status || 'Open'} onChange={e => isEd ? setEdF({...edF, bag_status: e.target.value}) : sb.from('baggage_records').update({ bag_status: e.target.value }).eq('id', b.id)}>{['Open', 'Arrived', 'Delivered', 'Suspended', 'File Closed'].map(s => <option key={s} value={s}>{s}</option>)}</select></td>
-                      <td style={cellStyle}><a href="https://worldtracer.aero" target="_blank" rel="noreferrer"><button className="btn btn-sm" style={{ background: '#5E8F4D', color: '#fff', width:'100%', padding:'5px 2px', fontSize:'11px', border:'none' }}>Trace</button></a></td>
+                      <td style={cellStyle}><a href="https://desktop.worldtracer.aero/desktop/index.html#!/index/login"><button className="btn btn-sm" style={{ background: '#5E8F4D', color: '#fff', width:'100%', padding:'5px 2px', fontSize:'11px', border:'none' }}>Trace</button></a></td>
                       
                       <td style={{ padding:'10px 8px', display:'flex', gap:'4px', alignItems:'center', justifyContext:'center', height:'38px' }}>
                         {isEd ? (
@@ -524,9 +524,9 @@ export default function App() {
                           </>
                         ) : (
                           <>
-                            <button className="btn btn-sm" style={{background:'#5E8F4D',color:'#fff',flex:1}} onClick={() => hPrnt(b)}>Print</button>
-                            <button className="btn btn-sm" style={{background:'#FFC92D',color:'#1e293b',flex:1}} onClick={() => { setEdId(b.id); setEdF({...b}); }}>Edit</button>
-                            <button className="btn btn-sm" style={{background:'#C52528',color:'#fff',flex:1}} onClick={async () => {
+                            <button className="btn btn-sm"  onClick={() => hPrnt(b)}>Print</button>
+                            <button className="btn btn-sm"  onClick={() => { setEdId(b.id); setEdF({...b}); }}>Edit</button>
+                            <button className="btn btn-sm"  onClick={async () => {
                               const currentAgentName = `${u.first_name} ${u.middle_name || ''}`.trim().toLowerCase();
                               if (currentAgentName !== (b.agent_name || '').trim().toLowerCase()) return alert(`🚫 Action Blocked: Deletions limited to creator. Creator: ${b.agent_name}`);
                               if (window.confirm('Del?')) await sb.from('baggage_records').delete().eq('id', b.id);
