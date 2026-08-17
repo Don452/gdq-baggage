@@ -521,7 +521,7 @@ export default function App() {
                     <td style={{
                       padding: '12px 8px',
                       verticalAlign: 'middle',
-                      borderBottom: '10px solid #e2e8f0',
+                      borderBottom: 0,
                       boxSizing: 'border-box'
                     }}>
                       <div className="table-action-container">
