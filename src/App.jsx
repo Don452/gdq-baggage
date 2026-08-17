@@ -349,7 +349,7 @@ export default function App() {
             <td>${b.passenger_first_name}</td>
           </tr>
           <tr>
-            <th>የቲኬት ቁጥር<span>&bull; Ticket Code</span></th>
+            <th>የቲኬት ቁጥር<span>&bull; Ticket Number</span></th>
             <td><span style="font-family: monospace; font-size: 13px;">${b.ticket_number || '—'}</span></td>
             <th>የስልክ ቁጥር <span>&bull; Contact Phone</span></th>
             <td>${b.phone_number || '—'}</td>
