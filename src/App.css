@@ -433,26 +433,46 @@ tr:hover td { background: #f8fafc; }
 }
 
 /* ==========================================================================
-   📊 DISPLAY TABLE BADGE COLORS SYNC
+   🎨 BRANDED FORMS & ROW ALIGNMENT FIXES
    ========================================================================== */
 
-.color-label {
-  padding: 3px 8px !important;
-  border-radius: 4px !important;
-  font-size: 11px !important;
-  font-weight: 700 !important;
-  text-transform: uppercase !important;
-  border: 1px solid #e2e8f0;
-  background: #f8fafc;
-  color: #475569;
+/* 1. Forces the new color dropdown selection wrapper to match previous inputs */
+.form-card-container select.form-theme-select {
+  height: 42px !important; 
+  background: #ffffff !important; 
+  color: #1e293b !important; 
+  border: 1px solid var(--primary) !important; /* Branded Green */
+  border-radius: 6px !important; 
+  padding: 0 14px !important;
+  box-sizing: border-box !important;
+  outline: none !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease-in-out !important;
 }
 
-.color-black { background-color: #1e293b !important; color: #ffffff !important; border: none !important; }
-.color-red   { background-color: #fee2e2 !important; color: #c52528 !important; border: 1px solid #fca5a5 !important; }
-.color-blue  { background-color: #dbeafe !important; color: #1d4ed8 !important; border: 1px solid #93c5fd !important; }
-.color-brown { background-color: #fef3c7 !important; color: #78350f !important; border: 1px solid #fcd34d !important; }
-.color-grey  { background-color: #f1f5f9 !important; color: #475569 !important; border: 1px solid #cbd5e1 !important; }
-.color-green { background-color: #dcfce7 !important; color: #15803d !important; border: 1px solid #86efac !important; }
+/* Hovering matches previous yellow custom color state */
+.form-card-container select.form-theme-select:hover {
+  border-color: #FFC92D !important;
+}
+
+/* Focus click strips browser defaults and locks to brand yellow highlight */
+.form-card-container select.form-theme-select:focus {
+  border-color: #FFC92D !important;
+  box-shadow: 0 0 0 3px rgba(255, 201, 45, 0.15) !important;
+}
+
+/* 2. Fixes lifted Action buttons by centering the table data layout block */
+.table-wrapper table tbody tr td:last-child {
+  padding: 0 8px !important;
+  display: flex !important;
+  gap: 4px !important;
+  align-items: center !important;     /* Centers vertically */
+  justify-content: center !important;  /* Centers horizontally */
+  height: 52px !important;             /* Aligns evenly with table cell heights */
+  box-sizing: border-box !important;
+}
 
 
 
