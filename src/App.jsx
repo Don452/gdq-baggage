@@ -177,7 +177,7 @@ export default function App() {
     return { background: '#ffffff', color: '#1e293b' };
   };
 
-     const hPrnt = (b) => {
+  const hPrnt = (b) => {
     const w = window.open('', '_blank');
     w.document.write(`
       <html>
@@ -241,15 +241,23 @@ export default function App() {
             text-align: left;
             vertical-align: middle;
           }
+          
+          /* ⚡ ALTERNATING ZEBRA ROW COLORS (SNOW VS LIGHT GRAY) */
+          table tr:nth-child(odd) td {
+            background: #ffffff !important; /* Clean Snow Color */
+          }
+          table tr:nth-child(even) td {
+            background: #f8fafc !important; /* Soft Light Gray */
+          }
+          
           th {
-            background: #f8fafc;
+            background: #f1f5f9 !important; /* Distinct Slate Gray for Headers */
             color: #334155;
             font-weight: 700;
             width: 25%;
             font-size: 12px;
             white-space: nowrap;
           }
-          /* ⚡ HORIZONTAL LABEL TRANSLATION DESIGN STYLE */
           th span {
             display: inline !important;
             color: #64748b !important;
@@ -328,12 +336,12 @@ export default function App() {
           የተሰጠበት ቀን / Issued Date: <span style="color: #0f172a;">${new Date(b.created_at || Date.now()).toLocaleString()}</span>
         </div>
         
-        <div class="section-title">የመዝገብ መግለጫ ዝርዝር / Case File Details</div>
+        <div class="section-title">የፋይል ዝርዝር / File Details</div>
         <table>
           <tr>
             <th>የሻንጣ መለያ ቁጥር <span>&bull; Tag Number</span></th>
             <td><b style="font-size: 15px; color: #0f172a; font-family: monospace; letter-spacing: 0.5px;">${b.bag_tag_number}</b></td>
-            <th>የማውጫ ፋይል መለያ <span>&bull; File Reference</span></th>
+            <th>የፋይል ቁጥር<span>&bull; File Reference</span></th>
             <td><span style="font-family: monospace; font-size: 14px; font-weight: 700; color: #0f172a;">${b.file_number || '—'}</span></td>
           </tr>
           <tr>
@@ -343,7 +351,7 @@ export default function App() {
             <td>${b.passenger_first_name}</td>
           </tr>
           <tr>
-            <th>የአውሮፕላን ቲኬት ኮድ <span>&bull; Ticket Code</span></th>
+            <th>የቲኬት ቁጥር<span>&bull; Ticket Code</span></th>
             <td><span style="font-family: monospace; font-size: 13px;">${b.ticket_number || '—'}</span></td>
             <th>የስልክ ቁጥር <span>&bull; Contact Phone</span></th>
             <td>${b.phone_number || '—'}</td>
@@ -355,7 +363,7 @@ export default function App() {
             <td>${b.bag_kilos ? '<b style="font-size:13px; color:#0f172a;">' + b.bag_kilos + ' KG</b>' : '—'}</td>
           </tr>
           <tr>
-            <th>የችግሩ አይነት <span>&bull; Incident Type</span></th>
+            <th>የተመዘገበበት ምክኒያት <span>&bull; Incident Type</span></th>
             <td><span class="badge">${b.irregularity_type}</span></td>
             <th>ያለበት ሁኔታ <span>&bull; Current Status</span></th>
             <td><span class="status-badge">${b.bag_status || 'Open'}</span></td>
@@ -385,7 +393,6 @@ export default function App() {
     `);
     w.document.close();
   };
-
 
 
   if (!u) return (
