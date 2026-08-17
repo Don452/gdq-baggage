@@ -518,9 +518,9 @@ export default function App() {
 
                  
                     {/* 🛠️ CELL MATCHED VERTICAL PADDING CELL */}
-                    <td style={{
+                    <td style={cellStyle,{
+
                       textAlign: 'center',
-                      marginTop:'4px',
                       borderBottom: 0,
                       boxSizing: 'border-box'
                     }}>
