@@ -519,7 +519,7 @@ export default function App() {
                  
                     {/* 🛠️ CELL MATCHED VERTICAL PADDING CELL */}
                     <td style={{
-                      verticalAlign: 'middle',
+                      textAlign: 'center',
                       borderBottom: 0,
                       boxSizing: 'border-box'
                     }}>
