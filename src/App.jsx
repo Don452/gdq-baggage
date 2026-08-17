@@ -177,7 +177,7 @@ export default function App() {
     return { background: '#ffffff', color: '#1e293b' };
   };
 
-  const hPrnt = (b) => {
+    const hPrnt = (b) => {
     const w = window.open('', '_blank');
     w.document.write(`
       <html>
@@ -224,6 +224,7 @@ export default function App() {
             font-size: 13px;
             border-bottom: 1px solid #e2e8f0;
             border-right: 1px solid #e2e8f0;
+            vertical-align: middle;
           }
           th:last-child, td:last-child {
             border-right: none;
@@ -236,9 +237,19 @@ export default function App() {
             color: #475569;
             font-weight: 600;
             text-transform: uppercase;
-            font-size: 11px;
+            font-size: 10px;
             letter-spacing: 0.5px;
-            width: 18%;
+            width: 22%;
+            line-height: 1.4;
+          }
+          th span {
+            display: block;
+            color: #64748b;
+            text-transform: none;
+            font-weight: 500;
+            font-size: 11px;
+            letter-spacing: 0px;
+            margin-top: 2px;
           }
           td {
             color: #334155;
@@ -280,31 +291,48 @@ export default function App() {
           <p style="font-size: 13px;">ጊዜያዊ የሻንጣ መጠየቂያ ሠነድ Temporary Property Irregularity Report</p>
           <p style="font-size: 12px;">GDQ BAGGAGE SERVICE TEL: +251991343796</p>
           <p style="font-size: 12px;">EMAIL: GDQAPT@ethiopianairlines.com</p>
-          <p style="margin-top: 6px; font-size: 11px; color: #64748b; font-weight: 500; white-space: nowrap;">Issued Date: ${new Date(b.created_at || Date.now()).toLocaleString()}</p>
+          <p style="margin-top: 6px; font-size: 11px; color: #64748b; font-weight: 500; white-space: nowrap;">የተሰጠበት ቀን / Issued Date: ${new Date(b.created_at || Date.now()).toLocaleString()}</p>
         </div>
         
-        <h3 style="color:#0f172a;margin-top:25px;font-size:15px;font-weight:700;">Passenger & Bag Claim Details</h3>
+        <h3 style="color:#0f172a;margin-top:25px;font-size:15px;font-weight:700;">የመንገደኛ እና የሻንጣ መረጃ ዝርዝር / Passenger & Bag Claim Details</h3>
         <table>
           <tr>
-            <th>Tag Number</th><td><b style="font-size:14px;color:#0f172a;letter-spacing:0.5px;">${b.bag_tag_number}</b></td>
-            <th>File Reference</th><td><span style="font-family:monospace;font-size:13px;font-weight:700;color:#0f172a;">${b.file_number || '—'}</span></td>
+            <th>የሻንጣ መለያ ቁጥር <span>Tag Number</span></th>
+            <td><b style="font-size:14px;color:#0f172a;letter-spacing:0.5px;">${b.bag_tag_number}</b></td>
+            <th>የፋይል መለያ ቁጥር <span>File Reference</span></th>
+            <td><span style="font-family:monospace;font-size:13px;font-weight:700;color:#0f172a;">${b.file_number || '—'}</span></td>
           </tr>
           <tr>
-            <th>Last Name</th><td>${b.passenger_last_name}</td>
-            <th>First Name</th><td>${b.passenger_first_name}</td>
+            <th>የአያት ስም <span>Last Name</span></th>
+            <td>${b.passenger_last_name}</td>
+            <th>ስም <span>First Name</span></th>
+            <td>${b.passenger_first_name}</td>
           </tr>
           <tr>
-            <th>Ticket Code</th><td><span style="font-family:monospace;">${b.ticket_number || '—'}</span></td>
-            <th>Contact Phone</th><td>${b.phone_number || '—'}</td>
+            <th>የቲኬት ቁጥር <span>Ticket Number</span></th>
+            <td><span style="font-family:monospace;">${b.ticket_number || '—'}</span></td>
+            <th>የስልክ ቁጥር <span>Contact Phone</span></th>
+            <td>${b.phone_number || '—'}</td>
+          </tr>
+          
+          {/* ⚡ NEWLY INTEGRATED SYNCED ROW FOR BAG COLOR AND BAGGAGE WEIGHT */}
+          <tr>
+            <th>የሻንጣው ቀለም <span>Bag Color</span></th>
+            <td>${b.bag_color || '—'}</td>
+            <th>የሻንጣው ክብደት <span>Bag Weight</span></th>
+            <td><b>${b.bag_kilos ? b.bag_kilos + ' KG' : '—'}</b></td>
+          </tr>
+
+          <tr>
+            <th>የችግሩ አይነት <span>Incident Type</span></th>
+            <td><span class="badge">${b.irregularity_type}</span></td>
+            <th>ያለበት ወቅታዊ ሁኔታ <span>Current Status</span></th>
+            <td><span class="status-badge">${b.bag_status || 'Open'}</span></td>
           </tr>
           <tr>
-            <th>Incident Type</th><td><span class="badge">${b.irregularity_type}</span></td>
-            <th>Current Status</th><td><span class="status-badge">${b.bag_status || 'Open'}</span></td>
-          </tr>
-          <tr>
-            <th>Logged By Agent</th>
+            <th>መረጃውን የመዘገበው ሰራተኛ <span>Logged By Agent</span></th>
             <td colspan="3" style="background:#f8fafc;color:#64748b;font-weight:500;">
-              👤 Station Handler Reference: <span style="color:#334155;font-weight:600;">${b.agent_name || 'System Authorized'}</span>
+              👤 የጣቢያው ተረኛ ሰራተኛ / Station Handler Reference: <span style="color:#334155;font-weight:600;">${b.agent_name || 'System Authorized'}</span>
             </td>
           </tr>
         </table>
@@ -315,9 +343,9 @@ export default function App() {
             ይህ ሰነድ ስላስመዘገቡት የሻንጣ መጥፋት/መዘግየት ጥያቄ ይፋዊ ማረጋገጫ ሆኖ የሚያገለግል ነው።<br/>
             የአየር መንገዳችን የስራ ቡድን ሂደቱን እስኪያጠናቅቅ ድረስ ስለሚያደርጉልን ትብብር እናመሰግናለን። ለተፈጠረው መስተጓጎል ይቅርታ እንጠይቃለን።
           </p>
-          <p style="font-size:11px;color:#94a3b8;line-height:1.6;margin:0;white-space:normal;">
+          <p style="font-size:11px;color:#94a3b8;line-height:1.6;margin:5px 0 0 0;white-space:normal;font-weight:500;">
             This serves as an official confirmation of your registered baggage irregularity claim file.<br/>
-            Thank you for your cooperation while our station team processes your records.
+            Thank you for your cooperation while our station team processes your records. We apologize for the inconvenience.
           </p>
         </div>
       </body>
@@ -325,6 +353,7 @@ export default function App() {
     `);
     w.document.close();
   };
+
 
   if (!u) return (
     <div className="auth-wrapper">
