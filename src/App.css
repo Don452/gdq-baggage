@@ -209,7 +209,7 @@ tr:hover td { background: #f8fafc; }
   margin-top: 20px;
 }
 
-/* 🎨 STICKING STRICTLY TO YOUR CUSTOM PALETTE FOR CARD INPUTS */
+
 
 /* 1. Default state: Clean border matching your primary green variable */
 .card input {
@@ -474,6 +474,36 @@ tr:hover td { background: #f8fafc; }
   justify-content: center !important;  /* Centers button row horizontally */
   height: 45px !important;             /* Scaled to sit perfectly inside row cells */
   box-sizing: border-box !important;
+}
+
+/* ==========================================================================
+   🛠️ FIXED STRETCHING ENGINE: MATCHES THE EXACT ROW HEALTH
+   ========================================================================== */
+
+/* Forces the container inside the cell to stretch to full cell boundaries */
+.table-action-container {
+  display: flex !important;
+  gap: 4px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 24px !important; /* Forces uniform explicit box baseline height */
+  box-sizing: border-box !important;
+}
+
+/* Normalizes all three action buttons to occupy full height space uniformly */
+.table-action-container .btn-sm {
+  height: 100% !important; /* Fills up the action baseline box completely */
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 10px !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  border: none !important;
+  white-space: nowrap !important;
 }
 
 
