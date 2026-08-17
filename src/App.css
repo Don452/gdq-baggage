@@ -433,15 +433,17 @@ tr:hover td { background: #f8fafc; }
 }
 
 /* ==========================================================================
-   🎨 BRANDED FORMS & ROW ALIGNMENT FIXES
+   📐 FORM ALIGNMENT & ACTION BUTTON BALANCING
    ========================================================================== */
 
-/* 1. Forces the new color dropdown selection wrapper to match previous inputs */
+/* 1. Makes the color selection box larger to match input sizes exactly */
 .form-card-container select.form-theme-select {
   height: 42px !important; 
+  flex: 2 !important; /* Matches the wider flex scale of text input boxes */
+  min-width: 150px !important; /* Slightly wider layout footprint for mobile scaling */
   background: #ffffff !important; 
   color: #1e293b !important; 
-  border: 1px solid var(--primary) !important; /* Branded Green */
+  border: 1px solid var(--primary) !important; 
   border-radius: 6px !important; 
   padding: 0 14px !important;
   box-sizing: border-box !important;
@@ -452,25 +454,25 @@ tr:hover td { background: #f8fafc; }
   transition: all 0.2s ease-in-out !important;
 }
 
-/* Hovering matches previous yellow custom color state */
+/* Hovering matches previous yellow brand accent */
 .form-card-container select.form-theme-select:hover {
   border-color: #FFC92D !important;
 }
 
-/* Focus click strips browser defaults and locks to brand yellow highlight */
+/* Focused click locks onto soft yellow halo */
 .form-card-container select.form-theme-select:focus {
   border-color: #FFC92D !important;
   box-shadow: 0 0 0 3px rgba(255, 201, 45, 0.15) !important;
 }
 
-/* 2. Fixes lifted Action buttons by centering the table data layout block */
+/* 2. Completely normalizes action table cells into a clean grid alignment block */
 .table-wrapper table tbody tr td:last-child {
   padding: 0 8px !important;
   display: flex !important;
   gap: 4px !important;
-  align-items: center !important;     /* Centers vertically */
-  justify-content: center !important;  /* Centers horizontally */
-  height: 52px !important;             /* Aligns evenly with table cell heights */
+  align-items: center !important;     /* Locks into perfect vertical middle grid */
+  justify-content: center !important;  /* Centers button row horizontally */
+  height: 45px !important;             /* Scaled to sit perfectly inside row cells */
   box-sizing: border-box !important;
 }
 
