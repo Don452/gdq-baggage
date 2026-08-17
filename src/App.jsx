@@ -433,7 +433,7 @@ export default function App() {
                 className="form-theme-select"
                 value={form.bag_color || ''} 
                 onChange={e => setForm({...form, bag_color: e.target.value})}
-                style={{ minWidth: '130px' }}
+                style={{ minWidth: '130px', height:'100%' }}
               >
                 <option value="">Select Color...</option>
                 <option value="Black">Black (BK)</option>
@@ -487,7 +487,7 @@ export default function App() {
                       {/* 🎨 SYNCED NATIVE BAG COLOR COLUMN DATA CELL */}
                       <td style={cellStyle}>
                         {isEd ? (
-                          <select style={{width:'100%'}} value={it.bag_color || ''} onChange={e => setEdF({...edF, bag_color: e.target.value})}>
+                          <select style={{width:'100%s'}} value={it.bag_color || ''} onChange={e => setEdF({...edF, bag_color: e.target.value})}>
                             <option value="">None</option>
                             <option value="Black">Black</option>
                             <option value="Red">Red</option>
@@ -514,7 +514,7 @@ export default function App() {
                       <td style={cellStyle}>{isEd ? <select className="table-edit-select" value={it.irregularity_type || ''} onChange={e => setEdF({...edF, irregularity_type: e.target.value})}><option value="Delayed">Delayed</option><option value="Damaged">Damaged</option><option value="Onhand">Onhand</option></select> : <span style={getTypeBadgeStyle(b.irregularity_type)}>{b.irregularity_type}</span>}</td>
                       <td style={cellStyle}>👤 {getI(b.agent_name)}</td>
                       <td style={cellStyle}><select style={{width:'100%', padding:'4px', textAlign:'center'}} value={it.bag_status || 'Open'} onChange={e => isEd ? setEdF({...edF, bag_status: e.target.value}) : sb.from('baggage_records').update({ bag_status: e.target.value }).eq('id', b.id)}>{['Open', 'Arrived', 'Delivered', 'Suspended', 'File Closed'].map(s => <option key={s} value={s}>{s}</option>)}</select></td>
-                      <td style={cellStyle}><a href="https://worldtracer.aero" target="_blank" rel="noreferrer"><button className="btn btn-sm" style={{ background: '#5E8F4D', color: '#fff', width:'100%', padding:'5px 2px', fontSize:'11px', border:'none' }}>WT Login</button></a></td>
+                      <td style={cellStyle}><a href="https://worldtracer.aero" target="_blank" rel="noreferrer"><button className="btn btn-sm" style={{ background: '#5E8F4D', color: '#fff', width:'100%', padding:'5px 2px', fontSize:'11px', border:'none' }}>Trace</button></a></td>
                       
                       <td style={{ padding:'10px 8px', display:'flex', gap:'4px', alignItems:'center', justifyContext:'center', height:'38px' }}>
                         {isEd ? (
