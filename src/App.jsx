@@ -52,86 +52,75 @@ export default function App() {
 
   useEffect(() => { if (!u) return; const f = async () => { let q = sb.from('baggage_records').select('*').order('created_at', { ascending: true }); const { data } = await (tab !== 'All' ? q.eq('irregularity_type', tab) : q); if (data) setRecs(data); }; f(); const ch = sb.channel('db').on('postgres_changes', { event: '*', schema: 'public', table: 'baggage_records' }, f).subscribe(); return () => sb.removeChannel(ch); }, [u, tab]);
   //HARDENED CLOUD AUTHENTICATION ENGINE: Requires master passcode for both Login and Registration
+   // 🔐 ENTERPRISE CLOUD AUTHENTICATION ENGINE: Validates passcodes dynamically via Supabase config vault
   const hAuth = async (e) => {
     e.preventDefault();
-
+    
     const currentUsername = auth.username?.toLowerCase().trim();
     const currentFirst = auth.first_name?.trim() || '';
     const currentMiddle = auth.middle_name?.trim() || '';
     const currentPassword = auth.password;
-    const currentStationKey = auth.station_key;
+    const currentStationKey = auth.station_key?.trim();
 
     if (!currentUsername || !currentPassword || !currentStationKey) {
-      return alert('⚠️ Please fill out all required security fields, including the Station Passcode.');
+      return alert('⚠️ Operational Halt: Please fill out all fields, including the Station Passcode.');
     }
 
-    // 🕵️‍♂️ GLOBAL SECURITY GATEWAY: Matches against your master corporate passcode first
-    const MASTER_STATION_KEY = "ETGDQ";
-    if (currentStationKey !== MASTER_STATION_KEY) {
-      return alert("🚫 Access Denied: Invalid Station Administration Passcode. Operations unauthorized.");
-    }
-
-    if (isS) {
-      // Query Supabase to see if this agent ID is already claimed
-      const { data: userCheck } = await sb
-        .from('agents')
-        .select('username')
-        .eq('username', currentUsername)
+    try {
+      // 🕵️‍♂️ DYNAMIC CLOUD PASSTHROUGH GATEWAY: Fetch the secret key directly from the database vault
+      const { data: configRow, error: configError } = await sb
+        .from('system_config')
+        .select('key_value')
+        .eq('key_name', 'MASTER_STATION_KEY')
         .maybeSingle();
 
-      if (userCheck) {
-        return alert(`🚫 Registration Failed: The username "${auth.username}" is already claimed by another station agent.`);
+      if (configError || !configRow) {
+        console.error("Vault Query Failure:", configError);
+        return alert("❌ Security Protocol Error: Unable to verify system access key. Please check your network.");
       }
 
-      // Query Supabase to stop duplicate real names from creating extra accounts
-      const { data: nameCheck } = await sb
-        .from('agents')
-        .select('first_name, middle_name')
-        .eq('first_name', currentFirst)
-        .eq('middle_name', currentMiddle);
-
-      if (nameCheck && nameCheck.length > 0) {
-        return alert(`🚫 Registration Failed: An agent profile named "${auth.first_name} ${auth.middle_name || ''}" is already registered on the central network.`);
+      // Match user entry against the centralized database value
+      if (currentStationKey !== configRow.key_value) {
+        return alert("🚫 Access Denied: Invalid Station Administration Passcode. Operations unauthorized.");
       }
 
-      // Push safe identity profile data straight to your global cloud database table
-      const { error: regError } = await sb
-        .from('agents')
-        .insert([{
-          username: currentUsername,
-          password: currentPassword,
-          first_name: currentFirst,
-          middle_name: currentMiddle
-        }]);
+      // Passcode is verified! Proceed with Account Registration or Portal Login sequence:
+      if (isS) {
+        const { data: userCheck } = await sb.from('agents').select('username').eq('username', currentUsername).maybeSingle();
+        if (userCheck) return alert(`🚫 Registration Failed: The username "${auth.username}" is already claimed.`);
 
-      if (regError) {
-        return alert('❌ Cloud Sync Failure: Unable to save station account to network servers.');
+        const { data: nameCheck } = await sb.from('agents').select('first_name, middle_name').eq('first_name', currentFirst).eq('middle_name', currentMiddle);
+        if (nameCheck && nameCheck.length > 0) return alert(`🚫 Registration Failed: An agent profile named "${auth.first_name} ${auth.middle_name || ''}" already exists.`);
+
+        const { error: regError } = await sb.from('agents').insert([{ username: currentUsername, password: currentPassword, first_name: currentFirst, middle_name: currentMiddle }]);
+
+        if (regError) {
+          return alert(`❌ Cloud Sync Failure:\n\nCode: ${regError.code || 'AUTH_ERR'}\nDetails: ${regError.message}`);
+        }
+
+        alert('✅ Station account created successfully on the cloud registry! Proceeding to portal login.');
+        setIsS(false);
+      } else {
+        const { data: matchingAgent, error: loginError } = await sb.from('agents').select('*').eq('username', currentUsername).eq('password', currentPassword).maybeSingle();
+
+        if (loginError) {
+          return alert(`❌ Portal Connection Interrupted:\n\nDetails: ${loginError.message}`);
+        }
+        
+        if (!matchingAgent) {
+          return alert('❌ Portal Access Denied: Invalid agent credentials or incorrect password.');
+        }
+
+        localStorage.setItem('bagtrack_user', JSON.stringify(matchingAgent));
+        setU(matchingAgent);
       }
-
-      alert('✅ Station account created successfully on the cloud registry! Proceeding to portal login.');
-      setIsS(false);
-    } else {
-      // Secure Cloud Portal Cross-Device Login Verification Sequence
-      const { data: matchingAgent, error: loginError } = await sb
-        .from('agents')
-        .select('*')
-        .eq('username', currentUsername)
-        .eq('password', currentPassword)
-        .maybeSingle();
-
-      if (loginError || !matchingAgent) {
-        return alert('❌ Portal Access Denied: Invalid agent credentials or incorrect password.');
-      }
-
-      localStorage.setItem('bagtrack_user', JSON.stringify(matchingAgent));
-      setU(matchingAgent);
+    } catch (err) {
+      console.error("Runtime Auth Exception:", err);
+      alert("❌ System Exception: Authentication process failed.");
     }
   };
 
-
-
-
-      // 💼 SEAMLESS RECORD REGISTRATION ENGINE WITH ACTUAL REAL-TIME ERROR EXTRACTION
+  // SEAMLESS RECORD REGISTRATION ENGINE WITH ACTUAL REAL-TIME ERROR EXTRACTION
   const hRec = async (e) => {
     e.preventDefault(); 
     const t = form.irregularity_type || 'Delayed', req = t !== 'Delayed'; 
