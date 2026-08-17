@@ -516,12 +516,12 @@ export default function App() {
                     <td style={cellStyle}><select style={{ width: '100%', padding: '4px', textAlign: 'center' }} value={it.bag_status || 'Open'} onChange={e => isEd ? setEdF({ ...edF, bag_status: e.target.value }) : sb.from('baggage_records').update({ bag_status: e.target.value }).eq('id', b.id)}>{['Open', 'Arrived', 'Delivered', 'Suspended', 'File Closed'].map(s => <option key={s} value={s}>{s}</option>)}</select></td>
                     <td style={cellStyle}><a href="https://desktop.worldtracer.aero/desktop/index.html#!/index/login"><button className="btn btn-sm" >Trace</button></a></td>
 
-                    {/*PERFECTLY ALIGNED NATIVE TABLE CELL ACTION BLOCK */}
+                 
                     {/* 🛠️ CELL MATCHED VERTICAL PADDING CELL */}
                     <td style={{
                       padding: '12px 8px',
                       verticalAlign: 'middle',
-                      borderBottom: '1px solid #e2e8f0',
+                      borderBottom: '10px solid #e2e8f0',
                       boxSizing: 'border-box'
                     }}>
                       <div className="table-action-container">
