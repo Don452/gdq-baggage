@@ -517,7 +517,7 @@ export default function App() {
                     <td style={cellStyle}><a href="https://desktop.worldtracer.aero/desktop/index.html#!/index/login"><button className="btn btn-sm" style={{ background: '#5E8F4D', color: '#fff', width: '100%', padding: '5px 2px', fontSize: '11px', border: 'none' }}>Trace</button></a></td>
 
                     {/*PERFECTLY ALIGNED NATIVE TABLE CELL ACTION BLOCK */}
-                    <td style={{ padding: '8px', verticalAlign: 'middle', }}>
+                    <td style={{ cellStyle}}>
                       <div className="table-action-container">
                         {isEd ? (
                           <>
