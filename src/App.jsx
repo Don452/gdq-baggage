@@ -177,7 +177,7 @@ export default function App() {
     return { background: '#ffffff', color: '#1e293b' };
   };
 
-  const hPrnt = (b) => {
+   const hPrnt = (b) => {
     const w = window.open('', '_blank');
     w.document.write(`
       <html>
@@ -242,16 +242,17 @@ export default function App() {
             vertical-align: middle;
           }
           
-          /* ⚡ ALTERNATING ZEBRA ROW COLORS (SNOW VS LIGHT GRAY) */
+          /* ⚡ PURE HORIZONTAL BACKGROUND ALIGNMENT (APPLIES TO TH AND TD UNIFORMLY BY ROW) */
+          table tr:nth-child(odd) th, 
           table tr:nth-child(odd) td {
-            background: #ffffff !important; /* Clean Snow Color */
+            background: #ffffff !important; /* Row 1: Unified Pure Snow Background */
           }
+          table tr:nth-child(even) th, 
           table tr:nth-child(even) td {
-            background: #f8fafc !important; /* Soft Light Gray */
+            background: #f8fafc !important; /* Row 2: Unified Muted Light Gray Background */
           }
           
           th {
-            background: #f1f5f9 !important; /* Distinct Slate Gray for Headers */
             color: #334155;
             font-weight: 700;
             width: 25%;
@@ -290,9 +291,6 @@ export default function App() {
             letter-spacing: 0.3px;
             display: inline-block;
             text-transform: uppercase;
-          }
-          .agent-cell {
-            background: #f8fafc !important;
           }
           .agent-info {
             display: flex;
@@ -336,7 +334,7 @@ export default function App() {
           የተሰጠበት ቀን / Issued Date: <span style="color: #0f172a;">${new Date(b.created_at || Date.now()).toLocaleString()}</span>
         </div>
         
-        <div class="section-title">የፋይል ዝርዝር / File Details</div>
+        <div class="section-title">የፋይል ምዝግባ ዝርዝር / File Record Details</div>
         <table>
           <tr>
             <th>የሻንጣ መለያ ቁጥር <span>&bull; Tag Number</span></th>
@@ -370,7 +368,7 @@ export default function App() {
           </tr>
           <tr>
             <th>የመዘገበው ሰራተኛ <span>&bull; Logged By Agent</span></th>
-            <td colspan="3" class="agent-cell">
+            <td colspan="3">
               <div class="agent-info">
                 👤 <span>የጣቢያው ተረኛ ሰራተኛ / Station Handler:</span> <strong style="color: #1e293b; font-weight: 700;">${b.agent_name || 'System Authorized'}</strong>
               </div>
@@ -392,7 +390,7 @@ export default function App() {
       </html>
     `);
     w.document.close();
-  };
+  }
 
 
   if (!u) return (
