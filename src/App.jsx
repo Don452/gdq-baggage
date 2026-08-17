@@ -520,6 +520,9 @@ export default function App() {
                     {/* 🛠️ CELL MATCHED VERTICAL PADDING CELL */}
                     <td style={{
                       textAlign: 'center',
+                      marginTop:'4px',
+                      borderBottom: 0,
+                      boxSizing: 'border-box'
                     }}>
                       <div className="table-action-container">
                         {isEd ? (
