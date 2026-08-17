@@ -517,26 +517,26 @@ export default function App() {
                     <td style={cellStyle}><a href="https://desktop.worldtracer.aero/desktop/index.html#!/index/login"><button className="btn btn-sm" style={{ background: '#5E8F4D', color: '#fff', width: '100%', padding: '5px 2px', fontSize: '11px', border: 'none' }}>Trace</button></a></td>
 
                     {/*PERFECTLY ALIGNED NATIVE TABLE CELL ACTION BLOCK */}
-                    <td style={{ cellStyle}}>
-                      <div className="table-action-container">
-                        {isEd ? (
-                          <>
-                            <button className="btn btn-sm" style={{ background: '#5E8F4D', color: '#fff' }} onClick={async () => { await sb.from('baggage_records').update({ ...edF, bag_tag_number: edF.bag_tag_number.toUpperCase().trim(), file_number: edF.file_number ? edF.file_number.toUpperCase().trim() : null }).eq('id', b.id); setEdId(null); }}>✓</button>
-                            <button className="btn btn-sm" style={{ background: '#C52528', color: '#fff' }} onClick={() => setEdId(null)}>X</button>
-                          </>
-                        ) : (
-                          <>
+                    <td style={{ cellStyle }}>
 
-                            <button className="btn btn-sm" onClick={() => { setEdId(b.id); setEdF({ ...b }); }}>Edit</button>
-                            <button className="btn btn-sm" onClick={async () => {
-                              const currentAgentName = `${u.first_name} ${u.middle_name || ''}`.trim().toLowerCase();
-                              if (currentAgentName !== (b.agent_name || '').trim().toLowerCase()) return alert(`🚫 Action Blocked: Deletions limited to creator. Creator: ${b.agent_name}`);
-                              if (window.confirm('Del?')) await sb.from('baggage_records').delete().eq('id', b.id);
-                            }}>Del</button>
-                            <button className="btn btn-sm" onClick={() => hPrnt(b)}>Print</button>
-                          </>
-                        )}
-                      </div>
+                      {isEd ? (
+                        <>
+                          <button className="btn btn-sm" style={{ background: '#5E8F4D', color: '#fff' }} onClick={async () => { await sb.from('baggage_records').update({ ...edF, bag_tag_number: edF.bag_tag_number.toUpperCase().trim(), file_number: edF.file_number ? edF.file_number.toUpperCase().trim() : null }).eq('id', b.id); setEdId(null); }}>✓</button>
+                          <button className="btn btn-sm" style={{ background: '#C52528', color: '#fff' }} onClick={() => setEdId(null)}>X</button>
+                        </>
+                      ) : (
+                        <>
+
+                          <button className="btn btn-sm" onClick={() => { setEdId(b.id); setEdF({ ...b }); }}>Edit</button>
+                          <button className="btn btn-sm" onClick={async () => {
+                            const currentAgentName = `${u.first_name} ${u.middle_name || ''}`.trim().toLowerCase();
+                            if (currentAgentName !== (b.agent_name || '').trim().toLowerCase()) return alert(`🚫 Action Blocked: Deletions limited to creator. Creator: ${b.agent_name}`);
+                            if (window.confirm('Del?')) await sb.from('baggage_records').delete().eq('id', b.id);
+                          }}>Del</button>
+                          <button className="btn btn-sm" onClick={() => hPrnt(b)}>Print</button>
+                        </>
+                      )}
+
                     </td>
 
                   </tr>
