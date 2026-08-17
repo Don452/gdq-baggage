@@ -17,7 +17,7 @@ export default function App() {
     [dash, setDash] = useState(false),
     [sd, setSd] = useState(''),
     [ed, setEd] = useState('');
-  // ⏱️ 5-MINUTE AUTOMATIC INACTIVITY LOGOUT ENGINE (PRODUCTION BASELINE)
+  // 5-MINUTE AUTOMATIC INACTIVITY LOGOUT ENGINE (PRODUCTION BASELINE)
   useEffect(() => {
     if (!u) return; // Only track activity if an agent is securely signed in
 
@@ -35,14 +35,13 @@ export default function App() {
       timeoutId = setTimeout(handleLogout, INACTIVITY_TIME);
     };
 
-    // Global interaction listeners
+    
     const events = ['mousemove', 'mousedown', 'keypress', 'touchstart', 'scroll'];
     events.forEach(event => window.addEventListener(event, resetTimer));
 
-    // Start countdown immediately
+   
     resetTimer();
 
-    // Cleanup listeners on unmount
     return () => {
       clearTimeout(timeoutId);
       events.forEach(event => window.removeEventListener(event, resetTimer));
@@ -52,7 +51,7 @@ export default function App() {
 
   useEffect(() => { if (!u) return; const f = async () => { let q = sb.from('baggage_records').select('*').order('created_at', { ascending: true }); const { data } = await (tab !== 'All' ? q.eq('irregularity_type', tab) : q); if (data) setRecs(data); }; f(); const ch = sb.channel('db').on('postgres_changes', { event: '*', schema: 'public', table: 'baggage_records' }, f).subscribe(); return () => sb.removeChannel(ch); }, [u, tab]);
 
-  //ENTERPRISE CLOUD AUTHENTICATION ENGINE: Validates passcodes dynamically via Supabase config vault
+ 
   const hAuth = async (e) => {
     e.preventDefault();
 
@@ -67,7 +66,7 @@ export default function App() {
     }
 
     try {
-      // 🕵️‍♂️ DYNAMIC CLOUD PASSTHROUGH GATEWAY: Fetch the secret key directly from the database vault
+      
       const { data: configRow, error: configError } = await sb
         .from('system_config')
         .select('key_value')
@@ -79,12 +78,12 @@ export default function App() {
         return alert("❌ Security Protocol Error: Unable to verify system access key. Please check your network.");
       }
 
-      // Match user entry against the centralized database value
+  
       if (currentStationKey !== configRow.key_value) {
         return alert("🚫 Access Denied: Invalid Station Administration Passcode. Operations unauthorized.");
       }
 
-      // Passcode is verified! Proceed with Account Registration or Portal Login sequence:
+      
       if (isS) {
         if (currentPassword.length < 8) {
           return alert('🚫 Security Violation: Your password must be at least 8 characters long to protect station terminal data.');
@@ -131,7 +130,7 @@ export default function App() {
     }
   };
 
-  // SEAMLESS RECORD REGISTRATION ENGINE WITH ACTUAL REAL-TIME ERROR EXTRACTION
+
   const hRec = async (e) => {
     e.preventDefault();
     const t = form.irregularity_type || 'Delayed', req = t !== 'Delayed';
@@ -147,21 +146,21 @@ export default function App() {
       bag_status: 'Open'
     }]);
 
-    // ⚡ EXTRACTS AND VISUALIZES THE ACTUAL ENGINE EXCEPTION TEXT
+    
     if (error) {
       console.error("Supabase Database Registration Failure:", error);
 
-      // Compiles an actionable error readout for the terminal handler
+    
       const errorHeading = `🚫 Central Database Registration Error`;
       const errorCode = `System Code: ${error.code || 'UNKNOWN_DB_FAULT'}`;
       const errorMessage = `Actual Cause: ${error.message || 'The cloud server rejected the data structure.'}`;
       const errorDetails = error.details ? `Technical Details: ${error.details}` : '';
       const errorHint = error.hint ? `Suggested Fix: ${error.hint}` : '';
 
-      // Triggers the comprehensive descriptive layout window alert
+    
       return alert([errorHeading, errorCode, errorMessage, errorDetails, errorHint].filter(Boolean).join('\n\n'));
     } else {
-      // ⚡ RESET THE NEW FORM FIELDS ALONG WITH CORE DATA
+  
       setForm({ irregularity_type: t, bag_color: '', bag_kilos: '' });
       alert('✅ Baggage file logged securely to cloud registry database!');
     }
@@ -242,7 +241,7 @@ export default function App() {
             vertical-align: middle;
           }
           
-          /* ⚡ PURE HORIZONTAL BACKGROUND ALIGNMENT (APPLIES TO TH AND TD UNIFORMLY BY ROW) */
+          
           table tr:nth-child(odd) th, 
           table tr:nth-child(odd) td {
             background: #ffffff !important; /* Row 1: Unified Pure Snow Background */
@@ -420,7 +419,7 @@ export default function App() {
             </>
           )}
 
-          {/* ⚡ PERMANENT PASSCODE GATEWAY FIELD FOR BOTH LOGIN & REGISTRATION */}
+         
           <div className="auth-form-group">
             <label style={{ color: '#C52528' }}>Station Administration Passcode</label>
             <input required className="auth-input" type="password" placeholder="Enter corporate security key" onChange={e => setAuth({ ...auth, station_key: e.target.value })} />
@@ -461,7 +460,7 @@ export default function App() {
         </div>
       </nav>
       <div className="utility-bar" style={{ display: 'flex', gap: '10px', margin: '10px 0', flexWrap: 'wrap' }}>
-        {/* 📅 COLOR-MATCHED DATE RANGE PANEL */}
+      
         <div className="date-filter-panel">
           <span>From:</span>
           <input
@@ -495,7 +494,7 @@ export default function App() {
         <div className="card" style={{ margin: '15px 0' }}><form onSubmit={hRec} style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'flex-end' }}>
           <select value={form.irregularity_type || 'Delayed'} onChange={e => setForm({ ...form, irregularity_type: e.target.value })} style={{ height: '38px' }}><option value="Delayed">Delayed</option><option value="Damaged">Damaged</option><option value="Onhand">Onhand</option></select>
           {flds.map(f => <input key={f} placeholder={f === 'file_number' ? `File Num ${reqFn ? '' : '(Opt)'}` : f.replace(/_/g, ' ')} required={f === 'file_number' ? reqFn : ['bag_tag_number', 'passenger_last_name', 'passenger_first_name'].includes(f)} maxLength={f === 'ticket_number' || f === 'phone_number' ? 13 : undefined} minLength={f === 'ticket_number' ? 13 : undefined} pattern={f === 'phone_number' ? "[0-9]*" : undefined} value={form[f] || ''} onChange={e => setForm({ ...form, [f]: e.target.value })} style={{ flex: '1', minWidth: '120px', height: '38px' }} />)}
-          {/* 🎨 NEW: BRANDED BAG COLOR DROPDOWN SELECTOR */}
+         
           <select
             className="form-theme-select"
             value={form.bag_color || ''}
@@ -512,7 +511,7 @@ export default function App() {
             <option value="Other">Other Color</option>
           </select>
 
-          {/* ⚖️ NEW: NUMERIC BAG WEIGHT KILOS INPUT */}
+        
           <input
             type="number"
             className="form-theme-input"
@@ -526,7 +525,7 @@ export default function App() {
 
           <button className="btn" style={{ width: 'auto', height: '38px' }}>Register</button>
         </form></div>
-        {/* 📊 MASTER DATA TABLE MATRIX WITH COLOR & WEIGHT SYNC */}
+       
         <div className="card table-wrapper" style={{ width: '100%', margin: '15px 0', padding: '0', overflowX: 'auto' }}>
           <table style={{ tableLayout: 'fixed', width: '1250px', borderCollapse: 'collapse' }}>
             <thead>
@@ -551,7 +550,7 @@ export default function App() {
                     <td style={cellStyle}>{isEd ? <input style={{ width: '100%', textAlign: 'center' }} maxLength={13} minLength={13} value={it.ticket_number || ''} onChange={e => setEdF({ ...edF, ticket_number: e.target.value })} /> : b.ticket_number || '—'}</td>
                     <td style={cellStyle}>{isEd ? <input style={{ width: '100%', textAlign: 'center' }} maxLength={13} pattern="[0-9]*" value={it.phone_number || ''} onChange={e => setEdF({ ...edF, phone_number: e.target.value })} /> : b.phone_number || '—'}</td>
 
-                    {/* 🎨 SYNCED NATIVE BAG COLOR COLUMN DATA CELL */}
+                  
                     <td style={cellStyle}>
                       {isEd ? (
                         <select style={{ width: '100%s' }} value={it.bag_color || ''} onChange={e => setEdF({ ...edF, bag_color: e.target.value })}>
@@ -569,7 +568,7 @@ export default function App() {
                       )}
                     </td>
 
-                    {/* ⚖️ SYNCED NATIVE BAG KILOS COLUMN DATA CELL */}
+          
                     <td style={cellStyle}>
                       {isEd ? (
                         <input type="number" style={{ width: '100%', textAlign: 'center' }} value={it.bag_kilos || ''} onChange={e => setEdF({ ...edF, bag_kilos: e.target.value })} />
@@ -584,7 +583,6 @@ export default function App() {
                     <td style={cellStyle}><a href="https://desktop.worldtracer.aero/desktop/index.html#!/index/login"><button className="btn btn-sm" >Trace</button></a></td>
 
                  
-                    {/* 🛠️ CELL MATCHED VERTICAL PADDING CELL */}
                     <td style={{
                       height:'100%',
                       verticalAlign: 'middle',
