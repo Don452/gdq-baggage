@@ -527,13 +527,13 @@ export default function App() {
                       ) : (
                         <>
 
-                          <button className="btn btn-sm" onClick={() => { setEdId(b.id); setEdF({ ...b }); }}>Edit</button>
-                          <button className="btn btn-sm" onClick={async () => {
+                          <button  onClick={() => { setEdId(b.id); setEdF({ ...b }); }}>Edit</button>
+                          <button  onClick={async () => {
                             const currentAgentName = `${u.first_name} ${u.middle_name || ''}`.trim().toLowerCase();
                             if (currentAgentName !== (b.agent_name || '').trim().toLowerCase()) return alert(`🚫 Action Blocked: Deletions limited to creator. Creator: ${b.agent_name}`);
                             if (window.confirm('Del?')) await sb.from('baggage_records').delete().eq('id', b.id);
                           }}>Del</button>
-                          <button className="btn btn-sm" onClick={() => hPrnt(b)}>Print</button>
+                          <button  onClick={() => hPrnt(b)}>Print</button>
                         </>
                       )}
 
