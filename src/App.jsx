@@ -184,123 +184,154 @@ export default function App() {
       <head>
         <title>Baggage Claim Receipt - ${b.bag_tag_number}</title>
         <style>
+          @page { size: auto; margin: 20mm 15mm 20mm 15mm; }
           body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            padding: 30px;
-            color: #1e293b;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            padding: 0;
+            margin: 0;
+            color: #0f172a;
             background: #ffffff;
-            position: relative;
+            line-height: 1.5;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
           } 
-          /* ⚡ DECREASED RIGHT MARGIN AND HEIGHT TO GIVE HEADERS FLUID HORIZONTAL BREATHING ROOM */
-          .hd {
-            border-bottom: 2px solid #5E8F4D;
-            padding-bottom: 12px;
-            margin-bottom: 20px;
+          .header-wrapper {
+            position: relative;
+            border-bottom: 3px solid #5E8F4D;
+            padding-bottom: 16px;
+            margin-bottom: 30px;
+            min-height: 75px;
+          }
+          .hd-text {
             margin-right: 210px;
           }
-          /* ⚡ FORCE HEADER LINES TO PREVENT WRAPPING AND FIT ON A SINGLE LINE */
-          .hd p {
+          .hd-text p {
             margin: 0;
-            color: #5E8F4D;
             font-weight: 800;
-            letter-spacing: 0.3px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
             line-height: 1.4;
+          }
+          .corner-logo {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 185px;
+            height: 60px;
+            object-fit: contain;
+          }
+          .section-title {
+            color: #1e293b;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 25px 0 10px 0;
+            border-left: 4px solid #5E8F4D;
+            padding-left: 10px;
           }
           table {
             width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            margin-top: 15px;
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border-collapse: collapse;
+            margin-top: 10px;
+            border: 1px solid #cbd5e1;
           } 
           th, td {
-            padding: 12px 14px;
+            padding: 12px 16px;
             font-size: 13px;
-            border-bottom: 1px solid #e2e8f0;
-            border-right: 1px solid #e2e8f0;
+            border: 1px solid #cbd5e1;
+            text-align: left;
             vertical-align: middle;
-          }
-          th:last-child, td:last-child {
-            border-right: none;
-          }
-          tr:last-child td {
-            border-bottom: none;
           }
           th {
             background: #f8fafc;
-            color: #475569;
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 10px;
-            letter-spacing: 0.5px;
-            width: 22%;
-            line-height: 1.4;
+            color: #334155;
+            font-weight: 700;
+            width: 25%;
           }
           th span {
             display: block;
             color: #64748b;
-            text-transform: none;
             font-weight: 500;
             font-size: 11px;
-            letter-spacing: 0px;
             margin-top: 2px;
           }
           td {
             color: #334155;
-            background: #ffffff;
-          }
-          .corner-logo {
-            position: absolute;
-            top: 25px;
-            right: 30px;
-            width: 190px;
-            height: 65px;
-            object-fit: contain;
+            font-weight: 500;
           }
           .badge {
             background: #FFC92D;
             color: #1e293b;
-            padding: 4px 10px;
-            border-radius: 6px;
+            padding: 5px 12px;
+            border-radius: 4px;
             font-weight: 700;
-            font-size: 12px;
+            font-size: 11px;
+            letter-spacing: 0.3px;
             display: inline-block;
+            text-transform: uppercase;
           }
           .status-badge {
             background: #e0f2fe;
             color: #0369a1;
-            padding: 4px 10px;
-            border-radius: 6px;
+            padding: 5px 12px;
+            border-radius: 4px;
             font-weight: 700;
-            font-size: 12px;
+            font-size: 11px;
+            letter-spacing: 0.3px;
             display: inline-block;
+            text-transform: uppercase;
+          }
+          .agent-cell {
+            background: #f8fafc !important;
+          }
+          .agent-info {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #475569;
+          }
+          .footer-banner {
+            margin-top: 50px;
+            border-top: 1px dashed #cbd5e1;
+            padding-top: 20px;
+            text-align: center;
+          }
+          .footer-amharic {
+            font-size: 12px;
+            color: #1e293b;
+            line-height: 1.6;
+            margin: 0;
+            font-weight: 600;
+          }
+          .footer-english {
+            font-size: 11px;
+            color: #64748b;
+            line-height: 1.6;
+            margin: 6px 0 0 0;
+            font-weight: 500;
           }
         </style>
       </head>
       <body>
-        <img src="${logo}" alt="Ethiopian" class="corner-logo" onload="setTimeout(function(){ window.print(); window.close(); }, 200);" onerror="window.print(); window.close();" />
+        <div class="header-wrapper">
+          <div class="hd-text">
+            <p style="font-size: 18px; color: #5E8F4D; letter-spacing: 0.2px;">የኢትዮጵያ አየር መንገድ &bull; Ethiopian Airlines</p>
+            <p style="font-size: 13px; color: #1e293b; margin-top: 2px;">ጊዜያዊ የሻንጣ መጠየቂያ ሠነድ &bull; Temporary Property Irregularity Report</p>
+            <p style="font-size: 11px; color: #475569; font-weight: 600; margin-top: 4px;">GDQ BAGGAGE SERVICE &bull; TEL: +251991343796 &bull; EMAIL: GDQAPT@ethiopianairlines.com</p>
+          </div>
+          <img src="${logo}" alt="Ethiopian Airlines" class="corner-logo" onload="setTimeout(function(){ window.print(); window.close(); }, 250);" onerror="window.print(); window.close();" />
+        </div>
 
-        <div class="hd">
-          <p style="font-size: 15px;">የኢትዮጵያ አየር መንገድ Ethiopian Airlines</p>
-          <p style="font-size: 13px;">ጊዜያዊ የሻንጣ መጠየቂያ ሠነድ Temporary Property Irregularity Report</p>
-          <p style="font-size: 12px;">GDQ BAGGAGE SERVICE TEL: +251991343796</p>
-          <p style="font-size: 12px;">EMAIL: GDQAPT@ethiopianairlines.com</p>
-          <p style="margin-top: 6px; font-size: 11px; color: #64748b; font-weight: 500; white-space: nowrap;">የተሰጠበት ቀን / Issued Date: ${new Date(b.created_at || Date.now()).toLocaleString()}</p>
+        <div style="text-align: right; font-size: 11px; color: #64748b; font-weight: 600; margin-bottom: 5px;">
+          የተሰጠበት ቀን / Issued Date: <span style="color: #0f172a;">${new Date(b.created_at || Date.now()).toLocaleString()}</span>
         </div>
         
-        <h3 style="color:#0f172a;margin-top:25px;font-size:15px;font-weight:700;">የመንገደኛ እና የሻንጣ መረጃ ዝርዝር / Passenger & Bag Claim Details</h3>
+        <div class="section-title">የመዝገብ መግለጫ ዝርዝር / Case File Details</div>
         <table>
           <tr>
             <th>የሻንጣ መለያ ቁጥር <span>Tag Number</span></th>
-            <td><b style="font-size:14px;color:#0f172a;letter-spacing:0.5px;">${b.bag_tag_number}</b></td>
+            <td><b style="font-size: 15px; color: #0f172a; font-family: monospace; letter-spacing: 0.5px;">${b.bag_tag_number}</b></td>
             <th>የፋይል መለያ ቁጥር <span>File Reference</span></th>
-            <td><span style="font-family:monospace;font-size:13px;font-weight:700;color:#0f172a;">${b.file_number || '—'}</span></td>
+            <td><span style="font-family: monospace; font-size: 14px; font-weight: 700; color: #0f172a;">${b.file_number || '—'}</span></td>
           </tr>
           <tr>
             <th>የአያት ስም <span>Last Name</span></th>
@@ -309,41 +340,39 @@ export default function App() {
             <td>${b.passenger_first_name}</td>
           </tr>
           <tr>
-            <th>የቲኬት ቁጥር <span>Ticket Number</span></th>
-            <td><span style="font-family:monospace;">${b.ticket_number || '—'}</span></td>
+            <th>የቲኬት ቁጥር<span>Ticket Code</span></th>
+            <td><span style="font-family: monospace; font-size: 13px;">${b.ticket_number || '—'}</span></td>
             <th>የስልክ ቁጥር <span>Contact Phone</span></th>
             <td>${b.phone_number || '—'}</td>
           </tr>
-          
-          {/* ⚡ NEWLY INTEGRATED SYNCED ROW FOR BAG COLOR AND BAGGAGE WEIGHT */}
           <tr>
             <th>የሻንጣው ቀለም <span>Bag Color</span></th>
             <td>${b.bag_color || '—'}</td>
             <th>የሻንጣው ክብደት <span>Bag Weight</span></th>
-            <td><b>${b.bag_kilos ? b.bag_kilos + ' KG' : '—'}</b></td>
+            <td>${b.bag_kilos ? '<b style="font-size:13px; color:#0f172a;">' + b.bag_kilos + ' KG</b>' : '—'}</td>
           </tr>
-
           <tr>
-            <th>የችግሩ አይነት <span>Incident Type</span></th>
+            <th>የተመዘገበት ምክኒያት <span>Incident Type</span></th>
             <td><span class="badge">${b.irregularity_type}</span></td>
             <th>ያለበት ወቅታዊ ሁኔታ <span>Current Status</span></th>
             <td><span class="status-badge">${b.bag_status || 'Open'}</span></td>
           </tr>
           <tr>
             <th>መረጃውን የመዘገበው ሰራተኛ <span>Logged By Agent</span></th>
-            <td colspan="3" style="background:#f8fafc;color:#64748b;font-weight:500;">
-              👤 የጣቢያው ተረኛ ሰራተኛ / Station Handler Reference: <span style="color:#334155;font-weight:600;">${b.agent_name || 'System Authorized'}</span>
+            <td colspan="3" class="agent-cell">
+              <div class="agent-info">
+                👤 <span>የጣቢያው ተረኛ ሰራተኛ / Station Handler:</span> <strong style="color: #1e293b; font-weight: 700;">${b.agent_name || 'System Authorized'}</strong>
+              </div>
             </td>
           </tr>
         </table>
         
-        <br/>
-        <div style="margin-top:40px;border-top:1px solid #e2e8f0;padding-top:15px;text-align:center;">
-          <p style="font-size:12px;color:#1e293b;line-height:1.6;margin:0;font-weight:600;">
+        <div class="footer-banner">
+          <p class="footer-amharic">
             ይህ ሰነድ ስላስመዘገቡት የሻንጣ መጥፋት/መዘግየት ጥያቄ ይፋዊ ማረጋገጫ ሆኖ የሚያገለግል ነው።<br/>
             የአየር መንገዳችን የስራ ቡድን ሂደቱን እስኪያጠናቅቅ ድረስ ስለሚያደርጉልን ትብብር እናመሰግናለን። ለተፈጠረው መስተጓጎል ይቅርታ እንጠይቃለን።
           </p>
-          <p style="font-size:11px;color:#94a3b8;line-height:1.6;margin:5px 0 0 0;white-space:normal;font-weight:500;">
+          <p class="footer-english">
             This serves as an official confirmation of your registered baggage irregularity claim file.<br/>
             Thank you for your cooperation while our station team processes your records. We apologize for the inconvenience.
           </p>
