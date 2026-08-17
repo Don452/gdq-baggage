@@ -85,40 +85,22 @@ export default function App() {
       }
 
       // Passcode is verified! Proceed with Account Registration or Portal Login sequence:
+            // Passcode is verified! Proceed with Account Registration or Portal Login sequence:
       if (isS) {
-        const { data: userCheck } = await sb.from('agents').select('username').eq('username', currentUsername).maybeSingle();
-        if (userCheck) return alert(`🚫 Registration Failed: The username "${auth.username}" is already claimed.`);
-
-        const { data: nameCheck } = await sb.from('agents').select('first_name, middle_name').eq('first_name', currentFirst).eq('middle_name', currentMiddle);
-        if (nameCheck && nameCheck.length > 0) return alert(`🚫 Registration Failed: An agent profile named "${auth.first_name} ${auth.middle_name || ''}" already exists.`);
-
-        const { error: regError } = await sb.from('agents').insert([{ username: currentUsername, password: currentPassword, first_name: currentFirst, middle_name: currentMiddle }]);
-
-        if (regError) {
-          return alert(`❌ Cloud Sync Failure:\n\nCode: ${regError.code || 'AUTH_ERR'}\nDetails: ${regError.message}`);
-        }
-
-        alert('✅ Station account created successfully on the cloud registry! Proceeding to portal login.');
-        setIsS(false);
-      } else {
-        const { data: matchingAgent, error: loginError } = await sb.from('agents').select('*').eq('username', currentUsername).eq('password', currentPassword).maybeSingle();
-
-        if (loginError) {
-          return alert(`❌ Portal Connection Interrupted:\n\nDetails: ${loginError.message}`);
+        // 🚨 STRENGTH GATEWAY: ENFORCE HARDENED PASSWORD COMPLEXITY RULES
+        if (currentPassword.length < 8) {
+          return alert('🚫 Security Violation: Your password must be at least 8 characters long to protect station terminal data.');
         }
         
-        if (!matchingAgent) {
-          return alert('❌ Portal Access Denied: Invalid agent credentials or incorrect password.');
+        const hasNumber = /\d/.test(currentPassword);
+        const hasLetter = /[a-zA-Z]/.test(currentPassword);
+        
+        if (!hasNumber || !hasLetter) {
+          return alert('🚫 Security Violation: Weak password detected. Your password must contain a combination of letters and numbers.');
         }
 
-        localStorage.setItem('bagtrack_user', JSON.stringify(matchingAgent));
-        setU(matchingAgent);
-      }
-    } catch (err) {
-      console.error("Runtime Auth Exception:", err);
-      alert("❌ System Exception: Authentication process failed.");
-    }
-  };
+        // --- LEAVE EXISTING USERNAME & DUPLICATE NAME CHECKS UNTOUCHED BELOW THIS ---
+        const { data: userCheck } = await sb.from('agents').select('username').eq('username', currentUsername).maybeSingle();
 
   // SEAMLESS RECORD REGISTRATION ENGINE WITH ACTUAL REAL-TIME ERROR EXTRACTION
   const hRec = async (e) => {
