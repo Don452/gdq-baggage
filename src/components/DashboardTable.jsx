@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { sb } from '../utils/supabaseClient';
 import { hPrnt } from '../utils/printEngine';
-import '../styles/dashboardTable.css';
+import '../styles/dashboardtable.css';
 import '../styles/stationDrop.css';
 import StationTransferRequest from './StationTransferRequest';
 
