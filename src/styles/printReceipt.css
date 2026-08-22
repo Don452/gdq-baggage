@@ -1,0 +1,132 @@
+/* ==========================================================================
+   ETHIOPIAN AIRLINES BAGGAGE TELEMETRY - FULL LIGHT GRID MATRIX STYLES
+   ========================================================================== */
+body { 
+  font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif; 
+  padding: 20px; 
+  color: #0f172a; 
+  line-height: 1.5; 
+  background-color: #ffffff;
+}
+.header-wrapper { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  border-bottom: 2px solid #e2e8f0; 
+  padding-bottom: 15px; 
+  margin-bottom: 15px; 
+}
+.hd-text p { 
+  margin: 0; 
+}
+.corner-logo { 
+  max-height: 55px; 
+  object-fit: contain; 
+}
+.section-title { 
+  background: #f8fafc; 
+  padding: 8px 12px; 
+  font-weight: 700; 
+  font-size: 11px; 
+  text-transform: uppercase; 
+  color: #475569; 
+  border-left: 4px solid #5E8F4D; 
+  margin: 20px 0 12px 0; 
+  letter-spacing: 0.5px;
+}
+
+/* 🕸️ CRISP HORIZONTAL AND VERTICAL LIGHT-GRID MATRIX CONTAINER */
+table { 
+  width: 100%; 
+  border-collapse: collapse; 
+  margin-bottom: 20px; 
+}
+th, td { 
+  /* Crisp 1px uniform light-gray horizontal and vertical border lines */
+  border: 1px solid #cbd5e1 !important; 
+  padding: 12px 14px; 
+  text-align: left; 
+  vertical-align: middle;
+}
+
+/* 🔤 TYPOGRAPHY STRUCTURAL MATRIX CONFIGURATION */
+th { 
+  background: #f1f5f9;
+  color: #475569; 
+  font-size: 11px;
+  text-transform: uppercase;
+  font-weight: 700; 
+  letter-spacing: 0.3px;
+  width: 25%; 
+}
+th span { 
+  display: block; 
+  font-size: 9px; 
+  color: #64748b; 
+  font-weight: 500; 
+  margin-top: 3px; 
+}
+td {
+  font-family: 'Inter', -apple-system, sans-serif;
+  font-size: 13px;
+  color: #0f172a;
+  font-weight: 500;
+}
+
+/* 🎨 ADJACENT ROW STACKERS WITH SUBTLE ACCENTS */
+table tbody tr:nth-child(odd) {
+  background: #ffffff; 
+}
+table tbody tr:nth-child(even) {
+  background: #f8fafc; 
+}
+
+/* 🏷️ STATUS BADGE CONFIGURATION */
+.badge { 
+  background: #fee2e2; 
+  color: #dc2626; 
+  padding: 4px 8px; 
+  border-radius: 6px; 
+  font-weight: 700; 
+  font-size: 11px; 
+}
+.status-badge { 
+  background: #fef9c3; 
+  color: #854d0e; 
+  padding: 4px 8px; 
+  border-radius: 6px; 
+  font-weight: 700; 
+  font-size: 11px; 
+}
+.agent-info { 
+  display: flex; 
+  align-items: center; 
+  gap: 6px; 
+  font-size: 13px;
+}
+.footer-banner { 
+  background: #f8fafc; 
+  border-top: 1px dashed #cbd5e1; 
+  padding: 20px; 
+  margin-top: 35px; 
+  text-align: center; 
+  border-radius: 8px; 
+}
+.footer-amharic { 
+  font-size: 12px; 
+  color: #334155; 
+  margin: 0 0 10px 0; 
+  font-weight: 500; 
+  line-height: 1.6;
+}
+.footer-english { 
+  font-size: 11px; 
+  color: #64748b; 
+  margin: 0; 
+  font-style: italic; 
+}
+
+@media print {
+  body { padding: 0; font-size: 12px; }
+  .footer-banner { page-break-inside: avoid; }
+}

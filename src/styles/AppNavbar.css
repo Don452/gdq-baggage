@@ -1,0 +1,188 @@
+/* 🛩️ COHESIVE SYSTEM PALETTE */
+:root {
+  --primary: #5E8F4D;
+  --primaryy: #ffffff;
+  --primary-hover: #f59e0b;
+  --bg-main: #f1f5f9;
+  --card-bg: #ffffff;
+  --text-dark: #0f172a;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0; /* Softened from cbd5e1 for a premium minimalist edge */
+  --accent-delayed: #ef4444;
+  --accent-damaged: #f59e0b;
+  --accent-onhand: #10b981;
+}
+
+/* 🧱 NAVBAR FIXED FLEX FRAME */
+.main-navbar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 32px; /* Streamlined height with widened breathability */
+  background: var(--card-bg) !important;
+  border-bottom: 1px solid var(--border-color);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  box-shadow: 0 4px 20px -4px rgba(15, 23, 42, 0.03);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(8px);
+}
+
+.brand-wrapper {
+  display: flex;
+  align-items: center;
+  transition: transform 0.2s ease;
+}
+
+.brand-wrapper:hover {
+  transform: scale(1.01);
+}
+
+.brand-heading {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.brand-logo-img {
+  width: 155px; /* Clean proportional size tuning */
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.02));
+}
+
+/* 📏 SYMMETRICAL ACTION BUTTON MATRIX AREA */
+.nav-actions-menu {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Refined layout distribution packing */
+  margin-bottom: 0;
+}
+
+/* 🎯 UNIFORM RECTANGULAR PILL CORE SPECIFICATION */
+.nav-pill-item {
+  box-sizing: border-box;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 18px;
+  font-size: 11px; /* Slightly dropped font size to increase text weight readability */
+  font-weight: 700;
+  border-radius: 4px; /* Softer modern curved corners */
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  white-space: nowrap;
+  outline: none;
+}
+
+/* 📍 STATION INDICATOR CORE IDENTIFIER */
+.station-badge-node {
+  height: 28px; /* Unified matching height structure */
+  padding: 0 14px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.5px;
+  box-shadow: inset 0 -2px 0px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+.station-badge-node:hover {
+background: var(--primary-hover);
+transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+transform: translateY(-1px);
+}
+
+.station-badge-node:active {
+ transform: translateY(0);
+}
+
+/* Elegant Solid Branded Primary States */
+.badge-admin,
+.badge-terminal {
+  background-color: var(--primary);
+  color: var(--primaryy);
+}
+
+/* 🔄 HIGH-UTILITY INTERACTIVE NAVIGATION TOGGLES */
+.nav-toggle-btn {
+  background-color: rgba(94, 143, 77, 0.08); /* Sophisticated tinted transparent baseline background */
+  color: #fff;
+  border: 1px solid rgba(94, 143, 77, 0.15);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Activated menu tab button state placeholder class name hook */
+.nav-toggle-btn.is-active {
+  background-color: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+.nav-toggle-btn:hover {
+  background-color: var(--primary-hover) !important;
+  color: #fff !important;
+  border-color: var(--primary-hover) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+}
+
+.nav-toggle-btn:active {
+  transform: translateY(0);
+}
+
+/* 🟢 BRANDED USER AVATAR CIRCLE SPECIFICATION */
+.agent-greeting-circle {
+  box-sizing: border-box;
+  width: 30px;  /* Locked vertical scaling symmetry bounds */
+  height: 30px; 
+  border-radius: 50%; 
+  background-color: var(--primary);
+  border: 2px solid #ffffff; 
+  color: var(--primaryy);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  box-shadow: 0 0 0 1px var(--border-color), 0 2px 6px rgba(0,0,0,0.06);
+  cursor: default;
+  transition: all 0.2s ease;
+}
+
+.agent-greeting-circle:hover {
+  background-color: var(--primary-hover);
+  box-shadow: 0 0 0 1px var(--primary-hover), 0 4px 12px rgba(245, 158, 11, 0.2);
+  transform: rotate(360deg); /* Playful luxury accent rotation animation on core user avatar */
+   width: 40px;  /* Locked vertical scaling symmetry bounds */
+  height: 40px; 
+}
+
+/* 🚪 LOGOUT CONTROL COMPONENT SPECIFICATION */
+.nav-logout-action-btn {
+  background-color: var(--primary); /* Off-white fallback tone prevents action-color clashing */
+  border: 1px solid var(--border-color);
+  color: #fff; /* Alert color context matches action intent */
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.nav-logout-action-btn:hover {
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.nav-logout-action-btn:active {
+  transform: translateY(0);
+}

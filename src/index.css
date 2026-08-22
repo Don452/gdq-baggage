@@ -1,111 +1,222 @@
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
-
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
+  --ethiopian-green: #5E8F4D;
+  --ethiopian-yellow: #FFC92D;
+  --ethiopian-red: #C52528;
+  --snow: #F4F5F6;
+  --white: #FFFFFF;
+  --text-dark: #0F172A;
+  --text-muted: #64748B;
+  --border-color: #E2E8F0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
-}
-
-body {
+/* 🌎 GLOBAL RESET */
+html, body, #root {
   margin: 0;
+  padding: 0;
+  width: 100vw;
+  min-height: 100vh;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  background-color: var(--snow);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  color: var(--text-dark);
 }
 
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+/* 🖥️ EDGE-TO-EDGE FULL SCREEN CONTAINER */
+.container {
+  width: 100%;
+  max-width: 100% !important;
+  margin: 0;
+  padding: 16px;
   box-sizing: border-box;
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+/* 📦 PREMIUM SYSTEM CONTENT CARD WIDGETS */
+.card {
+  background: var(--white);
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  margin-bottom: 16px;
+  box-sizing: border-box;
 }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
-  margin: 0;
-}
-
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
+/* 🛠️ SYSTEM FORMS & INPUT FOCUS PACKS */
+.card input, .card select {
+  width: 100%;
+  height: 36px;
+  border: 1px solid var(--ethiopian-green) !important;
+  background-color: var(--white) !important;
+  color: var(--text-dark) !important;
   border-radius: 4px;
-  color: var(--text-h);
+  padding: 0 8px;
+  font-size: 13px;
+  text-align: center;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease-in-out;
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
+.card input:hover, .card select:hover,
+.card input:focus, .card select:focus {
+  outline: none !important;
+  border-color: var(--ethiopian-yellow) !important;
+}
+
+/* 📊 HIGH-DYNAMIC SCROLL WRAPPER FOR ULTRA-WIDE DATA TABLES */
+.table-wrapper {
+  overflow-x: auto;
+  width: 100%;
+  background: var(--white);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+/* 📐 MATHEMATICALLY ALIGNED GRID MATRIX */
+table {
+  width: 100%;
+  min-width: 1350px;
+  border-collapse: collapse;
+  table-layout: fixed; /* Dynamic column locking metric */
+}
+
+th, td {
+  padding: 10px 6px;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  vertical-align: middle;
+  height: 52px; /* Uniform grid block height parameter */
+  box-sizing: border-box;
+}
+
+th {
+  background: var(--snow);
+  font-weight: 700;
+  color: var(--text-muted);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid var(--border-color);
+}
+
+tr:hover td {
+  background-color: var(--snow) !important;
+}
+
+/* 🏷️ BRAND CAPSULE LABELS */
+.type-lbl {
+  display: inline-block;
   padding: 4px 8px;
-  background: var(--code-bg);
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--white);
+  text-align: center;
+  min-width: 75px;
+}
+
+/* 🔘 REVENUE CONTROLS OPERATIONAL ACTION BUTTON PACKS */
+.btn-sm {
+  height: 30px;
+  padding: 0 10px;
+  font-size: 12px;
+  border-radius: 4px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.15s ease;
+}
+
+.btn-sm:hover {
+  opacity: 0.9;
+}
+
+.btn-cancel {
+  background: var(--text-muted);
+  color: var(--white);
+}
+
+
+/* 📝 HORIZONTAL REGISTRATION BAR CONTAINER */
+.form-card-container {
+  width: 100% !important;
+  max-width: 100% !important;
+  background: var(--white);
+  padding: 12px 16px !important;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+}
+
+/* 📐 HORIZONTAL ROW FLOW MANAGEMENT */
+.form-layout-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center; /* Aligns all inputs and the button onto a single horizontal centerline */
+  justify-content: space-between;
+  gap: 8px; /* Precise gap space between elements */
+  width: 100%;
+  box-sizing: border-box;
+  flex-wrap: nowrap; /* Forces everything to stay on one straight line */
+  overflow-x: auto;  /* Safe horizontal scroll fallback on small screens */
+}
+
+/* 📥 UNIFORM INLINE INPUTS AND DROP-DOWNS */
+.form-layout-row .form-theme-input,
+.form-layout-row .form-theme-select {
+  flex: 1; /* Automatically stretches fields equally across the horizontal screen space */
+  min-width: 110px; /* Prevents text squeezing */
+  height: 38px;
+  border: 1px solid var(--ethiopian-green) !important;
+  background-color: var(--white) !important;
+  color: var(--text-dark) !important;
+  border-radius: 4px;
+  padding: 0 10px;
+  font-size: 13px;
+  text-align: center;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease-in-out;
+}
+
+/* ⚡ BROWSER FOCUS OVERRIDES (Turns Ethiopian Yellow when clicked) */
+.form-layout-row .form-theme-input:hover,
+.form-layout-row .form-theme-select:hover,
+.form-layout-row .form-theme-input:focus,
+.form-layout-row .form-theme-select:focus {
+  outline: none !important;
+  border-color: var(--ethiopian-yellow) !important;
+}
+
+/* 🔘 PERFECTLY LEVEL REGISTER BUTTON */
+.form-layout-row .form-theme-submit-btn {
+  height: 38px;
+  background: var(--ethiopian-green);
+  color: var(--white);
+  padding: 0 18px;
+  font-weight: 700;
+  font-size: 13px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap; /* Prevents button text from breaking into two lines */
+  transition: background-color 0.15s, color 0.15s;
+  box-sizing: border-box;
+}
+
+.form-layout-row .form-theme-submit-btn:hover {
+  background: var(--ethiopian-yellow);
+  color: var(--text-dark);
 }

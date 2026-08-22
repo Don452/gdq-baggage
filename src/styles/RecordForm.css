@@ -1,0 +1,148 @@
+:root {
+  --primary: #5E8F4D;
+  --primaryy: #ffffff;
+  --primary-hover: #f59e0b;
+  --bg-main: #f1f5f9;
+  --card-bg: #ffffff;
+}
+
+.compact-form-card {
+  width: 100%;
+  background: #ffffff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 4px rgba(22, 163, 74, 0.06);
+  margin-bottom: 12px;
+}
+
+.compact-inline-form {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+.mini-input {
+  height: 28px;
+  padding: 0 6px;
+  font-size: 11px;
+  border: 1px solid var(--primary);
+  border-radius: 4px;
+  color: #1e293b;
+  background: #f8fafc;
+  outline: none;
+  min-width: 90px;
+  flex: 1;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* 🟥 Focus Track Overrides (Corporate Red Accent) */
+.mini-input:focus {
+  border-color: var(--primary-hover);
+  background: #ffffff;
+  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.08);
+}
+
+
+.mini-select {
+  padding-right: 12px;
+  cursor: pointer;
+  min-width: 100px;
+}
+
+.mini-weight {
+  max-width: 50px;
+  min-width: 45px;
+  text-align: center;
+}
+
+.tagless-horizontal-block {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.flex-grow-desc {
+  flex: 3 !important;
+  min-width: 280px;
+}
+
+/* 🎨 FIXED: Balanced horizontal constraint rule for the Tagless view color select */
+.mini-tagless-color {
+  flex: 1 !important;
+  min-width: 95px !important;
+  max-width: 120px !important;
+}
+
+.mini-upload-zone {
+  display: inline-block;
+  position: relative;
+}
+
+/* 🟨 Photo Upload Label (Corporate Amber Gold Accent) */
+.mini-file-label {
+  display: flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 10px;
+  background: #fef3c7;
+  color: #b45309;
+  border: 1px solid #fde68a;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.mini-file-label:hover {
+  background: #fde68a;
+}
+
+.mini-file-label input[type="file"] {
+  display: none;
+}
+
+/* 🟩 Core Submit Button (Primary Corporate Green Accent) */
+.mini-submit-btn {
+  height: 28px;
+  padding: 0 14px;
+  background: var(--primary);
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.mini-submit-btn:hover {
+
+  background: var(--primary-hover);
+}
+
+
+.mini-submit-btn:hover {
+  background: var(--primary-hover);
+  box-shadow: 0 2px 6px rgba(21, 128, 61, 0.2);
+}
+
+.mini-submit-btn:disabled {
+  background: #cbd5e1;
+  color: #94a3b8;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.font-bold {
+  font-weight: 700;
+  color: var(--primary);
+}
+

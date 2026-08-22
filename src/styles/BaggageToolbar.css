@@ -1,0 +1,154 @@
+:root {
+  --ethiopian-green: #5E8F4D;
+  --ethiopian-yellow: #FFC92D;
+  --ethiopian-red: #C52528;
+  --text-dark: #1e293b;
+  --text-muted: #64748b;
+  --white: #ffffff;
+  --snow: #f8fafc;
+  --border-color: #cbd5e1;
+}
+.toolbar-utilities-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  background-color: var(--card-bg);
+  padding: 12px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  margin: 15px 0;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* 📋 INCIDENT SELECTOR TABS */
+.tab-filters-row {
+  margin: 0;
+  display: flex;
+  gap: 4px;
+}
+
+.toolbar-tab-btn {
+  padding: 6px 14px;
+  cursor: pointer;
+  background-color: var(--ethiopian-green);
+  color: #fff;
+  border: 1px solid var(--primary);
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.30s ease-on-out;
+}
+
+.toolbar-tab-btn:hover {
+  padding: 6px 14px;
+  cursor: pointer;
+  background-color: var(--ethiopian-yellow);
+  color: #fff;
+  border: 1px solid var(--ethiopian-yellow);
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.30s ease-on-out;
+}
+
+
+
+/* Active Category Mappings using Design Tokens */
+.toolbar-tab-btn.tab-active-all {
+  background-color: var(--text-dark) !important;
+  color: var(--primaryy) !important;
+  border-color: var(--text-dark);
+}
+
+.toolbar-tab-btn.tab-active-delayed {
+  background-color: var(--accent-delayed) !important;
+  color: var(--primaryy) !important;
+  border-color: var(--accent-delayed);
+}
+
+.toolbar-tab-btn.tab-active-damaged {
+  background-color: var(--accent-damaged) !important;
+  color: var(--primaryy) !important;
+  border-color: var(--accent-damaged);
+}
+
+.toolbar-tab-btn.tab-active-onhand {
+  background-color: var(--accent-onhand) !important;
+  color: var(--primaryy) !important;
+  border-color: var(--accent-onhand);
+}
+
+/* 🎚️ PARAMETER INPUT FIELDS GRID COMPONENTS */
+.toolbar-filter-group-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.toolbar-field-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.toolbar-field-label {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--text-muted);
+  letter-spacing: 0.3px;
+}
+
+/* 📦 STRUCTURAL CONTROLS DROP MENUS AND INPUT FIELDS */
+.toolbar-select-menu,
+.toolbar-input-text,
+.toolbar-input-date {
+  box-sizing: border-box;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 4px;
+  border: 1px solid var(--ethiopian-green);
+  font-size: 12px;
+  color: var(--text-dark);
+  background-color: var(--);
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.toolbar-select-menu:hover,
+.toolbar-input-text:hover,
+.toolbar-input-date:hover {
+ 
+border: 1px solid var(--ethiopian-yellow);
+
+}
+
+.toolbar-select-menu:focus,
+.toolbar-input-text:focus,
+.toolbar-input-date:focus {
+  border-color: var(--ethiopian-yellow);
+  box-shadow: 0 0 0 3px rgba(94, 143, 77, 0.12);
+}
+
+/* 🛠️ FIXED STRUCTURAL SIZES WITH NO WIDTH EXPANSIONS */
+.toolbar-input-text {
+  width: 180px;
+}
+
+.toolbar-input-date {
+  padding: 0 6px;
+  width: 125px;
+}
+
+.toolbar-date-range-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: bold;
+}

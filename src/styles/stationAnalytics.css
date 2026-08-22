@@ -1,0 +1,40 @@
+/* ==========================================================================
+   ETHIOPIAN AIRLINES BAGGAGE TELEMETRY - COMPACT ANALYTICS STYLES
+   ========================================================================== */
+.an-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; width: 100%; margin: 15px 0; }
+.an-card { background: #fff; border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; box-sizing: border-box; }
+
+/* 🛠️ FIXED: Replaced illegal preprocessor extend logic with explicit native CSS rule stacking */
+.an-card-center { 
+  background: #fff; 
+  border: 1px solid var(--border-color); 
+  border-radius: 8px; 
+  padding: 16px; 
+  box-sizing: border-box;
+  text-align: center; 
+}
+
+.an-bar-container { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 12px 16px; border-radius: 8px; border: 1px solid var(--border-color); border-left: 4px solid var(--ethiopian-green); margin-bottom: 16px; }
+.an-bar-title { margin: 0; color: var(--text-dark); text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px; }
+.an-bar-sub { margin: 2px 0 0 0; font-size: 11px; color: var(--text-muted); }
+
+.an-btn { padding: 6px 12px; font-size: 12px; font-weight: 700; border-radius: 4px; border: 1px solid var(--border-color); cursor: pointer; transition: all 0.15s ease; }
+.an-btn-snow { background: var(--snow); color: var(--text-dark); }
+.an-btn-dark { background: var(--text-dark); color: #fff; }
+
+.an-donut-box { position: relative; width: 130px; height: 130px; margin: 0 auto; }
+.an-donut-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: 800; font-size: 18px; }
+.an-legend { display: flex; gap: 12px; font-size: 12px; justify-content: center; margin-top: 15px; }
+
+.an-rate-num { font-size: 36px; font-weight: 800; }
+.an-progress-track { width: 100%; background: var(--snow); border-radius: 10px; height: 16px; overflow: hidden; margin: 15px 0; border: 1px solid var(--border-color); }
+.an-progress-bar { background: var(--ethiopian-green); height: 100%; }
+
+.an-scroll-box { display: flex; flex-direction: column; gap: 12px; max-height: 180px; overflow-y: auto; }
+.an-row-meta { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; margin-bottom: 2px; }
+.an-sub-progress { background: var(--snow); height: 10px; border-radius: 4px; overflow: hidden; border: 1px solid var(--border-color); }
+.an-badge-strip { display: flex; gap: 10px; font-size: 10px; font-family: monospace; font-weight: 700; margin-top: 2px; }
+
+.an-node-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 10px; }
+.an-node-item { background: var(--snow); padding: 16px; border-radius: 6px; border: 1px solid var(--border-color); font-size: 13px; font-weight: 600; display: flex; flex-direction: column; gap: 4px; }
+.an-node-badge { font-weight: 800; background: var(--text-dark); color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 12px; }

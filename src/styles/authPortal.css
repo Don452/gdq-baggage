@@ -1,0 +1,158 @@
+:root {
+    --primary: #5E8F4D;
+    --primaryy: #ffffff;
+    --primary-hover: #f59e0b;
+    --bg-main: #f1f5f9;
+    --card-bg: #ffffff;
+    --text-dark: #0f172a;
+    --text-muted: #64748b;
+    --border-color: #e2e8f0;
+    /* Softened from cbd5e1 for a premium minimalist edge */
+    --accent-delayed: #ef4444;
+    --accent-damaged: #f59e0b;
+    --accent-onhand: #10b981;
+}
+
+.auth-viewport-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #f1f5f9;
+    padding: 15px;
+    font-family: system-ui, -apple-system, sans-serif;
+    box-sizing: border-box;
+}
+
+/* 🏢 SECURE AUTH PANEL MAIN CARD TEMPLATE */
+.auth-card-panel {
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 360px;
+    box-sizing: border-box;
+}
+
+/* 📋 HEADER BRAND ALIGNMENTS */
+.auth-card-header {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.auth-logo-badge {
+    color: #ffffff;
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-weight: 900;
+    cursor: pointer;
+    user-select: none;
+}
+
+
+.auth-brand-title {
+    margin: 8px 0 2px 0;
+    font-size: 18px;
+    color: #0f172a;
+}
+
+.auth-subtitle {
+    margin: 0;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.auth-subtitle-group h2 {
+    color: var(--primary);
+}
+
+
+
+/* ✉️ TEXT INPUT & SELECTION ENGINES FRAME */
+.auth-form-matrix {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.auth-input-row-split {
+  width: 100%;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 1fr; /* Single column format stack layout */
+  gap: 10px;
+}
+
+
+.auth-input-field,
+.auth-select-dropdown {
+    width: 100%;
+    padding: 7px;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 13.5px;
+    border: 1px solid var(--primary);
+    outline: none;
+    appearance: none;
+}
+
+
+.auth-input-field:focus,
+.auth-select-dropdown:focus {
+    width: 100%;
+    padding: 7px;
+    border: 1px solid;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 13.5px;
+    border-color: var(--primary);
+}
+
+
+
+
+
+/* ⚡ MAIN FORM SUBMISSION WORKFLOW BUTTON */
+.auth-action-submit-btn {
+    width: 100%;
+    padding: 9px;
+    border: none;
+    border-radius: 4px;
+    color: #ffffff;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+
+.auth-action-submit-btn.btn-agent {
+    background: #5E8F4D;
+}
+
+.auth-action-submit-btn.btn-admin {
+    background: var(--primary);
+}
+
+/* 🔄 BOTTOM FOOTER LINK LAYER RULES */
+.auth-footer-routing {
+    margin-top: 12px;
+    text-align: center;
+    font-size: 11px;
+}
+
+.auth-link-back {
+    color: var(--primary);
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.auth-toggle-text {
+    color: #64748b;
+}
+
+.auth-toggle-link {
+    color: #5E8F4D;
+    cursor: pointer;
+    text-decoration: underline;
+}

@@ -1,0 +1,106 @@
+.transfer-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 16px;
+  font-family: sans-serif;
+  box-sizing: border-box;
+}
+
+.transfer-modal-card {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+.transfer-modal-title {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+  color: #0f172a;
+}
+
+.transfer-summary-box {
+  background: #f8fafc;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  margin-bottom: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.transfer-summary-line {
+  margin-bottom: 4px;
+}
+
+.transfer-summary-line:last-child {
+  margin-bottom: 0;
+}
+
+.transfer-textarea {
+  width: 100%;
+  padding: 8px;
+  font-size: 13px;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  resize: none;
+  box-sizing: border-box;
+  margin-bottom: 12px;
+  font-family: inherit;
+}
+
+.transfer-textarea:focus {
+  outline: none;
+  border-color: #94a3b8;
+}
+
+.transfer-actions-group {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.transfer-btn {
+  padding: 6px 12px;
+  font-size: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.transfer-btn-cancel {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #334155;
+}
+
+.transfer-btn-cancel:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.transfer-btn-submit {
+  background: #0f172a;
+  color: #ffffff;
+  border: none;
+}
+
+.transfer-btn-submit:hover {
+  background: #1e293b;
+}
+
+.transfer-btn-submit:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+}
