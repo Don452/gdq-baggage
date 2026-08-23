@@ -249,7 +249,6 @@
     .toolbar-input-date:hover {
         width: 100% !important;
         flex: 1 1 100% !important;
-        background: var(--primary-hover);
         color: #fff;
     }
 
