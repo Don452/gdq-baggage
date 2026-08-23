@@ -66,7 +66,38 @@ export default function DashboardTable({ fil = [], u, edId, setEdId, edF, setEdF
                   <div className="station-item-top"><span className="station-item-origin">🛫 From: {n.requesting_station}</span><button onClick={() => closeReq(n.id, n.bag_tag_number)} className="station-item-close-x">&times;</button></div>
                   <div className="bag-tag-mono">ET: {n.bag_tag_number}</div>
                   <p className="station-item-msg">"{n.agent_message || n.message || n.notes || 'No notes.'}"</p>
-                  <div className="station-chat-viewport">{(Array.isArray(n.chat_history) ? n.chat_history : []).map((m, i) => <div key={i} className="station-chat-bubble" style={{ background: m.sender === stCode ? '#f0fdf4' : '#f1f5f9', marginLeft: m.sender === stCode ? '50%' : '0' }}><b>[{m.sender}]:</b> {m.text}</div>)}</div>
+                  <div className="station-chat-viewport" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    {(Array.isArray(n.chat_history) ? n.chat_history : []).map((m, i) => {
+                      const isMe = m.sender === stCode;
+                      return (
+                        <div
+                          key={i}
+                          style={{
+                            display: 'flex',
+                            width: '100%',
+                            justifyContent: isMe ? 'flex-end' : 'flex-start'
+                          }}
+                        >
+                          <div
+                            className={isMe ? 'station-chat-bubble-me' : 'station-chat-bubble-them'}
+                            style={{
+                              background: isMe ? '#f0fdf4' : '#f1f5f9',
+                              padding: '12px 14px',
+                              borderRadius: isMe ? '14px 14px 2px 14px' : '14px 14px 14px 2px',
+                              maxWidth: '70%',
+                              width: 'max-content',
+                              height: 'auto',
+                              wordBreak: 'break-word',
+                              boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)'
+                            }}
+                          >
+                            <b>[{m.sender}]:</b> {m.text}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
                   <form onSubmit={e => reply(e, n)} className="station-chat-form"><input type="text" value={replyTexts?.[n.id] || ''} onChange={e => setReplyTexts({ ...replyTexts, [n.id]: e.target.value })} placeholder="Reply..." required /><button type="submit" className="btn-sm btn-row-print">✈️</button></form>
                 </div>
               ))}
