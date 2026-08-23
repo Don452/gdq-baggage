@@ -29,18 +29,32 @@ export default function AdminAnalytics({ recs = [], stations = [], fetchStations
     const target = stations.find(st => st.station_code === code);
     setEdF(target ? { station_name: target.station_name, admin_passcode: target.admin_passcode || '' } : { station_name: '', admin_passcode: '' });
   };
-
-  return (
-    <>
+return (
     <div className="admin-container">
       {/* 🛠️ TOP ADMINISTRATIVE OPERATIONS BALANCED MANAGEMENT BAR (FLEX WRAP FOR AUTO-EXPANSION) */}
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginBottom: '20px', width: '100%' }}>
 
         {/* PANEL 1: VIEW ISOLATION CONTROLLER */}
-        <div className="control-panel cp-yellow" style={{ flex: '1 1 220px' }}><label>🔍 Filter Network Target</label><div className="input-row"><select style={{ width: '100%' }} value={flt} onChange={e => setFlt(e.target.value)}><option value="">All Active Hubs</option>{stations.map(st => <option key={st.station_code} value={st.station_code}>{st.station_code} — {st.station_name}</option>)}</select></div></div>
+        <div className="control-panel cp-yellow" style={{ flex: '1 1 220px' }}>
+          <label>🔍 Filter Network Target</label>
+          <div className="input-row">
+            <select style={{ width: '100%' }} value={flt} onChange={e => setFlt(e.target.value)}>
+              <option value="">All Active Hubs</option>
+              {stations.map(st => <option key={st.station_code} value={st.station_code}>{st.station_code} — {st.station_name}</option>)}
+            </select>
+          </div>
+        </div>
 
         {/* PANEL 2: PROVISION NEW HUB STATION */}
-        <form onSubmit={async (e) => { e.preventDefault(); const c = nst.station_code.toUpperCase().trim(); if (c.length !== 3) return alert('Must be 3 letters.'); const { error } = await sb.from('stations').insert([{ station_code: c, station_name: nst.station_name.trim(), admin_passcode: nst.admin_passcode.trim() }]); if (error) return alert(error.message); setNst({ station_code: '', station_name: '', admin_passcode: '' }); fetchStations(); }} className="control-panel cp-green" style={{ flex: '1.2 1 280px' }}><label>➕ Add New Station Node</label><div className="input-row"><input style={{ width: '50px', textAlign: 'center', fontWeight: '700' }} placeholder="CODE" maxLength={3} value={nst.station_code} onChange={e => setNst({ ...nst, station_code: e.target.value })} required /><input style={{ flex: 1.5 }} placeholder="City Name" value={nst.station_name} onChange={e => setNst({ ...nst, station_name: e.target.value })} required /><input style={{ flex: 1, background: 'var(--snow)', fontFamily: 'monospace' }} placeholder="Pass" value={nst.admin_passcode} onChange={e => setNst({ ...nst, admin_passcode: e.target.value })} required /><button type="submit" className="btn-primary" style={{ padding: '0 8px' }}>Deploy</button></div></form>
+        <form onSubmit={async (e) => { e.preventDefault(); const c = nst.station_code.toUpperCase().trim(); if (c.length !== 3) return alert('Must be 3 letters.'); const { error } = await sb.from('stations').insert([{ station_code: c, station_name: nst.station_name.trim(), admin_passcode: nst.admin_passcode.trim() }]); if (error) return alert(error.message); setNst({ station_code: '', station_name: '', admin_passcode: '' }); fetchStations(); }} className="control-panel cp-green" style={{ flex: '1.2 1 280px' }}>
+          <label>➕ Add New Station Node</label>
+          <div className="input-row">
+            <input style={{ width: '50px', textAlign: 'center', fontWeight: '700' }} placeholder="CODE" maxLength={3} value={nst.station_code} onChange={e => setNst({ ...nst, station_code: e.target.value })} required />
+            <input style={{ flex: '1.5 40px'}} placeholder="City Name" value={nst.station_name} onChange={e => setNst({ ...nst, station_name: e.target.value })} required />
+            <input style={{ flex: '1 40px', background: 'var(--snow)', fontFamily: 'monospace' }} placeholder="Pass" value={nst.admin_passcode} onChange={e => setNst({ ...nst, admin_passcode: e.target.value })} required />
+            <button type="submit" className="btn-primary" style={{ padding: '0 8px' }}>Deploy</button>
+          </div>
+        </form>
 
         {/* PANEL 3: MASTER CONFIGURATION PANEL OVERSEE */}
         <div className="control-panel cp-green" style={{ borderTopColor: '#3b6e2d', flex: '1.2 1 280px' }}>
@@ -58,9 +72,43 @@ export default function AdminAnalytics({ recs = [], stations = [], fetchStations
           </div>
         </div>
 
-
         {/* PANEL 4: DECOMMISSION HUB STATION */}
-        <div className="control-panel cp-red" style={{ flex: '1 1 220px' }}><label>❌ Decommission Station</label><div className="input-row"><select style={{ flex: '1 1 40px' }} value={delCode} onChange={e => setDelCode(e.target.value)}><option value="">Select target...</option>{stations.map(st => <option key={st.station_code} value={st.station_code}>{st.station_code} — {st.station_name}</option>)}</select><button onClick={async () => { if (delCode && window.confirm(`Decommission hub [${delCode}] safely?`)) { await sb.from('stations').delete().eq('station_code', delCode); setDelCode(''); fetchStations(); } }} className="btn-danger" style={{ padding: '0 12px' }}>Wipe</button></div></div>
+        <div className="control-panel cp-red" style={{ flex: '1 1 220px' }}>
+          <label>❌ Decommission Station</label>
+          <div className="input-row">
+            <select style={{ flex: '1 1 40px' }} value={delCode} onChange={e => setDelCode(e.target.value)}>
+              <option value="">Select target...</option>
+              {stations.map(st => <option key={st.station_code} value={st.station_code}>{st.station_code} — {st.station_name}</option>)}
+            </select>
+            <button onClick={async () => { if (delCode && window.confirm(`Decommission hub [${delCode}] safely?`)) { await sb.from('stations').delete().eq('station_code', delCode); setDelCode(''); fetchStations(); } }} className="btn-danger" style={{ padding: '0 12px' }}>Wipe</button>
+          </div>
+        </div>
+
+        {/* 🎯 NEW FUNCTION ADAPTATION LINK: Direct download trigger hook */}
+        <div className="control-panel cp-blue" style={{ flex: '1 1 140px', borderTopColor: '#2563eb' }}>
+          <label>📊 Data Exports</label>
+          <div className="input-row">
+            <button 
+              onClick={() => {
+                if (!fStats || !fStats.length) return alert('No loaded metrics ledger matrix available for processing.');
+                const csvHeaderRow = "Station Code,Station Name,Performance Score,Open,Arrived,Delivered,Suspended,Closed\n";
+                const csvBodyLines = fStats.map(s => `"${s.code}","${s.name}",${s.score || 0},${s.open || 0},${s.arrived || 0},${s.delivered || 0},${s.suspended || 0},${s.closed || 0}`).join("\n");
+                const blobObj = new Blob([csvHeaderRow + csvBodyLines], { type: 'text/csv;charset=utf-8;' });
+                const anchorEl = document.createElement('a');
+                anchorEl.href = URL.createObjectURL(blobObj);
+                anchorEl.setAttribute('download', `ET_Baggage_Ledger_Matrix_${Date.now()}.csv`);
+                document.body.appendChild(anchorEl);
+                anchorEl.click();
+                document.body.removeChild(anchorEl);
+              }} 
+              className="btn-primary" 
+              style={{ width: '100%', background: '#2563eb', fontWeight: '700' }}
+            >
+              💾 Export CSV
+            </button>
+          </div>
+        </div>
+
       </div>
 
       {/* 🏛️ CLEAN CORE MONITORING LEDGER MATRIX */}
@@ -69,9 +117,26 @@ export default function AdminAnalytics({ recs = [], stations = [], fetchStations
         <div className="stations-grid">
           {fStats.map(s => (
             <div key={s.code} className="station-cell" style={{ border: edCode === s.code ? '2px solid var(--ethiopian-yellow)' : '' }}>
-              <div className="station-header"><div><span className="station-badge">{s.code}</span><span className="station-name">{s.name}</span></div></div>
-              <div className="progress-bar-track"><div className="progress-bar-fill" style={{ width: `${s.score}%` }} /></div>
-              <div className="status-counters">{[['OPN', s.open, 'badge-open'], ['ARV', s.arrived, 'badge-arrived'], ['DLV', s.delivered, 'badge-delivered'], ['SUS', s.suspended, 'badge-suspended'], ['CLS', s.closed, 'badge-closed']].map(([l, v, c]) => <span key={l} className={`status-badge ${c}`}>{l}: {v}</span>)}</div>
+              <div className="station-header">
+                <div>
+                  <span className="station-badge">{s.code}</span>
+                  <span className="station-name">{s.name}</span>
+                </div>
+              </div>
+              <div className="progress-bar-track">
+                <div className="progress-bar-fill" style={{ width: `${s.score}%` }} />
+              </div>
+              <div className="status-counters">
+                {[
+                  ['OPN', s.open, 'badge-open'], 
+                  ['ARV', s.arrived, 'badge-arrived'], 
+                  ['DLV', s.delivered, 'badge-delivered'], 
+                  ['SUS', s.suspended, 'badge-suspended'], 
+                  ['CLS', s.closed, 'badge-closed']
+                ].map(([l, v, c]) => (
+                  <span key={l} className={`status-badge ${c}`}>{l}: {v}</span>
+                ))}
+              </div>
 
               {/* 🎯 INJECTED WORKSPACE: Dynamic array injection containing the newly integrated 'tgl' tagless value field */}
               <div className="reports-block">
@@ -98,6 +163,6 @@ export default function AdminAnalytics({ recs = [], stations = [], fetchStations
         </div>
       </div>
     </div>
-    </>
-  );
+);
+
 }
