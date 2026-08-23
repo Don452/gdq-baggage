@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import logo from '../assets/logo.webp';
 import '../styles/AppNavbar.css';
 
 export default function AppNavbar({ u, viewMode, setViewMode, handleLogout }) {
+  const [menuOpen, setMenuOpen] = useState(false);
   const stCode = String(u?.station_code || '').trim().toUpperCase();
   const isAdmin = !!u?.is_admin;
 
@@ -25,17 +26,30 @@ export default function AppNavbar({ u, viewMode, setViewMode, handleLogout }) {
       <div className="brand-wrapper">
         <h2 className="brand-heading">
           <img src={logo} alt="Ethiopian Airlines" className="brand-logo-img" />
-
         </h2>
       </div>
 
+      {/* 📱 Mobile Hamburger Menu Animation Trigger Toggle */}
+      <button 
+        className={`nav-hamburger-toggle-icon ${menuOpen ? 'is-active' : ''}`}
+        onClick={() => setMenuOpen(!menuOpen)}
+        aria-label="Toggle Navigation Control Menu"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
       {/* Perfectly Uniform Grid Action Wrapper Menu Area */}
-      <div className="nav-actions-menu">
+      <div className={`nav-actions-menu ${menuOpen ? 'mobile-is-visible' : ''}`}>
         {!isAdmin && (
           <button
             className="nav-pill-item nav-toggle-btn"
             style={{ backgroundColor: viewMode === 'analytics' ? 'var(--accent-damaged)' : 'var(--primary)' }}
-            onClick={() => setViewMode(viewMode === 'records' ? 'analytics' : 'records')}
+            onClick={() => {
+              setViewMode(viewMode === 'records' ? 'analytics' : 'records');
+              setMenuOpen(false); // Clean collapse on menu actions interaction
+            }}
           >
             {viewMode === 'records' ? "📊 View Analytics" : "📋 View Records"}
           </button>
@@ -48,7 +62,13 @@ export default function AppNavbar({ u, viewMode, setViewMode, handleLogout }) {
           {getInitials()}
         </div>
 
-        <button className="nav-pill-item nav-logout-action-btn" onClick={handleLogout}>
+        <button 
+          className="nav-pill-item nav-logout-action-btn" 
+          onClick={() => {
+            handleLogout();
+            setMenuOpen(false);
+          }}
+        >
           Sign Out
         </button>
       </div>

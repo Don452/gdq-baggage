@@ -186,3 +186,102 @@ transform: translateY(-1px);
 .nav-logout-action-btn:active {
   transform: translateY(0);
 }
+
+/* ==========================================================================
+   📱 MOBILE INTERACTION MAPPING SUBSECTION & HAMBURGER STYLES (ADDED)
+   ========================================================================== */
+
+/* Animated 3-line structural canvas hamburger toggle button link */
+.nav-hamburger-toggle-icon {
+  display: none; /* Desktop fallback status locks visibility down out of sight */
+  flex-direction: column;
+  justify-content: space-between;
+  width: 22px;
+  height: 16px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  outline: none;
+  z-index: 110;
+}
+
+.nav-hamburger-toggle-icon span {
+  width: 100%;
+  height: 2px;
+  background-color: var(--text-dark);
+  border-radius: 2px;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+/* CSS CSS Cross Shape Interpolation Transforms when triggered active state matches true */
+.nav-hamburger-toggle-icon.is-active span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.nav-hamburger-toggle-icon.is-active span:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-hamburger-toggle-icon.is-active span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Responsive breakpoint handling mobile phone constraints */
+@media (max-width: 768px) {
+  .main-navbar-header {
+    padding: 12px 20px;
+  }
+
+  /* Expose hamburger button grid nodes cleanly */
+  .nav-hamburger-toggle-icon {
+    display: flex;
+  }
+
+  /* Dropdown card overlay matrix block assignment */
+  .nav-actions-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--border-color);
+    padding: 20px;
+    box-sizing: border-box;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.05);
+  }
+
+  /* Exposes the container accordion slide open if menuOpen value equals true */
+  .nav-actions-menu.mobile-is-visible {
+    display: flex;
+    animation: navMobileSlideAnimation 0.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  /* Spans actions full width for high touch target accuracy on glass panels */
+  .nav-pill-item,
+  .station-badge-node {
+    width: 100%;
+    height: 38px;
+    font-size: 12px;
+  }
+
+  .station-badge-node {
+    order: -1; /* Pushes current station code identifier badge cleanly to the top line */
+  }
+
+  .agent-greeting-circle {
+    align-self: center; /* Centers profile initials alignment dot */
+    width: 36px;
+    height: 36px;
+    margin: 4px 0;
+  }
+}
+
+@keyframes navMobileSlideAnimation {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
