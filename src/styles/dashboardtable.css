@@ -125,6 +125,7 @@
   overflow-y: hidden !important;
   padding: 4px 2px !important;
   box-sizing: border-box !important;
+   font-size: 13px;
   
   /* Smooth inertia scrolling touch behaviors for iOS and Android web views */
   -webkit-overflow-scrolling: touch; 

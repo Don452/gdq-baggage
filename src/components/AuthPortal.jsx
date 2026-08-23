@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { sb } from '../utils/supabaseClient';
 import '../styles/authPortal.css';
 import logo from '../assets/logo.webp';
+import { initializeUserSession } from '../utils/sessionManager';
 
 export default function AuthPortal({ setU, auth = {}, setAuth }) {
   const [stList, setStList] = useState([]);
@@ -48,7 +49,9 @@ export default function AuthPortal({ setU, auth = {}, setAuth }) {
           .maybeSingle();
 
         if (!adm) return alert('Invalid Admin HQ credentials.');
-        localStorage.setItem('bagtrack_user', JSON.stringify(adm));
+
+        // 🎯 THE INTEGRATION FIX: Initialize 5-minute active timestamp mapping
+        initializeUserSession(adm);
         return setU(adm);
       }
 
@@ -85,7 +88,9 @@ export default function AuthPortal({ setU, auth = {}, setAuth }) {
       } else {
         const { data: ag } = await sb.from('agents').select('*').eq('agent_code', idKey).eq('password', pass).maybeSingle();
         if (!ag || ag.station_code !== code) return alert('Access Denied: Invalid Agent ID credentials or incorrect station assignment.');
-        localStorage.setItem('bagtrack_user', JSON.stringify(ag));
+
+        // 🎯 THE INTEGRATION FIX: Initialize 5-minute active timestamp mapping
+        initializeUserSession(ag);
         setU(ag);
       }
     } catch {
@@ -137,7 +142,7 @@ export default function AuthPortal({ setU, auth = {}, setAuth }) {
         <form onSubmit={handleAuth} className="auth-form-matrix">
           {!isAdmin && isUp && (
             <div className="auth-input-row-split">
-              
+
               <input required className="auth-input-field" placeholder="First Name" value={auth.first_name || ''} onChange={e => setAuth(prev => ({ ...prev, first_name: e.target.value }))} />
               <input className="auth-input-field" placeholder="Middle Name" value={auth.middle_name || ''} onChange={e => setAuth(prev => ({ ...prev, middle_name: e.target.value }))} />
             </div>
@@ -152,43 +157,52 @@ export default function AuthPortal({ setU, auth = {}, setAuth }) {
 
           {!isAdmin && (
             <div className="auth-form-group">
-             
               <input type="password" required className="auth-input-field input-station-pass" placeholder="Station Passcode" value={auth.station_key || ''} onChange={e => setAuth(prev => ({ ...prev, station_key: e.target.value }))} />
             </div>
           )}
 
           {isAdmin ? (
             <><div>
-            <input
-              type="text"
-              required
-              className="auth-input-field input-highlight"
-              placeholder="Admin Username"
-              value={auth.username || ''}
-              onChange={e => setAuth(prev => ({ ...prev, username: e.target.value }))}
-            />
+              <input
+                type="text"
+                required
+                className="auth-input-field input-highlight"
+                placeholder="Admin Username"
+                value={auth.username || ''}
+                onChange={e => setAuth(prev => ({ ...prev, username: e.target.value }))}
+              />
             </div></>
           ) : (
             <><div>
-          
-            <input
-              type="text"
-              required
-              className="auth-input-field input-highlight"
-              placeholder="Agent ID"
-              value={auth.agent_code || ''}
-              onChange={e => setAuth(prev => ({ ...prev, agent_code: e.target.value }))}
-            />
+
+              <input
+                type="text"
+                required
+                className="auth-input-field input-highlight"
+                placeholder="Agent ID"
+                value={auth.agent_code || ''}
+                onChange={e => setAuth(prev => ({ ...prev, agent_code: e.target.value }))}
+              />
             </div></>
           )}
           <div>
-            <input type="password" required className="auth-input-field" placeholder="Password" value={auth.password || ''} onChange={e => setAuth(prev => ({ ...prev, password: e.target.value }))} />
+            <input
+              type="password"
+              required
+              className="auth-input-field"
+              placeholder="Password"
+              value={auth.password || ''}
+              onChange={e => setAuth(prev => ({ ...prev, password: e.target.value }))}
+              /* 🎯 ADDED SECURITY: Conditional dynamic registration strength checks */
+              minLength={isUp ? 8 : undefined}
+              pattern={isUp ? "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$" : undefined}
+              title={isUp ? "Registration Requirement: Minimum 8 characters, at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*?&)." : undefined}
+            />
           </div>
           <button type="submit" className={`auth-action-submit-btn ${isAdmin ? 'btn-admin' : 'btn-agent'}`}>
-            {isAdmin ? 'Verify Admin Auth ' : isUp ? 'Register Account' : 'Secure Login '}
+            {isAdmin ? 'Verify Admin Auth ' : isUp ? 'Register Account' : 'Login '}
           </button>
         </form>
-
         <div className="auth-footer-routing">
           {isAdmin ? (
             <span className="auth-link-back" onClick={() => { setIsAdmin(false); setIsUp(false); setAuth({}); }}>← Operational Gateway</span>

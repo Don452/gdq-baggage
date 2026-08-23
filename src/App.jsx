@@ -7,6 +7,7 @@ import AdminAnalytics from './components/AdminAnalytics';
 import StationAnalytics from './components/StationAnalytics';
 import AppNavbar from './components/AppNavbar';
 import BaggageToolbar from './components/BaggageToolbar';
+import { useIdleTimeout } from './hooks/useIdleTimeout';
 
 import './App.css';
 
@@ -27,6 +28,17 @@ export default function App() {
   const [colorFilter, setColorFilter] = useState('ALL');
   const [sd, setSd] = useState('');
   const [ed, setEd] = useState('');
+
+   useEffect(() => {
+    const cachedUserRecord = localStorage.getItem('bagtrack_user');
+    if (cachedUserRecord) {
+      setU(JSON.parse(cachedUserRecord));
+      localStorage.setItem('last_activity_timestamp', Date.now().toString());
+    }
+  }, []);
+
+  // 🎯 ACTIVE IDLE MONITOR ACTIVATED AT ROOT: Automatically updates and resets user states
+  useIdleTimeout(setU);
 
   useEffect(() => {
     if (u && u.is_admin) {

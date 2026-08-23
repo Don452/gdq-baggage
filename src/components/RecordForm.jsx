@@ -1,9 +1,33 @@
 import React, { useState } from 'react';
 import { sb } from '../utils/supabaseClient';
 import '../styles/RecordForm.css';
+import '../utils/compressor'
 
 export default function RecordForm({ u, form, setForm, fetchRecords }) {
-  const [photos, setPhotos] = useState([]), [uploading, setUploading] = useState(false);
+
+  const [photos, setPhotos] = useState([]);
+  const [uploading, setUploading] = useState(false);
+  const [isCompressing, setIsCompressing] = useState(false); // Optional loader check hook
+
+  const handlePhotoSelection = async (e) => {
+    if (!e.target.files) return;
+
+    setIsCompressing(true);
+    const rawFileList = Array.from(e.target.files);
+
+    try {
+      // ⚡ COMPRESSION PIPE: Iterates across all selected photo items concurrently 
+      const optimizedPhotosList = await Promise.all(
+        rawFileList.map(file => compressBaggagePhoto(file, 1200, 0.7))
+      );
+
+      setPhotos(optimizedPhotosList); // These clean, optimized files are now ready to be stored in your DB
+    } catch (err) {
+      console.error("Baggage photo runtime optimization processing broken:", err);
+    } finally {
+      setIsCompressing(false);
+    }
+  };
   const curSt = String(u?.station_code || 'GDQ').trim().toUpperCase(), isTagless = form.irregularity_type === 'Tagless';
   const flds = ['bag_tag_number', 'passenger_last_name', 'passenger_first_name', 'file_number', 'ticket_number', 'phone_number'];
 
@@ -24,7 +48,7 @@ export default function RecordForm({ u, form, setForm, fetchRecords }) {
     if (isTagless && photos.length === 0) return alert('⚠️ Please select at least one baggage proof photo.');
     if (!isTagless && (!form.bag_tag_number || !form.passenger_last_name)) return alert('⚠️ Missing fields.');
 
-    setUploading(true); 
+    setUploading(true);
     let actualBase64Photos = [];
     let finalizedTagNumber = '';
 
@@ -56,28 +80,28 @@ export default function RecordForm({ u, form, setForm, fetchRecords }) {
       bag_tag_number: finalizedTagNumber,
       passenger_last_name: isTagless ? 'UNKNOWN' : String(form.passenger_last_name).trim(),
       passenger_first_name: isTagless ? 'UNKNOWN' : String(form.passenger_first_name).trim(),
-      irregularity_type: t, 
+      irregularity_type: t,
       bag_color: form.bag_color || (isTagless ? 'UNKNOWN' : 'Unspecified'),
-      file_number: isTagless ? 'UNKNOWN' : form.file_number || null, 
+      file_number: isTagless ? 'UNKNOWN' : form.file_number || null,
       ticket_number: isTagless ? 'UNKNOWN' : form.ticket_number || null,
-      phone_number: isTagless ? 'UNKNOWN' : form.phone_number || null, 
+      phone_number: isTagless ? 'UNKNOWN' : form.phone_number || null,
       bag_kilos: isTagless ? 0 : parseFloat(form.bag_kilos) || 0,
       station_code: curSt, origin_station: curSt, current_station: curSt, destination_station: curSt,
       agent_name: String(u?.first_name || 'Agent').trim(), custom_agent_id: String(u?.agent_code || 'AG-UNKNOWN').toUpperCase(), bag_status: 'Open',
-      metadata_matrix: {}, 
+      metadata_matrix: {},
       tagless_description: isTagless ? form.item_description?.trim() : null,
       tagless_photos: isTagless ? actualBase64Photos : []
     };
 
     const { error: dbError } = await sb.from('baggage_records').insert([payload]);
     setUploading(false);
-    
+
     if (dbError) {
       alert(`🚫 Database Error: ${dbError.message}`);
-    } else { 
-      setForm({ irregularity_type: t, bag_color: '', bag_kilos: '', item_description: '' }); 
-      setPhotos([]); 
-      if (typeof fetchRecords === 'function') fetchRecords(); 
+    } else {
+      setForm({ irregularity_type: t, bag_color: '', bag_kilos: '', item_description: '' });
+      setPhotos([]);
+      if (typeof fetchRecords === 'function') fetchRecords();
       alert(`✅ Registered under dynamic tracking label: ${finalizedTagNumber}`);
     }
   };
@@ -86,7 +110,7 @@ export default function RecordForm({ u, form, setForm, fetchRecords }) {
     <div className="compact-form-card">
       {/* 🎯 HEADER LABEL MATCHING OVERALL BRAND APP SPECIFICATION STYLE */}
       <h3 className="form-section-title">🛄 Register Baggage</h3>
-      
+
       <form onSubmit={hRec} className="compact-inline-form">
         <select className="mini-input mini-select font-bold" value={form.irregularity_type || 'Delayed'} onChange={e => setForm({ ...form, irregularity_type: e.target.value })}>
           <option value="Delayed">Delayed</option>
@@ -94,7 +118,7 @@ export default function RecordForm({ u, form, setForm, fetchRecords }) {
           <option value="Onhand">Onhand</option>
           <option value="Tagless">🏷️ Tagless</option>
         </select>
-        
+
         {!isTagless ? (
           <>
             {flds.map(f => <input key={f} className="mini-input" placeholder={f.replace(/_/g, ' ').toUpperCase()} required={['bag_tag_number', 'passenger_last_name'].includes(f)} value={form[f] || ''} onChange={e => setForm({ ...form, [f]: e.target.value })} />)}
@@ -113,7 +137,7 @@ export default function RecordForm({ u, form, setForm, fetchRecords }) {
         ) : (
           <div className="tagless-horizontal-block">
             <input type="text" className="mini-input flex-grow-desc" placeholder="DETAILED DESCRIPTION / CONTENTS / VISUAL TRAITS..." value={form.item_description || ''} onChange={e => setForm({ ...form, item_description: e.target.value })} required />
-            
+
             <select className="mini-input mini-select mini-tagless-color" value={form.bag_color || ''} onChange={e => setForm({ ...form, bag_color: e.target.value })}>
               <option value="">Select Color...</option>
               <option value="Black">Black (BK)</option>
@@ -127,13 +151,14 @@ export default function RecordForm({ u, form, setForm, fetchRecords }) {
 
             <div className="mini-upload-zone">
               <label className="mini-file-label">
-                📸 {photos.length ? `${photos.length} Selected` : 'Attach Photos'}
-                <input 
-                  type="file" 
-                  accept="image/*" 
-                  multiple 
-                  onChange={e => e.target.files && setPhotos(Array.from(e.target.files))} 
-                  required 
+                📸 {isCompressing ? 'Optimizing Files...' : photos.length ? `${photos.length} Selected` : 'Attach Photos'}
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handlePhotoSelection}
+                  required
+                  disabled={isCompressing}
                 />
               </label>
             </div>
