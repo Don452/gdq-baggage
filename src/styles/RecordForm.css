@@ -5,6 +5,108 @@
   --bg-main: #f1f5f9;
   --card-bg: #ffffff;
 }
+/* 📦 MAIN FORM WORKSPACE WRAPPER CARD */
+.compact-form-card {
+  background: var(--card-bg, #ffffff);
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid var(--border-color, #e2e8f0);
+  box-shadow: 0 4px 20px -4px rgba(15, 23, 42, 0.03);
+  margin-bottom: 24px;
+  box-sizing: border-box;
+}
+
+/* 🎯 BRANDED HIGH-UTILITY HEADER LABEL SECTION STYLE */
+.form-section-title {
+  margin: 0 0 16px 0;
+  font-size: 15px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--text-dark, #0f172a);
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 🧱 ELEMENT FLEX LAYOUT CONTROL STRIPS */
+.compact-inline-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+}
+
+/* 📝 INPUTS & SELECT DROPDOWN ELEMENT RULES */
+.mini-input {
+  height: 38px;
+  padding: 0 12px;
+  border: 1px solid var(--border-color, #cbd5e1);
+  border-radius: 6px;
+  font-size: 13px;
+  color: var(--text-dark, #0f172a);
+  background-color: var(--card-bg, #ffffff);
+  outline: none;
+  box-sizing: border-box;
+  transition: all 0.15s ease;
+  flex: 1 1 160px; /* Fluid scaling matrix limits wrap boundaries gracefully */
+}
+
+.mini-input:focus {
+  border-color: var(--primary, #5E8F4D);
+  box-shadow: 0 0 0 3px rgba(94, 143, 77, 0.08);
+}
+
+/* Specific Dimension Allocations */
+.mini-select {
+  cursor: pointer;
+}
+
+.mini-weight {
+  max-width: 75px;
+  flex: 0 0 75px;
+  text-align: center;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+/* 🏷️ TAGLESS ACCORDION BLOCK HORIZONTAL RULES */
+.tagless-horizontal-block {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  flex: 3 1 auto;
+  align-items: center;
+}
+
+.flex-grow-desc {
+  flex: 3 1 300px;
+}
+
+.mini-tagless-color {
+  flex: 1 1 140px;
+}
+
+/* 📸 PHOTO UPLOAD TARGET ZONE INDICATOR */
+.mini-upload-zone {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  flex: 1 1 140px;
+}
+
+
+.mini-file-label input[type="file"] {
+  display: none;
+}
+
+.mini-file-label:hover {
+  background-color: rgba(94, 143, 77, 0.12);
+  border-color: var(--primary, #5E8F4D);
+}
 
 .compact-form-card {
   width: 100%;
@@ -145,4 +247,22 @@
   font-weight: 700;
   color: var(--primary);
 }
+
+
+@media (max-width: 640px) {
+  .compact-form-card {
+    padding: 16px;
+  }
+  .mini-input, 
+  .tagless-horizontal-block .mini-input, 
+  .mini-upload-zone, 
+  .mini-submit-btn {
+    width: 100% !important;
+    flex: 1 1 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+
+
 

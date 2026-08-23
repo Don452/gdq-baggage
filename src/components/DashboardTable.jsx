@@ -91,38 +91,37 @@ export default function DashboardTable({ fil = [], u, edId, setEdId, edF, setEdF
               <div className="grid-cell">{isEd ? <select value={it.bag_color || ''} onChange={e => setEdF({ ...edF, bag_color: e.target.value })}>{['', 'Black', 'Red', 'Blue', 'Brown', 'Grey', 'Green'].map(c => <option key={c} value={c}>{c || 'None'}</option>)}</select> : <span className={`color-attribute-badge ${colorCls}`}>{b.bag_color || '—'}</span>}</div>
               <div className="grid-cell">{isEd ? <input type="number" value={it.bag_kilos || ''} onChange={e => setEdF({ ...edF, bag_kilos: e.target.value })} /> : (b.bag_kilos ? <b>{b.bag_kilos} KG</b> : '—')}</div>
               <div className="grid-cell">{isEd ? <select value={it.irregularity_type || ''} onChange={e => setEdF({ ...edF, irregularity_type: e.target.value })}>{['Delayed', 'Damaged', 'Onhand'].map(t => <option key={t} value={t}>{t}</option>)}</select> : <span className={`irregularity-status-tag ${irrCls}`}>{b.irregularity_type}</span>}</div>
-             <div className="grid-cell" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-  👤 {(() => {
-    const nameStr = (b.agent_name || '').trim();
-    if (!nameStr || nameStr.toLowerCase() === 'system') return 'SYS';
+              <div className="grid-cell" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                👤 {(() => {
+                  const nameStr = (b.agent_name || '').trim();
+                  if (!nameStr || nameStr.toLowerCase() === 'system') return 'SYS';
 
-    // Split name by spaces into an array of words
-    const nameParts = nameStr.split(/\s+/);
-    
-    // Extract first letter of the first two words found
-    const firstInitial = nameParts[0] ? nameParts[0].charAt(0).toUpperCase() : '';
-    const secondInitial = nameParts[1] ? nameParts[1].charAt(0).toUpperCase() : '';
+                  // Split name by spaces into an array of words
+                  const nameParts = nameStr.split(/\s+/);
 
-    const twoLetterInitials = `${firstInitial}${secondInitial}`;
+                  // Extract first letter of the first two words found
+                  const firstInitial = nameParts[0] ? nameParts[0].charAt(0).toUpperCase() : '';
+                  const secondInitial = nameParts[1] ? nameParts[1].charAt(0).toUpperCase() : '';
 
-    // Fallback to first 2 letters of a single word name if no space exists
-    return twoLetterInitials.length >= 2 
-      ? twoLetterInitials 
-      : nameStr.substring(0, 2).toUpperCase();
-  })()}
-</div>
+                  const twoLetterInitials = `${firstInitial}${secondInitial}`;
 
-              {/* 🎯 CORE ACTION BUTTON CELL: Implements clean style hook connections */}
-              <div className="grid-cell wt-cell-container"><button>
+                  // Fallback to first 2 letters of a single word name if no space exists
+                  return twoLetterInitials.length >= 2
+                    ? twoLetterInitials
+                    : nameStr.substring(0, 2).toUpperCase();
+                })()}
+              </div>
+
+              <div className="grid-cell wt-cell-container">
                 <a
                   href="https://desktop.worldtracer.aero/desktop/index.html#!/index/landing"
                   target="_blank"
                   rel="noreferrer"
                   className="wt-action-button-link"
                 >
-                  <span>🌐</span> Trace File
+                  Trace
                 </a>
-              </button>
+
               </div>
 
               <div className="grid-cell status-select-cell">
@@ -130,9 +129,9 @@ export default function DashboardTable({ fil = [], u, edId, setEdId, edF, setEdF
                   disabled={!isEd && !u?.is_admin}
                   value={isEd ? edF.bag_status : (b.bag_status || 'Open')}
                   className={`status-dropdown-control ${isEd ? 'mode-editing' : 'mode-static'} ${(() => {
-                      const s = isEd ? edF.bag_status : (b.bag_status || 'Open');
-                      return `status-color-${String(s).toLowerCase()}`;
-                    })()
+                    const s = isEd ? edF.bag_status : (b.bag_status || 'Open');
+                    return `status-color-${String(s).toLowerCase()}`;
+                  })()
                     }`}
                   onChange={async (e) => {
                     const selectedValue = e.target.value;
@@ -166,7 +165,7 @@ export default function DashboardTable({ fil = [], u, edId, setEdId, edF, setEdF
 
 
 
-              <div className="grid-cell" style={{ display: 'flex', gap: '4px', width: '100%', flexWrap: 'nowrap' }}>
+              <div className="grid-cell">
                 {isEd ? (
                   <>
                     <button onClick={async () => { if (!(await sb.from('baggage_records').update(edF).eq('id', b.id)).error) { setEdId(null); fetchRecords(); } }} className="btn-sm btn-save-check" style={{ flex: '1 1 auto' }}>Save</button>
@@ -180,11 +179,18 @@ export default function DashboardTable({ fil = [], u, edId, setEdId, edF, setEdF
                       <button disabled className="btn-sm btn-row-edit-disabled" style={{ flex: '1 1 auto', opacity: 0.3 }}>Edit</button>
                     )}
 
-                    <button onClick={() => hPrnt(b)} className="btn-sm btn-row-print" style={{ flex: '1 1 auto' }}>Print</button>
+                    <button onClick={() => hPrnt(b)} className="btn-sm btn-row-print" style={{ flex: '1 1 auto' }}>🖨️</button>
 
-                    {b.irregularity_type === 'Onhand' && String(b.station_code).toUpperCase() !== stCode && (
-                      <button onClick={() => setActBag(b)} className="btn-sm" style={{ background: 'var(--ethiopian-red)', color: '#fff', flex: '1 1 auto' }}>Request</button>
+                    {((b.irregularity_type === 'Onhand' || b.irregularity_type === 'Tagless') && String(b.station_code).toUpperCase() !== stCode) && (
+                      <button
+                        onClick={() => setActBag(b)}
+                        className="btn-sm"
+                        style={{ background: 'var(--ethiopian-red)', color: '#fff', flex: '1 1 auto' }}
+                      >
+                        Request
+                      </button>
                     )}
+
 
                     {/* 🔒 Strict Mode Deletion validation element safely tucked inside action workflow limits */}
                     <button

@@ -1,154 +1,286 @@
+/* 📦 MAIN PANEL CANVAS WRAPPER CARD */
 :root {
-  --ethiopian-green: #5E8F4D;
-  --ethiopian-yellow: #FFC92D;
-  --ethiopian-red: #C52528;
-  --text-dark: #1e293b;
-  --text-muted: #64748b;
-  --white: #ffffff;
-  --snow: #f8fafc;
-  --border-color: #cbd5e1;
-}
-.toolbar-utilities-panel {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 15px;
-  background-color: var(--card-bg);
-  padding: 12px 16px;
-  border-radius: 6px;
-  border: 1px solid var(--border-color);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  margin: 15px 0;
-  font-family: system-ui, -apple-system, sans-serif;
+    --primary: #5E8F4D;
+    --primaryy: #ffffff;
+    --primary-hover: #f59e0b;
+    --bg-main: #f1f5f9;
+    --card-bg: #ffffff;
 }
 
-/* 📋 INCIDENT SELECTOR TABS */
+.toolbar-utilities-panel {
+    background: var(--card-bg, #ffffff);
+    border-radius: 12px;
+    padding: 20px 24px;
+    border: 1px solid var(--border-color, #e2e8f0);
+    box-shadow: 0 4px 20px -4px rgba(15, 23, 42, 0.03);
+    margin-bottom: 24px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 🎯 HEADER LABEL SEPARATOR CONTAINER STRIP */
+.toolbar-header-strip {
+    width: 100%;
+    padding-bottom: 14px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid #f1f5f9;
+    /* Premium, clean separating vector border */
+}
+
+.toolbar-section-title {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--text-dark, #0f172a);
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* 🧱 BODY WORKSPACE BLOCK: ENFORCES HORIZONTAL MATRIX ALIGNMENT */
+.toolbar-workspace-body {
+    display: flex;
+    flex-direction: row;
+    /* 🎯 THE FIX: Forces items side-by-side on desktop */
+    flex-wrap: wrap;
+    /* Gracefully breaks rows if the user screen size shrinks */
+    align-items: center;
+    gap: 16px;
+    /* Symmetrical layout gap between the button lists and selection columns */
+    width: 100%;
+}
+
+/* 📊 TAB INTERACTIVE CONTROL STRIPS */
 .tab-filters-row {
-  margin: 0;
-  display: flex;
-  gap: 4px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 0;
+    /* 🎯 THE FIX: Cleaned margin layout for smooth cross-row centering */
 }
 
 .toolbar-tab-btn {
-  padding: 6px 14px;
-  cursor: pointer;
-  background-color: var(--ethiopian-green);
-  color: #fff;
-  border: 1px solid var(--primary);
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: 600;
-  transition: all 0.30s ease-on-out;
+    height: 26px;
+    padding: 0 16px;
+    background: var(--primary);
+    color: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .toolbar-tab-btn:hover {
-  padding: 6px 14px;
-  cursor: pointer;
-  background-color: var(--ethiopian-yellow);
-  color: #fff;
-  border: 1px solid var(--ethiopian-yellow);
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: 600;
-  transition: all 0.30s ease-on-out;
+    background: var(--primary-hover);
+    color: #fff;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 
 
-/* Active Category Mappings using Design Tokens */
-.toolbar-tab-btn.tab-active-all {
-  background-color: var(--text-dark) !important;
-  color: var(--primaryy) !important;
-  border-color: var(--text-dark);
+/* 🎨 THEMED VISUAL SIGNATURES FOR ACTIVE INCIDENT MODES */
+.tab-active-all {
+    background: #5E8F4D !important;
+    color: #ffffff !important;
+    border-color: #5E8F4D !important;
+    box-shadow: 0 2px 6px rgba(94, 143, 77, 0.2);
 }
 
-.toolbar-tab-btn.tab-active-delayed {
-  background-color: var(--accent-delayed) !important;
-  color: var(--primaryy) !important;
-  border-color: var(--accent-delayed);
+.tab-active-delayed {
+    background: #ef4444 !important;
+    color: #ffffff !important;
+    border-color: #ef4444 !important;
+    box-shadow: 0 2px 6px rgba(239, 68, 68, 0.2);
 }
 
-.toolbar-tab-btn.tab-active-damaged {
-  background-color: var(--accent-damaged) !important;
-  color: var(--primaryy) !important;
-  border-color: var(--accent-damaged);
+.tab-active-damaged {
+    background: #f59e0b !important;
+    color: #ffffff !important;
+    border-color: #f59e0b !important;
+    box-shadow: 0 2px 6px rgba(245, 158, 11, 0.2);
 }
 
-.toolbar-tab-btn.tab-active-onhand {
-  background-color: var(--accent-onhand) !important;
-  color: var(--primaryy) !important;
-  border-color: var(--accent-onhand);
+.tab-active-onhand {
+    background: #10b981 !important;
+    color: #ffffff !important;
+    border-color: #10b981 !important;
+    box-shadow: 0 2px 6px rgba(16, 185, 129, 0.2);
 }
 
-/* 🎚️ PARAMETER INPUT FIELDS GRID COMPONENTS */
+/* 🧱 ROW ELEMENT DISTRIBUTION FLOW MODULES */
 .toolbar-filter-group-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    /* 🎯 THE FIX: Locks internal inputs to scale horizontally */
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 0;
+    /* 🎯 THE FIX: Flattens vertical distribution spacing */
+    flex: 1 1 auto;
+    /* Expands dynamically to absorb available horizontal screen space */
 }
 
+/* 📝 MENUS, TEXT FIELDS & DATETIME BOUNDS RULES */
 .toolbar-field-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
 }
 
 .toolbar-field-label {
-  font-size: 11px;
-  font-weight: 800;
-  color: var(--text-muted);
-  letter-spacing: 0.3px;
+    font-size: 11px;
+    font-weight: 800;
+    color: #475569;
+    letter-spacing: 0.6px;
 }
 
-/* 📦 STRUCTURAL CONTROLS DROP MENUS AND INPUT FIELDS */
 .toolbar-select-menu,
 .toolbar-input-text,
 .toolbar-input-date {
-  box-sizing: border-box;
-  height: 32px;
-  padding: 0 10px;
-  border-radius: 4px;
-  border: 1px solid var(--ethiopian-green);
-  font-size: 12px;
-  color: var(--text-dark);
-  background-color: var(--);
-  outline: none;
-  font-family: inherit;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
-}
-
-.toolbar-select-menu:hover,
-.toolbar-input-text:hover,
-.toolbar-input-date:hover {
- 
-border: 1px solid var(--ethiopian-yellow);
-
+    height: 26px;
+    padding: 0 12px;
+    border: 1px solid var(--primary);
+    border-radius: 4px;
+    font-size: 13px;
+    background: #ffffff;
+    outline: none;
+    box-sizing: border-box;
+    transition: all 0.15s ease;
 }
 
 .toolbar-select-menu:focus,
 .toolbar-input-text:focus,
 .toolbar-input-date:focus {
-  border-color: var(--ethiopian-yellow);
-  box-shadow: 0 0 0 3px rgba(94, 143, 77, 0.12);
+    height: 26px;
+    padding: 0 12px;
+    border: 1px solid var(--primary-hover);
+    border-radius: 4px;
+    font-size: 13px;
+    background: #ffffff;
+    transition: all 0.15s ease;
 }
 
-/* 🛠️ FIXED STRUCTURAL SIZES WITH NO WIDTH EXPANSIONS */
 .toolbar-input-text {
-  width: 180px;
+    flex: 2 1 200px;
+    /* 🎯 THE FIX: Allows the search field to widen cleanly next to calendar grids */
 }
 
-.toolbar-input-date {
-  padding: 0 6px;
-  width: 125px;
+.toolbar-select-menu {
+    cursor: pointer;
+    min-width: 140px;
 }
 
 .toolbar-date-range-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 11px;
-  color: var(--text-muted);
-  font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.toolbar-date-separator {
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.toolbar-date-clear-btn {
+    background: var(--primary);
+    color: #ffffff;
+    border: none;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    transition: background 0.1s ease;
+    margin-left: 4px;
+}
+
+.toolbar-date-clear-btn:hover {
+    background: var(--primary-hover);
+}
+
+
+/*📱 ULTRA-RESPONSIVE SINGLE COLUMN FALLBACKS FOR PHONE VIEWPORTS */
+@media (max-width: 1024px) {
+    .toolbar-workspace-body {
+        flex-direction: column;
+        /* Stacks layout tools if screen dimensions narrow down */
+        align-items: stretch;
+
+    }
+}
+
+@media (max-width: 640px) {
+    .toolbar-utilities-panel {
+        padding: 16px;
+    }
+
+    .toolbar-tab-btn,
+    .toolbar-field-item,
+    .toolbar-select-menu,
+    .toolbar-input-text,
+    .toolbar-filter-group-row,
+    .toolbar-date-range-wrapper,
+    .toolbar-input-date {
+        width: 100% !important;
+        flex: 1 1 100% !important;
+
+    }
+
+    .toolbar-tab-btn:hover,
+    .toolbar-field-item:hover,
+    .toolbar-select-menu:hover,
+    .toolbar-input-text:hover,
+    .toolbar-filter-group-row:hover,
+    .toolbar-date-range-wrapper:hover,
+    .toolbar-input-date:hover {
+        width: 100% !important;
+        flex: 1 1 100% !important;
+        background: var(--primary-hover);
+        color: #fff;
+    }
+
+    .toolbar-input-text,
+    .toolbar-input-date {
+        width: 100% !important;
+        flex: 1 1 100% !important;
+        padding: 4px;
+
+    }
+
+    .toolbar-input-text:focus,
+    .toolbar-input-date:focus {
+        width: 100% !important;
+        flex: 1 1 100% !important;
+        padding: 4px;
+
+    }
+
+    .toolbar-filter-group-row {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .toolbar-date-range-wrapper {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .toolbar-date-separator {
+        text-align: center;
+        padding: 2px 0;
+    }
 }

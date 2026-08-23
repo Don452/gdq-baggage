@@ -1,21 +1,30 @@
 /* 🌐 WORLDTRACER CELL ROUTING WRAPPER */
+:root {
+  --border-color: #e2e8f0;
+  --text-dark: #0f172a;
+  --text-muted: #64748b;
+  --snow: #f8fafc;
+  --ethiopian-green: #5E8F4D;
+  --ethiopian-yellow: #facc15;
+  --ethiopian-red: #dc2626;
+}
+
 .wt-cell-container {
   display: flex;
-  align-items: center;
-  justify-content: center;
   box-sizing: border-box;
 }
 
 /* 🛩️ MODERN LIGHT BLUE PILL SPECIFICATION */
 .wt-action-button-link {
-  display: inline-flex;
+  display: grid;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 3px;
   height: 32px;
+  width: 80%;
   padding: 0 14px;
-  background-color: #fee0f2; /* Light sky blue background */
-  color: #0369a1; /* Deep ocean blue contrast text */
+  background-color: var(--ethiopian-green); /* Light sky blue background */
+  color: #fff; /* Deep ocean blue contrast text */
   border: 1px solid #bae6fd; /* Soft border accent line */
   border-radius: 6px;
   font-size: 12.5px;
@@ -30,11 +39,10 @@
 
 /* ✨ INTERACTIVE MOTION CONTROLS */
 .wt-action-button-link:hover {
-  background-color: #0284c7; /* Switches to a vibrant medium-light blue */
+  background-color: var(--ethiopian-yellow); /* Switches to a vibrant medium-light blue */
   color: #ffffff;
-  border-color: #0284c7;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
+
 }
 
 .wt-action-button-link:active {
@@ -104,15 +112,45 @@
   width: 100%;
 }
 
+/* 🧱 HORIZONTAL ACTION ROW CONTAINER CORRECTION */
 .grid-cell {
-  display: flex;
-  min-width: 0;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap; 
-  font-size: 13px;
-  color: var(--text-dark);
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;       /* 🎯 THE FIX: Strongly prevents buttons from breaking down to a new line */
+  justify-content: flex-start !important;
+  align-items: center !important;
+  gap: 6px !important;                 /* Main horizontal gap spacing matrix between actions */
+  width: 100% !important;
+  overflow-x: auto !important;         /* 🎯 THE FIX: Enables fluid horizontal touch swipe if width clips */
+  overflow-y: hidden !important;
+  padding: 4px 2px !important;
+  box-sizing: border-box !important;
+  
+  /* Smooth inertia scrolling touch behaviors for iOS and Android web views */
+  -webkit-overflow-scrolling: touch; 
 }
+
+/* 🎯 UNIFORM NON-SHRINKING HORIZONTAL BUTTON STRUCTURES */
+.grid-cell .btn-sm {
+  flex: 1 0 auto !important;           /* 🎯 THE FIX: Forces buttons to stay full width without shrinking to 0 */
+  white-space: nowrap !important;      /* Blocks internal text strings from wrapping awkwardly */
+  min-width: 20px !important;          /* Sets a safe minimum boundary for clean legibility */
+  height: 32px !important;             /* Standard comfortable operations height rule */
+  padding: 0 12px !important;
+  box-sizing: border-box !important;
+}
+
+/* 🧹 SILENT TRACK CLEANER: Hides raw desktop scrollbars to match professional native app layouts */
+.grid-cell::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+.grid-cell {
+  -ms-overflow-style: none !important;  /* IE and Edge hide rule */
+  scrollbar-width: none !important;     /* Firefox hide rule */
+}
+
 
 /* Row Functional Background States Modifiers */
 .row-active-edit { background: #FFFBEB !important; }
@@ -122,9 +160,7 @@
 /* 🔍 WorldTracer Link Component Badge Elements */
 .wt-trace-link {
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: #1e293b;
+
   color: #ffffff !important;
   text-decoration: none !important;
   padding: 4px 8px;
@@ -132,16 +168,11 @@
   font-family: monospace;
   font-weight: 700;
   font-size: 11px;
-  border: 1px solid #334155;
   transition: background 0.15s ease, transform 0.1s ease;
   width: max-content;
   max-width: 100%;
 }
 
-.wt-trace-link:hover {
-  background: #0f172a;
-  transform: translateY(-1px);
-}
 
 .wt-trace-empty { font-size: 11px; color: var(--text-muted); font-style: italic; }
 
@@ -211,35 +242,20 @@
 .color-badge-fallback { background: var(--text-muted); }
 
 .irregularity-status-tag { display: inline-block; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 11px; }
-.irregularity-delayed { background: var(--ethiopian-red); color: var(--white); }
-.irregularity-damaged { background: var(--ethiopian-yellow); color: var(--text-dark); }
+.irregularity-delayed { background: var(--ethiopian-yellow); color: var(--white); }
+.irregularity-damaged { background: var(--ethiopian-red); color: var(--white); }
 .irregularity-onhand  { background: var(--ethiopian-green); color: var(--white); }
+.irregularity-tagless  { background: var(--text-dark); color: var(--white); }
 
 .btn-save-check { background: var(--ethiopian-green); color: var(--white); }
-.btn-row-print { background: var(--text-dark); color: var(--white); flex: 1; }
+.btn-row-print { background: var(--ethiopian-green); color: var(--white); flex: 1; }
 .btn-row-edit { background: var(--ethiopian-yellow); color: var(--text-dark); flex: 1; }
 .btn-row-edit-disabled { opacity: 0.3; cursor: not-allowed; }
 
 /* Add these root definitions at the top of your CSS file to prevent crashes */
-:root {
-  --border-color: #e2e8f0;
-  --text-dark: #0f172a;
-  --text-muted: #64748b;
-  --snow: #f8fafc;
-  --ethiopian-green: #5E8F4D;
-  --ethiopian-yellow: #facc15;
-  --ethiopian-red: #dc2626;
-}
 
 .an-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; width: 100%; margin: 15px 0; }
 .an-card { background: #fff; border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; box-sizing: border-box; }
-/* ... rest of your styles */
-/* 🌐 WORLDTRACER CELL ROUTING WRAPPER */
-.wt-cell-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-}
+
 
 

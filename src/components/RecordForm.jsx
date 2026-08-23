@@ -30,7 +30,6 @@ export default function RecordForm({ u, form, setForm, fetchRecords }) {
 
     try {
       if (isTagless) {
-        // 1️⃣ Uniform Counter Engine: Fetch existing ET-Station entries to determine the next exact counter
         const { count, error: countErr } = await sb
           .from('baggage_records')
           .select('bag_tag_number', { count: 'exact', head: true })
@@ -41,7 +40,6 @@ export default function RecordForm({ u, form, setForm, fetchRecords }) {
         const nextSequence = (count || 0) + 1;
         finalizedTagNumber = `ET-${curSt}-${nextSequence}`;
 
-        // 2️⃣ Base64 physical image processor file stream loop
         for (const file of photos) {
           const base64String = await convertFileToBase64(file);
           actualBase64Photos.push(base64String);
@@ -86,6 +84,9 @@ export default function RecordForm({ u, form, setForm, fetchRecords }) {
 
   return (
     <div className="compact-form-card">
+      {/* 🎯 HEADER LABEL MATCHING OVERALL BRAND APP SPECIFICATION STYLE */}
+      <h3 className="form-section-title">🛄 Register Baggage</h3>
+      
       <form onSubmit={hRec} className="compact-inline-form">
         <select className="mini-input mini-select font-bold" value={form.irregularity_type || 'Delayed'} onChange={e => setForm({ ...form, irregularity_type: e.target.value })}>
           <option value="Delayed">Delayed</option>
@@ -98,14 +99,14 @@ export default function RecordForm({ u, form, setForm, fetchRecords }) {
           <>
             {flds.map(f => <input key={f} className="mini-input" placeholder={f.replace(/_/g, ' ').toUpperCase()} required={['bag_tag_number', 'passenger_last_name'].includes(f)} value={form[f] || ''} onChange={e => setForm({ ...form, [f]: e.target.value })} />)}
             <select className="mini-input mini-select" value={form.bag_color || ''} onChange={e => setForm({ ...form, bag_color: e.target.value })}>
-               <option value="">Select Color...</option>
-            <option value="Black">Black (BK)</option>
-            <option value="Red">Red (RD)</option>
-            <option value="Blue">Blue (BL)</option>
-            <option value="Brown">Brown (BR)</option>
-            <option value="Grey">Grey (GY)</option>
-            <option value="Green">Green (GR)</option>
-            <option value="Other">Other Color</option>
+              <option value="">Select Color...</option>
+              <option value="Black">Black (BK)</option>
+              <option value="Red">Red (RD)</option>
+              <option value="Blue">Blue (BL)</option>
+              <option value="Brown">Brown (BR)</option>
+              <option value="Grey">Grey (GY)</option>
+              <option value="Green">Green (GR)</option>
+              <option value="Other">Other Color</option>
             </select>
             <input type="number" className="mini-input mini-weight" placeholder="KG" min="1" max="100" value={form.bag_kilos || ''} onChange={e => setForm({ ...form, bag_kilos: e.target.value })} />
           </>
@@ -114,14 +115,14 @@ export default function RecordForm({ u, form, setForm, fetchRecords }) {
             <input type="text" className="mini-input flex-grow-desc" placeholder="DETAILED DESCRIPTION / CONTENTS / VISUAL TRAITS..." value={form.item_description || ''} onChange={e => setForm({ ...form, item_description: e.target.value })} required />
             
             <select className="mini-input mini-select mini-tagless-color" value={form.bag_color || ''} onChange={e => setForm({ ...form, bag_color: e.target.value })}>
-            <option value="">Select Color...</option>
-            <option value="Black">Black (BK)</option>
-            <option value="Red">Red (RD)</option>
-            <option value="Blue">Blue (BL)</option>
-            <option value="Brown">Brown (BR)</option>
-            <option value="Grey">Grey (GY)</option>
-            <option value="Green">Green (GR)</option>
-            <option value="Other">Other Color</option>
+              <option value="">Select Color...</option>
+              <option value="Black">Black (BK)</option>
+              <option value="Red">Red (RD)</option>
+              <option value="Blue">Blue (BL)</option>
+              <option value="Brown">Brown (BR)</option>
+              <option value="Grey">Grey (GY)</option>
+              <option value="Green">Green (GR)</option>
+              <option value="Other">Other Color</option>
             </select>
 
             <div className="mini-upload-zone">
