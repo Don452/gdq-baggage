@@ -84,9 +84,6 @@
 .panel-footer span:first-child { color: var(--text-muted); font-size: 11px; }
 .panel-footer .efficiency-score { font-size: 16px; font-weight: 900; }
 
-
-
-
 /* Triggers the smooth transitional stretch of the layout cells */
 .control-panel {
   transition: min-width 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
@@ -113,4 +110,77 @@
 .control-panel input:focus {
   flex-grow: 3 !important; /* Widens individual focused field over adjacent parameters */
   border-color: var(--text-dark);
+}
+
+/* ==========================================================================
+   📲 ULTRA-RESPONSIVE MOBILE VIEWPORT DECK ADDITIONS (NEW)
+   ========================================================================== */
+@media (max-width: 768px) {
+  /* Center the root view block and manage side margins uniformly */
+  .admin-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 12px;
+    margin: 0 auto;
+  }
+
+  /* Drop interactive focus scaling behaviors to keep columns stable on mobile */
+  .controls-grid:has(.control-panel:focus-within) .control-panel,
+  .control-panel:focus-within {
+    flex-grow: 1 !important;
+  }
+  
+  .control-panel input:focus {
+    flex-grow: 1 !important;
+  }
+
+  /* Force single-column forms stack layout to fit phone widths */
+  .controls-grid {
+    grid-template-columns: 1fr;
+    width: 100%;
+    gap: 10px;
+  }
+
+  /* Stack layout input boxes vertically to eliminate side clipping */
+  .control-panel .input-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .control-panel select, 
+  .control-panel input,
+  .btn-primary,
+  .btn-danger {
+    width: 100% !important;
+    height: 40px; /* Enhanced tap targets for mobile layout */
+  }
+
+  /* Set matrix grid layout panel container boxes to take full screen width rows */
+  .master-card {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+  }
+
+  /* Stack airport station cells directly on top of each other */
+  .stations-grid {
+    grid-template-columns: 1fr;
+    width: 100%;
+    gap: 12px;
+  }
+
+  /* Convert 3-column subgrid matrices into scrollable horizontal flows */
+  .reports-block {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 12px;
+  }
+
+  /* Add subtle separator block lines between reporting sectors on mobile views */
+  .report-column:not(:last-child) {
+    padding-bottom: 10px;
+    border-bottom: 1px dashed var(--border-color);
+  }
 }
