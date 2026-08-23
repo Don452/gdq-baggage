@@ -212,14 +212,12 @@
     background: var(--primary-hover);
 }
 
-
 /*📱 ULTRA-RESPONSIVE SINGLE COLUMN FALLBACKS FOR PHONE VIEWPORTS */
 @media (max-width: 1024px) {
     .toolbar-workspace-body {
         flex-direction: column;
         /* Stacks layout tools if screen dimensions narrow down */
         align-items: stretch;
-
     }
 }
 
@@ -237,7 +235,6 @@
     .toolbar-input-date {
         width: 100% !important;
         flex: 1 1 100% !important;
-
     }
 
     .toolbar-tab-btn:hover,
@@ -252,12 +249,18 @@
         color: #fff;
     }
 
+    /* 🎯 THE FIX: Forces user input fields to maintain dark text color and overrides white-on-white text masking during mobile hover states */
+    .toolbar-input-text:hover,
+    .toolbar-input-date:hover,
+    .toolbar-select-menu:hover {
+        color: #0f172a !important;
+    }
+
     .toolbar-input-text,
     .toolbar-input-date {
         width: 100% !important;
         flex: 1 1 100% !important;
         padding: 4px;
-
     }
 
     .toolbar-input-text:focus,
@@ -265,7 +268,7 @@
         width: 100% !important;
         flex: 1 1 100% !important;
         padding: 4px;
-
+        color: #0f172a !important; /* Locks text readability in place on live focus */
     }
 
     .toolbar-filter-group-row {
