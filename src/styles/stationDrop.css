@@ -6,6 +6,7 @@
   --card-bg: #ffffff;
 }
 .station-req-wrapper {
+  width: 100%;
   position: relative;
   display: inline-block;
   margin-bottom: 12px;
