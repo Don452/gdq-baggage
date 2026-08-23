@@ -248,8 +248,8 @@
 .irregularity-tagless  { background: var(--text-dark); color: var(--white); }
 
 .btn-save-check { background: var(--ethiopian-green); color: var(--white); }
-.btn-row-print { background: var(--ethiopian-green); color: var(--white); flex: 1; }
-.btn-row-edit { background: var(--ethiopian-yellow); color: var(--text-dark); flex: 1; }
+.btn-row-print { background: var(--snow); color: var(--white);}
+.btn-row-edit { background: rgb(211, 241, 220); color: var(--text-dark); flex: 1; }
 .btn-row-edit-disabled { opacity: 0.3; cursor: not-allowed; }
 
 /* Add these root definitions at the top of your CSS file to prevent crashes */

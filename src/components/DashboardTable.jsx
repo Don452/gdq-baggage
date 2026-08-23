@@ -4,6 +4,7 @@ import { hPrnt } from '../utils/printEngine';
 import '../styles/dashboardtable.css';
 import '../styles/stationDrop.css';
 import StationTransferRequest from './StationTransferRequest';
+import StationRequests from './StationRequests';
 
 export default function DashboardTable({ fil = [], u, edId, setEdId, edF, setEdF, fetchRecords }) {
   const [actBag, setActBag] = useState(null), [notifs, setNotifs] = useState([]), [showDrop, setShowDrop] = useState(false), [replyTexts, setReplyTexts] = useState({});
@@ -61,12 +62,12 @@ export default function DashboardTable({ fil = [], u, edId, setEdId, edF, setEdF
             <div className="station-dropdown-header">📥 Incoming Claims Inbox</div>
             <div className="station-dropdown-scroll">
               {!notifs.length ? <div className="station-empty-msg">No claims found.</div> : notifs.map((n, idx) => (
-                <div key={n.id || idx} className="station-item-card" style={{ borderLeft: n.holding_station === stCode ? '10000px solid : #fff' : '3px solid var(--ethiopian-green)' }}>
+                <div key={n.id || idx}>
                   <div className="station-item-top"><span className="station-item-origin">🛫 From: {n.requesting_station}</span><button onClick={() => closeReq(n.id, n.bag_tag_number)} className="station-item-close-x">&times;</button></div>
                   <div className="bag-tag-mono">ET: {n.bag_tag_number}</div>
                   <p className="station-item-msg">"{n.agent_message || n.message || n.notes || 'No notes.'}"</p>
-                  <div className="station-chat-viewport">{(Array.isArray(n.chat_history) ? n.chat_history : []).map((m, i) => <div key={i} className="station-chat-bubble" style={{ background: m.sender === stCode ? '#f0fdf4' : '#f1f5f9', marginLeft: m.sender === stCode ? '12px' : '0' }}><b>[{m.sender}]:</b> {m.text}</div>)}</div>
-                  <form onSubmit={e => reply(e, n)} className="station-chat-form"><input type="text" value={replyTexts?.[n.id] || ''} onChange={e => setReplyTexts({ ...replyTexts, [n.id]: e.target.value })} placeholder="Reply..." required /><button type="submit" className="btn-sm btn-row-print">Send</button></form>
+                  <div className="station-chat-viewport">{(Array.isArray(n.chat_history) ? n.chat_history : []).map((m, i) => <div key={i} className="station-chat-bubble" style={{ background: m.sender === stCode ? '#f0fdf4' : '#f1f5f9', marginLeft: m.sender === stCode ? '50%' : '0' }}><b>[{m.sender}]:</b> {m.text}</div>)}</div>
+                  <form onSubmit={e => reply(e, n)} className="station-chat-form"><input type="text" value={replyTexts?.[n.id] || ''} onChange={e => setReplyTexts({ ...replyTexts, [n.id]: e.target.value })} placeholder="Reply..." required /><button type="submit" className="btn-sm btn-row-print">✈️</button></form>
                 </div>
               ))}
             </div>
