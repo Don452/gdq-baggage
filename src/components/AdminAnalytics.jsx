@@ -50,17 +50,17 @@ export default function AdminAnalytics({ recs = [], stations = [], fetchStations
               <option value="">Target</option>
               {stations.map(st => <option key={st.station_code} value={st.station_code}>{st.station_code}</option>)}
             </select>
-            <input style={{ flex: '1.5 1 120px' }} value={edF.station_name} onChange={e => setEdF({ ...edF, station_name: e.target.value })} placeholder="City Name" disabled={!edCode} />
-            <input style={{ flex: '1 1 90px', fontFamily: 'monospace' }} value={edF.admin_passcode} onChange={e => setEdF({ ...edF, admin_passcode: e.target.value })} placeholder="Pass" disabled={!edCode} />
-            <input style={{ flex: '1 1 100px' }} value={edF.station_phone} onChange={e => setEdF({ ...edF, station_phone: e.target.value })} placeholder="Phone" disabled={!edCode} />
-            <input style={{ flex: '1.2 1 120px' }} value={edF.station_email} onChange={e => setEdF({ ...edF, station_email: e.target.value })} placeholder="Email" type="email" disabled={!edCode} />
+            <input style={{ flex: '1.5 1 40px' }} value={edF.station_name} onChange={e => setEdF({ ...edF, station_name: e.target.value })} placeholder="City Name" disabled={!edCode} />
+            <input style={{ flex: '1 1 40px', fontFamily: 'monospace' }} value={edF.admin_passcode} onChange={e => setEdF({ ...edF, admin_passcode: e.target.value })} placeholder="Pass" disabled={!edCode} />
+            <input style={{ flex: '1 1 40px' }} value={edF.station_phone} onChange={e => setEdF({ ...edF, station_phone: e.target.value })} placeholder="Phone" disabled={!edCode} />
+            <input style={{ flex: '1.2 1 40px' }} value={edF.station_email} onChange={e => setEdF({ ...edF, station_email: e.target.value })} placeholder="Email" type="email" disabled={!edCode} />
             <button onClick={async () => { if (!edCode) return; const { error } = await sb.from('stations').update({ station_name: edF.station_name.trim(), admin_passcode: edF.admin_passcode.trim(), station_phone: edF.station_phone.trim(), station_email: edF.station_email.trim() }).eq('station_code', edCode); if (error) return alert(error.message); setEdCode(''); setEdF({ station_name: '', admin_passcode: '', station_phone: '', station_email: '' }); fetchStations(); }} className="btn-primary" style={{ padding: '0 12px' }} disabled={!edCode}>Save</button>
           </div>
         </div>
 
 
         {/* PANEL 4: DECOMMISSION HUB STATION */}
-        <div className="control-panel cp-red" style={{ flex: '1 1 220px' }}><label>❌ Decommission Station</label><div className="input-row"><select style={{ flex: 1 }} value={delCode} onChange={e => setDelCode(e.target.value)}><option value="">Select target...</option>{stations.map(st => <option key={st.station_code} value={st.station_code}>{st.station_code} — {st.station_name}</option>)}</select><button onClick={async () => { if (delCode && window.confirm(`Decommission hub [${delCode}] safely?`)) { await sb.from('stations').delete().eq('station_code', delCode); setDelCode(''); fetchStations(); } }} className="btn-danger" style={{ padding: '0 12px' }}>Wipe</button></div></div>
+        <div className="control-panel cp-red" style={{ flex: '1 1 220px' }}><label>❌ Decommission Station</label><div className="input-row"><select style={{ flex: '1 1 40px' }} value={delCode} onChange={e => setDelCode(e.target.value)}><option value="">Select target...</option>{stations.map(st => <option key={st.station_code} value={st.station_code}>{st.station_code} — {st.station_name}</option>)}</select><button onClick={async () => { if (delCode && window.confirm(`Decommission hub [${delCode}] safely?`)) { await sb.from('stations').delete().eq('station_code', delCode); setDelCode(''); fetchStations(); } }} className="btn-danger" style={{ padding: '0 12px' }}>Wipe</button></div></div>
       </div>
 
       {/* 🏛️ CLEAN CORE MONITORING LEDGER MATRIX */}

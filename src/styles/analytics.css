@@ -157,6 +157,8 @@
     height: 40px; /* Enhanced tap targets for mobile layout */
   }
 
+  
+
   /* Set matrix grid layout panel container boxes to take full screen width rows */
   .master-card {
     width: 100%;
