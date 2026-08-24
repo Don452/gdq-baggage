@@ -140,7 +140,7 @@ export const hPrnt = async (b, u, stations = []) => { // 🎯 CONVERTED TO ASYNC
         </table>
       `}
       
-      {/* 🛠️ RESTORED TRUNCATED BLOCK: Fixed the trailing layout configuration code from your snippet */}
+     
       <div class="footer-banner">
         <p class="footer-amharic">
           ይህ ሰነድ ስላስመዘገቡት የሻንጣ መጥፋት/መዘግየት ጥያቄ ይፋዊ ማረጋገጫ ሆኖ የሚያገለግል ነው።<br/>

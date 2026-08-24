@@ -8,7 +8,7 @@ export const useIdleTimeout = (setU) => {
     if (!sessionActiveUser) return;
 
     // 🎯 5 MINUTES THRESHOLD EQUATION MATRIX: 5 * 60 * 1000 = 300,000 milliseconds
-    const IDLE_TIMEOUT_LIMIT = 5 * 60 * 1000; 
+    const IDLE_TIMEOUT_LIMIT = 15 * 60 * 1000; 
     const RUNTIME_AUDIT_INTERVAL = 10000; // Audits session status logs every 10 seconds
 
     /**

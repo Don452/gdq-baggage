@@ -36,7 +36,7 @@ return (
 
         {/* PANEL 1: VIEW ISOLATION CONTROLLER */}
         <div className="control-panel cp-yellow" style={{ flex: '1 1 220px' }}>
-          <label>🔍 Filter Network Target</label>
+          <label>🔍 Filter Airport Station</label>
           <div className="input-row">
             <select style={{ width: '100%' }} value={flt} onChange={e => setFlt(e.target.value)}>
               <option value="">All Active Hubs</option>
@@ -47,7 +47,7 @@ return (
 
         {/* PANEL 2: PROVISION NEW HUB STATION */}
         <form onSubmit={async (e) => { e.preventDefault(); const c = nst.station_code.toUpperCase().trim(); if (c.length !== 3) return alert('Must be 3 letters.'); const { error } = await sb.from('stations').insert([{ station_code: c, station_name: nst.station_name.trim(), admin_passcode: nst.admin_passcode.trim() }]); if (error) return alert(error.message); setNst({ station_code: '', station_name: '', admin_passcode: '' }); fetchStations(); }} className="control-panel cp-green" style={{ flex: '1.2 1 280px' }}>
-          <label>➕ Add New Station Node</label>
+          <label>➕ Add New Station</label>
           <div className="input-row">
             <input style={{ width: '50px', textAlign: 'center', fontWeight: '700' }} placeholder="CODE" maxLength={3} value={nst.station_code} onChange={e => setNst({ ...nst, station_code: e.target.value })} required />
             <input style={{ flex: '1.5 40px'}} placeholder="City Name" value={nst.station_name} onChange={e => setNst({ ...nst, station_name: e.target.value })} required />
@@ -56,21 +56,7 @@ return (
           </div>
         </form>
 
-        {/* PANEL 3: MASTER CONFIGURATION PANEL OVERSEE */}
-        <div className="control-panel cp-green" style={{ borderTopColor: '#3b6e2d', flex: '1.2 1 280px' }}>
-          <label>⚙️ Config Station Parameters</label>
-          <div className="input-row" style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
-            <select style={{ width: '72px', fontWeight: '700' }} value={edCode} onChange={e => handleSelectEdCode(e.target.value)}>
-              <option value="">Target</option>
-              {stations.map(st => <option key={st.station_code} value={st.station_code}>{st.station_code}</option>)}
-            </select>
-            <input style={{ flex: '1.5 1 40px' }} value={edF.station_name} onChange={e => setEdF({ ...edF, station_name: e.target.value })} placeholder="City Name" disabled={!edCode} />
-            <input style={{ flex: '1 1 40px', fontFamily: 'monospace' }} value={edF.admin_passcode} onChange={e => setEdF({ ...edF, admin_passcode: e.target.value })} placeholder="Pass" disabled={!edCode} />
-            <input style={{ flex: '1 1 40px' }} value={edF.station_phone} onChange={e => setEdF({ ...edF, station_phone: e.target.value })} placeholder="Phone" disabled={!edCode} />
-            <input style={{ flex: '1.2 1 40px' }} value={edF.station_email} onChange={e => setEdF({ ...edF, station_email: e.target.value })} placeholder="Email" type="email" disabled={!edCode} />
-            <button onClick={async () => { if (!edCode) return; const { error } = await sb.from('stations').update({ station_name: edF.station_name.trim(), admin_passcode: edF.admin_passcode.trim(), station_phone: edF.station_phone.trim(), station_email: edF.station_email.trim() }).eq('station_code', edCode); if (error) return alert(error.message); setEdCode(''); setEdF({ station_name: '', admin_passcode: '', station_phone: '', station_email: '' }); fetchStations(); }} className="btn-primary" style={{ padding: '0 12px' }} disabled={!edCode}>Save</button>
-          </div>
-        </div>
+   
 
         {/* PANEL 4: DECOMMISSION HUB STATION */}
         <div className="control-panel cp-red" style={{ flex: '1 1 220px' }}>
@@ -84,8 +70,24 @@ return (
           </div>
         </div>
 
+             {/* PANEL 3: MASTER CONFIGURATION PANEL OVERSEE */}
+        <div className="control-panel cp-green" style={{ borderTopColor: '#3b6e2d', flex: '1.2 1 280px' }}>
+          <label>⚙️ Config Station Settings</label>
+          <div className="input-row" style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+            <select style={{ width: '72px', fontWeight: '700' }} value={edCode} onChange={e => handleSelectEdCode(e.target.value)}>
+              <option value="">Target</option>
+              {stations.map(st => <option key={st.station_code} value={st.station_code}>{st.station_code}</option>)}
+            </select>
+            <input style={{ flex: '1.5 1 40px' }} value={edF.station_name} onChange={e => setEdF({ ...edF, station_name: e.target.value })} placeholder="City Name" disabled={!edCode} />
+            <input style={{ flex: '1 1 40px', fontFamily: 'monospace' }} value={edF.admin_passcode} onChange={e => setEdF({ ...edF, admin_passcode: e.target.value })} placeholder="Pass" disabled={!edCode} />
+            <input style={{ flex: '1 1 40px' }} value={edF.station_phone} onChange={e => setEdF({ ...edF, station_phone: e.target.value })} placeholder="Phone" disabled={!edCode} />
+            <input style={{ flex: '1.2 1 40px' }} value={edF.station_email} onChange={e => setEdF({ ...edF, station_email: e.target.value })} placeholder="Email" type="email" disabled={!edCode} />
+            <button onClick={async () => { if (!edCode) return; const { error } = await sb.from('stations').update({ station_name: edF.station_name.trim(), admin_passcode: edF.admin_passcode.trim(), station_phone: edF.station_phone.trim(), station_email: edF.station_email.trim() }).eq('station_code', edCode); if (error) return alert(error.message); setEdCode(''); setEdF({ station_name: '', admin_passcode: '', station_phone: '', station_email: '' }); fetchStations(); }} className="btn-primary" style={{ padding: '0 12px' }} disabled={!edCode}>Save</button>
+          </div>
+        </div>
+
         {/* 🎯 NEW FUNCTION ADAPTATION LINK: Direct download trigger hook */}
-        <div className="control-panel cp-blue" style={{ flex: '1 1 140px', borderTopColor: '#2563eb' }}>
+        <div className="control-panel cp-blue" style={{ borderTopColor: '#3b6e2d', flex: '1.2 1 280px' }}>
           <label>📊 Data Exports</label>
           <div className="input-row">
             <button 
@@ -102,7 +104,7 @@ return (
                 document.body.removeChild(anchorEl);
               }} 
               className="btn-primary" 
-              style={{ width: '100%', background: '#2563eb', fontWeight: '700' }}
+              style={{ flex: '1.5 1 40px' }}
             >
               💾 Export CSV
             </button>
