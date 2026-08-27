@@ -186,3 +186,46 @@
     border-bottom: 1px dashed var(--border-color);
   }
 }
+
+/* ==========================================================================
+   💎 TARGET SPECIFICATION: PREMIUM STYLING FOR TOTAL NET ANALYTICS
+   ========================================================================== */
+.report-column.overall-summary-column {
+  /* 🎯 THE FIX: Changes the indicator strip line to a solid network blue color theme */
+  border-top: 3px solid #2563eb;
+  
+  /* Adds a soft, subtle background layout tint to differentiate totals from periodic cards */
+  background: #f0f6ff;
+  border-color: #bfdbfe;
+}
+
+/* Enhances the text weight profiles of your net summaries layout */
+.report-column.overall-summary-column .report-title {
+  color: #1e3a8a;
+  font-weight: 900;
+}
+
+.report-column.overall-summary-column .report-efficiency {
+  border-top: 1px dotted #bfdbfe;
+  color: #1e3a8a;
+}
+
+/* ==========================================================================
+   👑 TARGET LAYOUT REINFORCEMENT: MULTI-LAYER ADMINISTRATIVE PROVISIONING
+   ========================================================================== */
+.control-panel.cp-green input[name="sub_password"] {
+  font-family: monospace; /* Standardized typing spacing mask for security characters */
+}
+
+@media (max-width: 640px) {
+  /* Forces child input tags on the new provisioning form to safely fit compact phone stacks */
+  form[onSubmit*="sub_admin"] input,
+  form[onSubmit*="sub_admin"] select {
+    width: 100% !important;
+    height: 42px !important;
+    margin-bottom: 4px;
+  }
+}
+
+
+

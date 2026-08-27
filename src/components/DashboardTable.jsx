@@ -7,6 +7,30 @@ import StationTransferRequest from './StationTransferRequest';
 import StationRequests from './StationRequests';
 
 export default function DashboardTable({ fil = [], u, edId, setEdId, edF, setEdF, fetchRecords }) {
+
+  const getInitials = (agentNameStr) => {
+    const nameStr = String(agentNameStr || '').trim();
+    
+    // Checks if the entry was logged by the system matrix loop automatically
+    if (!nameStr || nameStr.toLowerCase() === 'system') return 'SYS';
+
+    // Splits the text cleanly by space blocks into separate name strings inside an array
+    const nameParts = nameStr.split(/\s+/);
+
+    // 🎯 THE FIX: Extract index [0] first letter and index [1] first letter cleanly
+    const firstInitial = nameParts[0] ? nameParts[0].charAt(0).toUpperCase() : '';
+    const secondInitial = nameParts[1] ? nameParts[1].charAt(0).toUpperCase() : '';
+
+    const exactInitials = `${firstInitial}${secondInitial}`;
+
+    // Fallback: If there is no middle name word found, return the first 2 letters of the first name
+    return exactInitials.length === 2
+      ? exactInitials
+      : nameStr.substring(0, 2).toUpperCase();
+  };
+
+
+
   const [actBag, setActBag] = useState(null), [notifs, setNotifs] = useState([]), [showDrop, setShowDrop] = useState(false), [replyTexts, setReplyTexts] = useState({});
   // Place this next to your [actBag, setActBag] or [notifs, setNotifs] states
 
@@ -124,24 +148,8 @@ export default function DashboardTable({ fil = [], u, edId, setEdId, edF, setEdF
               <div className="grid-cell">{isEd ? <input type="number" value={it.bag_kilos || ''} onChange={e => setEdF({ ...edF, bag_kilos: e.target.value })} /> : (b.bag_kilos ? <b>{b.bag_kilos} KG</b> : '—')}</div>
               <div className="grid-cell">{isEd ? <select value={it.irregularity_type || ''} onChange={e => setEdF({ ...edF, irregularity_type: e.target.value })}>{['Delayed', 'Damaged', 'Onhand'].map(t => <option key={t} value={t}>{t}</option>)}</select> : <span className={`irregularity-status-tag ${irrCls}`}>{b.irregularity_type}</span>}</div>
               <div className="grid-cell" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                👤 {(() => {
-                  const nameStr = (b.agent_name || '').trim();
-                  if (!nameStr || nameStr.toLowerCase() === 'system') return 'SYS';
-
-                  // Split name by spaces into an array of words
-                  const nameParts = nameStr.split(/\s+/);
-
-                  // Extract first letter of the first two words found
-                  const firstInitial = nameParts[0] ? nameParts[0].charAt(0).toUpperCase() : '';
-                  const secondInitial = nameParts[1] ? nameParts[1].charAt(0).toUpperCase() : '';
-
-                  const twoLetterInitials = `${firstInitial}${secondInitial}`;
-
-                  // Fallback to first 2 letters of a single word name if no space exists
-                  return twoLetterInitials.length >= 2
-                    ? twoLetterInitials
-                    : nameStr.substring(0, 2).toUpperCase();
-                })()}
+              
+                👤 {getInitials(b.agent_name)}
               </div>
 
               <div className="grid-cell wt-cell-container">
@@ -155,8 +163,24 @@ export default function DashboardTable({ fil = [], u, edId, setEdId, edF, setEdF
                 </a>
 
               </div>
+              <div className="grid-cell status-select-cell" style={{ display: 'flex', alignItems: 'center', gap: '8px', width: '100%' }}>
 
-              <div className="grid-cell status-select-cell">
+                {/* 🎯 TARGET INTEGRATED: Dynamic Animated Pulsing Radar Indicator Dot Element */}
+                {(() => {
+                  const currentStatus = isEd ? edF.bag_status : (b.bag_status || 'Open');
+                  const sLower = String(currentStatus).toLowerCase();
+
+                  // Hide indicator dot entirely if the file record is permanently closed
+                  if (sLower === 'closed') return null;
+
+                  return (
+                    <span
+                      className={`status-pulse-radar pulse-type-${sLower}`}
+                      title={`Status tracking flag: File is currently ${currentStatus}`}
+                    />
+                  );
+                })()}
+
                 <select
                   disabled={!isEd && !u?.is_admin}
                   value={isEd ? edF.bag_status : (b.bag_status || 'Open')}
@@ -165,6 +189,7 @@ export default function DashboardTable({ fil = [], u, edId, setEdId, edF, setEdF
                     return `status-color-${String(s).toLowerCase()}`;
                   })()
                     }`}
+                  style={{ flex: 1, minWidth: '0' }} /* Ensures proper sharing of cell horizontal track room */
                   onChange={async (e) => {
                     const selectedValue = e.target.value;
 
@@ -174,7 +199,7 @@ export default function DashboardTable({ fil = [], u, edId, setEdId, edF, setEdF
                       if (!window.confirm(`Are you certain you want to update status to: ${selectedValue}?`)) return;
 
                       const { error } = await sb
-                        .from('baggage_records')
+                        .from('bagaage_records')
                         .update({ bag_status: selectedValue })
                         .eq('id', b.id);
 
@@ -186,13 +211,15 @@ export default function DashboardTable({ fil = [], u, edId, setEdId, edF, setEdF
                     }
                   }}
                 >
-                  <option value="Open">Open</option>
-                  <option value="Arrived">Arrived</option>
-                  <option value="Delivered">Delivered</option>
-                  <option value="Suspended">Suspended</option>
-                  <option value="Closed">Closed</option>
+                  <option value="Open" className="opt-open">Open</option>
+                  <option value="Arrived" className="opt-arrived">Arrived</option>
+                  <option value="Delivered" className="opt-delivered">Delivered</option>
+                  <option value="Suspended" className="opt-suspended">Suspended</option>
+                  <option value="Closed" className="opt-closed">Closed</option>
                 </select>
               </div>
+
+
 
 
 

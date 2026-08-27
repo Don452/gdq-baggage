@@ -12,7 +12,7 @@ export default function AppNavbar({ u, viewMode, setViewMode, handleLogout }) {
     const first = String(u?.first_name || '').trim();
     const middle = String(u?.middle_name || '').trim();
 
-    if (!first) return 'HA';
+    if (!first) return '';
 
     const firstInitial = first.charAt(0);
     const secondInitial = middle ? middle.charAt(0) : first.charAt(1) || 'X';

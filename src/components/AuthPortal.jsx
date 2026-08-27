@@ -25,7 +25,7 @@ export default function AuthPortal({ setU, auth = {}, setAuth }) {
       setIsAdmin(true);
       setClicks(0);
       setAuth({});
-      alert("👑 Admin Mode Active");
+      alert("Admin Mode Active");
       return;
     }
     tRef.current = setTimeout(() => setClicks(0), 3000);
@@ -40,21 +40,29 @@ export default function AuthPortal({ setU, auth = {}, setAuth }) {
         const userKey = auth.username?.trim();
         if (!userKey || !pass) return alert('Fill credentials completely.');
 
-        const { data: adm } = await sb
+        // 👑 HQ Admin & Sub-Admin Verification Matrix
+        // Checks BOTH username and agent_code columns so no Admin gets locked out
+        const { data: adm, error: admErr } = await sb
           .from('agents')
           .select('*')
-          .eq('username', userKey)
+          .or(`username.eq.${userKey},agent_code.eq.${userKey.toUpperCase()}`)
           .eq('password', pass)
-          .eq('is_admin', true)
           .maybeSingle();
 
-        if (!adm) return alert('Invalid Admin HQ credentials.');
+        if (admErr) return alert(`Database connection error: ${admErr.message}`);
+        
+        // 🛡️ SECURITY AUDIT GATE: Verifies the account has administrative rank attributes
+        if (!adm || (!adm.is_admin && adm.role !== 'super_admin' && adm.role !== 'sub_admin')) {
+          return alert('Invalid Admin HQ or Station Manager credentials.');
+        }
 
-        // 🎯 THE INTEGRATION FIX: Initialize 5-minute active timestamp mapping
-        initializeUserSession(adm);
+        // Initialize 15-minute active timestamp mappings and pass session profile to root state variables
+        localStorage.setItem('last_activity_timestamp', Date.now().toString());
+        localStorage.setItem('bagtrack_user', JSON.stringify(adm)); 
         return setU(adm);
       }
-
+      
+      // 🔒 STANDARD AGENT LAYER WORKFLOW PANEL ROUTINES
       const idKey = auth.agent_code?.toUpperCase().trim();
       const code = auth.station_code?.toUpperCase().trim();
       const key = auth.station_key?.trim();
@@ -68,35 +76,37 @@ export default function AuthPortal({ setU, auth = {}, setAuth }) {
 
       if (isUp) {
         if (pass.length < 8) return alert('Password length must be at least 8 characters.');
-
+        
         const { data: check } = await sb.from('agents').select('agent_code').eq('agent_code', idKey).maybeSingle();
         if (check) return alert('Agent ID already registered.');
-
-        const { error } = await sb.from('agents').insert([{
-          agent_code: idKey,
-          password: pass,
-          first_name: auth.first_name?.trim(),
-          middle_name: auth.middle_name?.trim() || null,
-          station_code: code,
-          is_admin: false
+        
+        const { error } = await sb.from('agents').insert([{ 
+          agent_code: idKey, 
+          password: pass, 
+          first_name: auth.first_name?.trim(), 
+          middle_name: auth.middle_name?.trim() || null, 
+          station_code: code, 
+          is_admin: false,
+          role: 'agent' 
         }]);
-
+        
         if (error) return alert(error.message);
-        alert('Registered successfully!');
-        setIsUp(false);
+        alert('Registered successfully!'); 
+        setIsUp(false); 
         setAuth({});
       } else {
         const { data: ag } = await sb.from('agents').select('*').eq('agent_code', idKey).eq('password', pass).maybeSingle();
         if (!ag || ag.station_code !== code) return alert('Access Denied: Invalid Agent ID credentials or incorrect station assignment.');
-
-        // 🎯 THE INTEGRATION FIX: Initialize 5-minute active timestamp mapping
-        initializeUserSession(ag);
+        
+        localStorage.setItem('last_activity_timestamp', Date.now().toString());
+        localStorage.setItem('bagtrack_user', JSON.stringify(ag)); 
         setU(ag);
       }
-    } catch {
-      alert("Authentication system error encountered.");
+    } catch { 
+      alert("Authentication system error encountered."); 
     }
   };
+
 
   return (
     <div className="auth-viewport-wrapper">

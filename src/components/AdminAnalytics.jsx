@@ -36,7 +36,7 @@ return (
 
         {/* PANEL 1: VIEW ISOLATION CONTROLLER */}
         <div className="control-panel cp-yellow" style={{ flex: '1 1 220px' }}>
-          <label>🔍 Filter Airport Station</label>
+          <label>🔍 Filter Station</label>
           <div className="input-row">
             <select style={{ width: '100%' }} value={flt} onChange={e => setFlt(e.target.value)}>
               <option value="">All Active Hubs</option>
@@ -56,6 +56,8 @@ return (
           </div>
         </form>
 
+        
+
    
 
         {/* PANEL 4: DECOMMISSION HUB STATION */}
@@ -70,6 +72,49 @@ return (
           </div>
         </div>
 
+                {/* PANEL 2.5: PROVISION NEW SUB-ADMIN / MANAGER */}
+        <form onSubmit={async (e) => { 
+          e.preventDefault(); 
+          const uKey = e.target.sub_username.value.trim();
+          const pWord = e.target.sub_password.value;
+          const sCode = e.target.sub_station.value;
+          const fName = e.target.sub_fname.value.trim();
+
+          if (!uKey || !pWord || !sCode || !fName) return alert('Fill credentials completely.');
+          if (pWord.length < 8) return alert('Password length must be at least 8 characters.');
+
+          const { data: check } = await sb.from('agents').select('username, agent_code').or(`username.eq.${uKey},agent_code.eq.${uKey.toUpperCase()}`).maybeSingle();
+          if (check) return alert('Username or Agent ID already registered inside system tables.');
+
+          const { error } = await sb.from('agents').insert([{
+            username: uKey,
+            agent_code: uKey.toUpperCase(),
+            password: pWord,
+            first_name: fName,
+            station_code: sCode,
+            is_admin: false,
+            role: 'sub_admin'
+          }]);
+
+          if (error) return alert(`Provisioning failed: ${error.message}`);
+          alert(`✅ Sub-Admin Manager [${uKey}] successfully appointed to Hub ${sCode}!`);
+          e.target.reset();
+        }} className="control-panel cp-green" style={{ flex: '1.2 1 280px', borderTopColor: '#10b981' }}>
+
+          <label>Add Station Manager</label>
+          <div className="input-row" style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+            <input name="sub_username" style={{ flex: '1 1 40px' }} placeholder="Username" required />
+            <input name="sub_password" type="password" style={{ flex: '1 1 40px' }} placeholder="Password" required />
+            <input name="sub_fname" style={{ flex: '1 1 40px' }} placeholder="Manager Name" required />
+            <select name="sub_station" style={{ flex: '1 1 40px', fontWeight: '700' }} required>
+              <option value="">Station</option>
+              {stations.map(st => <option key={st.station_code} value={st.station_code}>{st.station_code}</option>)}
+            </select>
+            <button type="submit" className="btn-primary" style={{ padding: '0 8px', height: '38px' }}>Appoint</button>
+          </div>
+        </form>
+
+
              {/* PANEL 3: MASTER CONFIGURATION PANEL OVERSEE */}
         <div className="control-panel cp-green" style={{ borderTopColor: '#3b6e2d', flex: '1.2 1 280px' }}>
           <label>⚙️ Config Station Settings</label>
@@ -82,7 +127,7 @@ return (
             <input style={{ flex: '1 1 40px', fontFamily: 'monospace' }} value={edF.admin_passcode} onChange={e => setEdF({ ...edF, admin_passcode: e.target.value })} placeholder="Pass" disabled={!edCode} />
             <input style={{ flex: '1 1 40px' }} value={edF.station_phone} onChange={e => setEdF({ ...edF, station_phone: e.target.value })} placeholder="Phone" disabled={!edCode} />
             <input style={{ flex: '1.2 1 40px' }} value={edF.station_email} onChange={e => setEdF({ ...edF, station_email: e.target.value })} placeholder="Email" type="email" disabled={!edCode} />
-            <button onClick={async () => { if (!edCode) return; const { error } = await sb.from('stations').update({ station_name: edF.station_name.trim(), admin_passcode: edF.admin_passcode.trim(), station_phone: edF.station_phone.trim(), station_email: edF.station_email.trim() }).eq('station_code', edCode); if (error) return alert(error.message); setEdCode(''); setEdF({ station_name: '', admin_passcode: '', station_phone: '', station_email: '' }); fetchStations(); }} className="btn-primary" style={{ padding: '0 12px' }} disabled={!edCode}>Save</button>
+            <button  onClick={async () => { if (!edCode) return; const { error } = await sb.from('stations').update({ station_name: edF.station_name.trim(), admin_passcode: edF.admin_passcode.trim(), station_phone: edF.station_phone.trim(), station_email: edF.station_email.trim() }).eq('station_code', edCode); if (error) return alert(error.message); setEdCode(''); setEdF({ station_name: '', admin_passcode: '', station_phone: '', station_email: '' }); fetchStations(); }} className="btn-primary" style={{ padding: '0 20px' }} disabled={!edCode}>Save</button>
           </div>
         </div>
 
@@ -104,7 +149,7 @@ return (
                 document.body.removeChild(anchorEl);
               }} 
               className="btn-primary" 
-              style={{ flex: '1.5 1 40px' }}
+              style={{ flex: '1.2 1 40px' }}
             >
               💾 Export CSV
             </button>
@@ -115,7 +160,7 @@ return (
 
       {/* 🏛️ CLEAN CORE MONITORING LEDGER MATRIX */}
       <div className="master-card">
-        <h2>🔄 Terminal Node Station Periodic Status Ledger Matrix</h2>
+        <h2>🪟 Station Performance</h2>
         <div className="stations-grid">
           {fStats.map(s => (
             <div key={s.code} className="station-cell" style={{ border: edCode === s.code ? '2px solid var(--ethiopian-yellow)' : '' }}>
@@ -146,6 +191,8 @@ return (
                   { n: 'Daily', t: s.d_tot, dl: s.d_del, dm: s.d_dam, oh: s.d_oh, tgl: s.d_tgl, cl: s.d_cl, cls: 'daily' },
                   { n: 'Weekly', t: s.w_tot, dl: s.w_del, dm: s.w_dam, oh: s.w_oh, tgl: s.w_tgl, cl: s.w_cl, cls: 'weekly' },
                   { n: 'Monthly', t: s.m_tot, dl: s.m_del, dm: s.m_dam, oh: s.m_oh, tgl: s.m_tgl, cl: s.m_cl, cls: 'monthly' }
+              
+
                 ].map((p, i) => (
                   <div key={i} className={`report-column ${p.cls}`}>
                     <div className="report-title">{p.n}</div>

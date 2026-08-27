@@ -9,6 +9,8 @@
   --ethiopian-red: #dc2626;
 }
 
+
+
 .wt-cell-container {
   display: flex;
   box-sizing: border-box;
@@ -258,5 +260,92 @@
 .an-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; width: 100%; margin: 15px 0; }
 .an-card { background: #fff; border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; box-sizing: border-box; }
 
+
+/* ==========================================================================
+   🚥 DYNAMIC OPERATIONAL STATUS DROPDOWN COLOR THEMES
+   ========================================================================== */
+
+/* 🟢 STATIC SELECTOR HOOKS (Changes the main dropdown box state) */
+.status-dropdown-control {
+  font-weight: 700 !important;
+  border-radius: 6px !important;
+  padding: 4px 8px !important;
+  border: 1px solid #cbd5e1 !important;
+  outline: none !important;
+  transition: all 0.15s ease !important;
+  cursor: pointer;
+}
+
+.status-dropdown-control:disabled {
+  opacity: 0.85 !important;
+  cursor: not-allowed;
+}
+
+/* 🎨 Class Mappings assigned via template literals dynamically */
+.status-color-open { background-color: #fef3c7 !important; color: #b45309 !important; border-color: #fde68a !important; }
+.status-color-arrived { background-color: #eff6ff !important; color: #1e40af !important; border-color: #bfdbfe !important; }
+.status-color-delivered { background-color: #ecfdf5 !important; color: #065f46 !important; border-color: #a7f3d0 !important; }
+.status-color-suspended { background-color: #fff5f5 !important; color: #c52528 !important; border-color: #feb2b2 !important; }
+.status-color-closed { background-color: #f1f5f9 !important; color: #475569 !important; border-color: #cbd5e1 !important; }
+
+/* 📋 DROPDOWN LIST OPTION SELECTION OVERRIDES (When extended by users) */
+.opt-open { background-color: #fffbeb !important; color: #b45309 !important; }
+.opt-arrived { background-color: #f0f6ff !important; color: #1e40af !important; }
+.opt-delivered { background-color: #f0fdf4 !important; color: #065f46 !important; }
+.opt-suspended { background-color: #fff5f5 !important; color: #c52528 !important; }
+.opt-closed { background-color: #f8fafc !important; color: #475569 !important; }
+
+/* ==========================================================================
+   📡 ANIMATED TELEMETRY STATUS RADAR PULSE INDICATORS
+   ========================================================================== */
+.status-pulse-radar {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+  position: relative;
+}
+
+/* Base keyframe ring generator rule setup */
+.status-pulse-radar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  animation: radarBreathingRingEffect 1.6s infinite cubic-bezier(0.4, 0, 0.2, 1);
+  box-sizing: border-box;
+}
+
+/* 🟠 WARNING LEVEL 1: File is Open & active inside queue logs */
+.pulse-type-open { background-color: #b45309; }
+.pulse-type-open::after { border: 2px solid #f59e0b; }
+
+/* 🔵 WARNING LEVEL 2: Flight has landed, awaiting handoff sorting checks */
+.pulse-type-arrived { background-color: #1e40af; }
+.pulse-type-arrived::after { border: 2px solid #3b82f6; }
+
+/* 🔴 CRITICAL WARNING LEVEL 3: Case suspended or frozen due to claim claims anomalies */
+.pulse-type-suspended { background-color: #c52528; }
+.pulse-type-suspended::after { border: 2px solid #ef4444; }
+
+/* 🟢 SECURE LEVEL: Luggage delivered, breathing pulse stops into stable solid target point */
+.pulse-type-delivered { background-color: #10b981; }
+.pulse-type-delivered::after { display: none; } /* Stable status requires no active warning ripple loops */
+
+/* 💨 HARDWARE-ACCELERATED TRANSIT MOTION MATRIX */
+@keyframes radarBreathingRingEffect {
+  0% {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(2.8);
+    opacity: 0;
+  }
+}
 
 
