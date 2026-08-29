@@ -20,8 +20,8 @@
 .form-section-title {
   margin: 0 0 16px 0;
   font-size: 15px;
-  font-weight: 800;
-  text-transform: uppercase;
+  font-weight: 8000;
+
   color: var(--text-dark, #0f172a);
   letter-spacing: 0.5px;
   display: flex;
@@ -32,122 +32,53 @@
 /* 🧱 ELEMENT FLEX LAYOUT CONTROL STRIPS */
 .compact-inline-form {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  align-items: center;
+  flex-direction: column; /* Changed to column to contain our two row strips cleanly */
+  gap: 4px;
   width: 100%;
 }
 
-/* 📝 INPUTS & SELECT DROPDOWN ELEMENT RULES */
-.mini-input {
-  height: 38px;
-  padding: 0 12px;
-  border: 1px solid var(--border-color, #cbd5e1);
-  border-radius: 6px;
-  font-size: 13px;
-  color: var(--text-dark, #0f172a);
-  background-color: var(--card-bg, #ffffff);
-  outline: none;
-  box-sizing: border-box;
-  transition: all 0.15s ease;
-  flex: 1 1 160px; /* Fluid scaling matrix limits wrap boundaries gracefully */
-}
-
-.mini-input:focus {
-  border-color: var(--primary, #5E8F4D);
-  box-shadow: 0 0 0 3px rgba(94, 143, 77, 0.08);
-}
-
-/* Specific Dimension Allocations */
-.mini-select {
-  cursor: pointer;
-}
-
-.mini-weight {
-  max-width: 75px;
-  flex: 0 0 75px;
-  text-align: center;
-}
-
-.font-bold {
-  font-weight: 700;
-}
-
-/* 🏷️ TAGLESS ACCORDION BLOCK HORIZONTAL RULES */
-.tagless-horizontal-block {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  flex: 3 1 auto;
-  align-items: center;
-}
-
-.flex-grow-desc {
-  flex: 3 1 300px;
-}
-
-.mini-tagless-color {
-  flex: 1 1 140px;
-}
-
-/* 📸 PHOTO UPLOAD TARGET ZONE INDICATOR */
-.mini-upload-zone {
-  display: inline-flex;
-  align-items: center;
-  box-sizing: border-box;
-  flex: 1 1 140px;
-}
-
-
-.mini-file-label input[type="file"] {
-  display: none;
-}
-
-.mini-file-label:hover {
-  background-color: rgba(94, 143, 77, 0.12);
-  border-color: var(--primary, #5E8F4D);
-}
-
-.compact-form-card {
-  width: 100%;
-  background: #ffffff;
-  padding: 6px 12px;
-  border-radius: 6px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 1px 4px rgba(22, 163, 74, 0.06);
-  margin-bottom: 12px;
-}
-
-.compact-inline-form {
+/* 🎯 TWO ROW SPLITTER WRAPPER CONTROLLERS */
+.form-layout-row-strip {
   display: flex;
   align-items: center;
   gap: 4px;
   width: 100%;
-  flex-wrap: nowrap;
-  overflow-x: auto;
+  flex-wrap: wrap; /* Supports elastic focus width expansion */
 }
 
+/* 📝 INPUTS & SELECT DROPDOWN ELEMENT RULES */
 .mini-input {
   height: 28px;
   padding: 0 6px;
   font-size: 11px;
-  border: 1px solid var(--primary);
+  /* 🎯 FIXED: Default green border color completely removed as requested */
+  border: 1px solid var(--border-color, #cbd5e1);
   border-radius: 4px;
   color: #1e293b;
   background: #f8fafc;
   outline: none;
   min-width: 90px;
-  flex: 1;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  flex: 1 1 110px;
+  border: 1px solid var(--primary);
+  /* 🏎️ TRANSITION MATRIX: Integrated hardware-accelerated curves for input stretching */
+  transition: min-width 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              flex-grow 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.15s ease, 
+              box-shadow 0.15s ease;
+}
+
+/* 🎯 THE EXPANSION HOOK: Sibling components expand dynamically together on context interaction loops */
+.form-layout-row-strip:has(.mini-input:focus) .mini-input {
+  flex-grow: 1;
 }
 
 /* 🟥 Focus Track Overrides (Corporate Red Accent) */
 .mini-input:focus {
+  flex-grow: 3 !important; /* Forces focused input to widen safely over empty row space */
   border-color: var(--primary-hover);
   background: #ffffff;
   box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.08);
 }
-
 
 .mini-select {
   padding-right: 12px;
@@ -173,7 +104,6 @@
   min-width: 280px;
 }
 
-/* 🎨 FIXED: Balanced horizontal constraint rule for the Tagless view color select */
 .mini-tagless-color {
   flex: 1 !important;
   min-width: 95px !important;
@@ -226,12 +156,6 @@
 }
 
 .mini-submit-btn:hover {
-
-  background: var(--primary-hover);
-}
-
-
-.mini-submit-btn:hover {
   background: var(--primary-hover);
   box-shadow: 0 2px 6px rgba(21, 128, 61, 0.2);
 }
@@ -248,21 +172,122 @@
   color: var(--primary);
 }
 
-
+/* ==========================================================================
+   📲 RESPONSIVE MOBILE VIEWPORT STACK CONFIGURATIONS
+   ========================================================================== */
 @media (max-width: 640px) {
+  .form-layout-row-strip:has(.mini-input:focus) .mini-input,
+  .mini-input:focus {
+    flex-grow: 1 !important;
+   
+  }
   .compact-form-card {
     padding: 16px;
   }
+  .form-layout-row-strip {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  /* 🎯 MAXIMIZED FOR MOBILE ONLY: Generous touch target height across smartphone devices */
   .mini-input, 
   .tagless-horizontal-block .mini-input, 
   .mini-upload-zone, 
+  .mini-file-label,
   .mini-submit-btn {
+    
     width: 100% !important;
-    flex: 1 1 100% !important;
+    flex: 1 1 28px !important;
     max-width: 100% !important;
+    border: 1px solid var(--primary);
+    height: 46px !important; /* Maximized safely to 46px for effortless mobile touch precision */
   }
+  
 }
 
+/* ==========================================================================
+   ⚡ FLOATING ALIGNED COCKPIT BADGE WITH MINIMIZED HEIGHT TRACKS
+   ========================================================================== */
+.telemetry-date-wrapper-aligned {
+  display: inline-flex !important;
+  flex-direction: column !important;
+  position: relative !important;
+  height: 45px;
+  bottom: 8px;
+  /* Flex baseline settings match neighboring standalone text input items */
+  flex: 1 1 110px;
+  min-width: 90px;
+  /* Adds slight top padding room to protect the absolute floating badge headroom */
+  padding-top: 16px; 
+}
 
+/* 🏆 FLOATING BADGE: Lifted completely out of flow to prevent row line distortions */
+.telemetry-date-wrapper-aligned .premium-radar-label {
+  position: absolute !important;
+  top: 0px; /* Suspends badge perfectly centered above input tracking boxes */
+  left: 2px;
+  font-size: 9px;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: var(--primary); 
+  background: var(--card-bg); 
+  /* 🎯 FIXED: Replaced custom green border with standard subtle frame mapping */
+  border: 1px solid var(--border-color, #cbd5e1);
+  border-radius: 4px;
+  padding: 1px 5px;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  user-select: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  z-index: 2;
+}
 
+/* 🎯 THE RESIZE: Compressed height to lock down exact 28px alignment across the form */
+.premium-date-box-minimized {
+  width: 100% !important;
+  height: 28px !important; /* Forces the box to match adjacent fields perfectly */
+  padding: 0 4px !important;
+  cursor: pointer;
+  background: var(--bg-main); 
+  /* 🎯 FIXED: Default green border color completely removed */
+  border: 1px solid var(--primary);
+}
 
+/* Connects the modern focus-stretching timeline smoothly through the aligned wrapper container */
+.form-layout-row-strip:has(.premium-date-box-minimized:focus) .telemetry-date-wrapper-aligned {
+  flex-grow: 3 !important;
+}
+
+.premium-date-box-minimized:focus {
+  background: #ffffff !important;
+  border-color: var(--primary-hover) !important;
+}
+
+/* ==========================================================================
+   📲 RESPONSIVE MOBILE VIEWPORT STACK CONFIGURATIONS (DUPLICATED TARGET FOR INLINE OVERRIDES)
+   ========================================================================== */
+@media (max-width: 640px) {
+  .telemetry-date-wrapper-aligned {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: unset !important;
+    padding-top: 0 !important; /* Resets structural gap alignment cleanly on phone viewports */
+    height: 50px !important;
+    bottom: 0 !important;
+  }
+  .telemetry-date-wrapper-aligned .premium-radar-label {
+    position: relative !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 20% !important;
+    padding: 2px 0px;
+    box-sizing: border-box;
+    text-align: center;
+    margin-bottom: 4px;
+  }
+  /* 🎯 MAXIMIZED FOR MOBILE ONLY: Date box scales up perfectly to match the tactile layout profile */
+  .premium-date-box-minimized {
+    height: 46px !important; /* Maximized to 46px on mobile view targets */
+    width: 100% !important;
+  }
+}

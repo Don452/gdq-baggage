@@ -4,7 +4,7 @@ import { sb } from '../utils/supabaseClient'; // 🎯 INJECTED SAFELY: Direct ba
 
 export const hPrnt = async (b, u, stations = []) => { // 🎯 CONVERTED TO ASYNC ROUTINE
   // 📡 ROUTING PARAMETER MATRIX: Clean target strings up completely
-  const recordStationCode = String(b?.station_code || u?.station_code || 'GDQ').trim().toUpperCase();
+  const recordStationCode = String(b?.station_code || u?.station_code || '').trim().toUpperCase();
   
   let dbStation = null;
 
@@ -78,7 +78,7 @@ export const hPrnt = async (b, u, stations = []) => { // 🎯 CONVERTED TO ASYNC
       </div>
       
       ${isTagless ? `
-        <div class="section-title">የን|ብረት ዝርዝር መግለጫ እና ምስሎች / Property Description & Photo Manifest</div>
+        <div class="section-title">የንብረት ዝርዝር መግለጫ እና ምስሎች / Property Description & Photo Manifest</div>
         
         <div style="margin-bottom: 12px; background: #f8fafc; border: 1px solid #cbd5e1; padding: 12px; border-radius: 6px;">
           <span style="font-size: 12px; font-weight: bold; color: #334155; font-family: monospace;">TAG REFERENCE: ${b.bag_tag_number || 'TL-' + localizedStationCode}</span>
@@ -104,6 +104,15 @@ export const hPrnt = async (b, u, stations = []) => { // 🎯 CONVERTED TO ASYNC
               <th>የፋይል ቁጥር<span>&bull; File Reference</span></th>
               <td><span style="font-family: 'SF Mono', Monaco, Consolas, monospace; font-size: 14px; font-weight: 700; color: #0f172a;">${b.file_number || '—'}</span></td>
             </tr>
+            
+            <!-- ✈️ INJECTED REAL-TIME OPERATIONAL FLIGHT TELEMETRY DATA FIELDS ROW -->
+            <tr>
+              <th>የበረራ ቁጥር <span>&bull; Flight Number</span></th>
+              <td><b style="font-size: 14px; color: #dc2626; font-family: 'SF Mono', Monaco, Consolas, monospace; letter-spacing: 0.5px;">✈️ ${b.flight_number || 'ET-N/A'}</b></td>
+              <th>የበረራ ቀን <span>&bull; Flight Date</span></th>
+              <td><b style="font-size: 13px; color: #1e3a8a; font-family: 'Inter', sans-serif;">📅 ${b.flight_date ? new Date(b.flight_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—'}</b></td>
+            </tr>
+
             <tr>
               <th>የአያት ስም <span>&bull; Last Name</span></th>
               <td style="font-weight: 600; color: #0f172a;">${b.passenger_last_name || '—'}</td>
@@ -128,14 +137,30 @@ export const hPrnt = async (b, u, stations = []) => { // 🎯 CONVERTED TO ASYNC
               <th>ያለበት ሁኔታ <span>&bull; Current Status</span></th>
               <td><span class="status-badge">${b.bag_status || 'Open'}</span></td>
             </tr>
+                
             <tr>
-              <th>የመዘገበው ሰራተኛ <span>&bull; Logged By Agent</span></th>
-              <td colspan="3">
-                <div class="agent-info">
-                  👤 <span style="color: #64748b; font-size: 11px; text-transform: uppercase; font-weight: 600;">የጣቢያው ተረኛ ሰራተኛ / Station Handler:</span> <strong style="color: #0f172a; font-weight: 700;">${b.agent_name || 'System Authorized'}</strong>
+              <th style="vertical-align: middle; background: #fafafa; border-right: 1px solid #e2e8f0; width: 22%;">
+                የመዘገበው ሰራተኛ <span style="display: block; font-size: 9px; color: #64748b; font-weight: 500; margin-top: 2px;">&bull; Logged By Agent</span>
+              </th>
+              <td colspan="3" style="padding: 12px 16px; background: #ffffff; vertical-align: middle;">
+                <div class="agent-badge-container" style="display: flex; align-items: center; width: 100%;">
+                  
+                
+                  <div class="handler-id-badge" style="display: inline-flex; align-items: center; gap: 6px; background-color: #fffbeb; border: 1px solid #fde68a; border-radius: 6px; padding: 5px 12px; box-shadow: 0 2px 4px rgba(180, 83, 9, 0.04); height: max-content; flex-shrink: 0;">
+                    <span style="font-size: 12px;"></span>
+                    <span style="font-size: 9px; font-weight: 900; color: #b45309; text-transform: uppercase; letter-spacing: 0.6px; font-family: sans-serif;">AGT</span>
+                    <strong style="font-size: 13px; font-weight: 850; color: #78350f; font-family: monospace; letter-spacing: 0.5px;">
+                      ${(() => {
+                        const idCode = String(b?.custom_agent_id || b?.agent_code || b?.agent_name || '').trim().toUpperCase();
+                        return (idCode && idCode !== 'AG-UNKNOWN' && idCode.toLowerCase() !== 'system') ? idCode : 'SYS-AUTH';
+                      })()}
+                    </strong>
+                  </div>
+
                 </div>
               </td>
             </tr>
+
           </tbody>
         </table>
       `}

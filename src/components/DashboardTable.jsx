@@ -6,30 +6,8 @@ import '../styles/stationDrop.css';
 import StationTransferRequest from './StationTransferRequest';
 import StationRequests from './StationRequests';
 
-export default function DashboardTable({ fil = [], u, edId, setEdId, edF, setEdF, fetchRecords }) {
-
-  const getInitials = (agentNameStr) => {
-    const nameStr = String(agentNameStr || '').trim();
-    
-    // Checks if the entry was logged by the system matrix loop automatically
-    if (!nameStr || nameStr.toLowerCase() === 'system') return 'SYS';
-
-    // Splits the text cleanly by space blocks into separate name strings inside an array
-    const nameParts = nameStr.split(/\s+/);
-
-    // 🎯 THE FIX: Extract index [0] first letter and index [1] first letter cleanly
-    const firstInitial = nameParts[0] ? nameParts[0].charAt(0).toUpperCase() : '';
-    const secondInitial = nameParts[1] ? nameParts[1].charAt(0).toUpperCase() : '';
-
-    const exactInitials = `${firstInitial}${secondInitial}`;
-
-    // Fallback: If there is no middle name word found, return the first 2 letters of the first name
-    return exactInitials.length === 2
-      ? exactInitials
-      : nameStr.substring(0, 2).toUpperCase();
-  };
-
-
+// 🎯 THE FIX: Add 'agents' inside your functional destructuring properties line
+export default function DashboardTable({ fil, u, agents, edId, setEdId, edF, setEdF, fetchRecords }) {
 
   const [actBag, setActBag] = useState(null), [notifs, setNotifs] = useState([]), [showDrop, setShowDrop] = useState(false), [replyTexts, setReplyTexts] = useState({});
   // Place this next to your [actBag, setActBag] or [notifs, setNotifs] states
@@ -131,7 +109,7 @@ export default function DashboardTable({ fil = [], u, edId, setEdId, edF, setEdF
       </div>
 
       <div className="dashboard-table-card"><div className="table-scroll-container"><div className="grid-table">
-        <div className="grid-row grid-header">{['Origin', 'Tag', 'Last Name', 'First Name', 'File Ref', 'Ticket', 'Phone', 'Color', 'Weight', 'Incident', 'Agent', 'Tracer', 'Status', 'Actions'].map(c => <div key={c} className="grid-cell">{c}</div>)}</div>
+        <div className="grid-row grid-header">{['Origin', 'Tag', 'Last Name', 'First Name', 'File Ref','FLT Num','FLT Date','Ticket', 'Phone', 'Color', 'Weight', 'Incident', 'Agent', 'Tracer', 'Status',].map(c => <div key={c} className="grid-cell">{c}</div>)}</div>
         {!fil.length ? <div className="grid-cell" style={{ padding: '40px', textAlign: 'center', gridColumn: 'span 14', color: 'var(--text-muted)' }}>🛄 No matching records.</div> : fil.map(b => {
           const isEd = edId && String(edId) === String(b.id), it = isEd ? edF : b, cM = u?.is_admin || u?.station_code === b.station_code;
           const colorCls = cls(b.bag_color), irType = String(b.irregularity_type || 'Delayed').toLowerCase(), irrCls = ['delayed', 'damaged', 'onhand'].includes(irType) ? `irregularity-${irType}` : 'irregularity-delayed';
@@ -141,16 +119,116 @@ export default function DashboardTable({ fil = [], u, edId, setEdId, edF, setEdF
               <div className="grid-cell">{isEd ? <input value={it.bag_tag_number || ''} onChange={e => setEdF({ ...edF, bag_tag_number: e.target.value })} /> : <span className="bag-tag-mono">{b.bag_tag_number}</span>}</div>
               <div className="grid-cell">{isEd ? <input value={it.passenger_last_name || ''} onChange={e => setEdF({ ...edF, passenger_last_name: e.target.value })} /> : b.passenger_last_name}</div>
               <div className="grid-cell">{isEd ? <input value={it.passenger_first_name || ''} onChange={e => setEdF({ ...edF, passenger_first_name: e.target.value })} /> : b.passenger_first_name}</div>
+              
               <div className="grid-cell">{isEd ? <input value={it.file_number || ''} onChange={e => setEdF({ ...edF, file_number: e.target.value })} /> : b.file_number || '—'}</div>
+                            {/* ✈️ INJECTED REAL-TIME OPERATIONAL DATA GRID CELLS SIDE-BY-SIDE */}
+              <div className="grid-cell">
+                {isEd ? (
+                  <input 
+                    style={{ height: '24px', width: '80px', padding: '0 4px', fontSize: '11px', border: '1px solid var(--border-color, #cbd5e1)', borderRadius: '4px', textTransform: 'uppercase' }} 
+                    value={it.flight_number || ''} 
+                    onChange={e => setEdF({ ...edF, flight_number: e.target.value.toUpperCase() })} 
+                    placeholder="FLIGHT" 
+                  />
+                ) : (
+                  <span style={{ fontWeight: '800', fontFamily: 'monospace', color: 'var(--ethiopian-red, #dc2626)', fontSize: '11px' }}>✈️ {b.flight_number || 'ET-N/A'}</span>
+                )}
+              </div>
+
+              <div className="grid-cell">
+                {isEd ? (
+                  <input 
+                    type="date" 
+                    style={{ height: '24px', width: '105px', padding: '0 2px', fontSize: '11px', border: '1px solid var(--border-color, #cbd5e1)', borderRadius: '4px' }} 
+                    value={it.flight_date || ''} 
+                    onChange={e => setEdF({ ...edF, flight_date: e.target.value })} 
+                  />
+                ) : (
+                  <span style={{ color: 'var(--text-muted, #64748b)', fontSize: '11px', fontWeight: '600', whiteSpace: 'nowrap' }}>{b.flight_date ? `📅 ${new Date(b.flight_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}` : '📅 —'}</span>
+                )}
+              </div>
+
               <div className="grid-cell">{isEd ? <input maxLength={13} value={it.ticket_number || ''} onChange={e => setEdF({ ...edF, ticket_number: e.target.value })} /> : b.ticket_number || '—'}</div>
               <div className="grid-cell">{isEd ? <input maxLength={13} value={it.phone_number || ''} onChange={e => setEdF({ ...edF, phone_number: e.target.value })} /> : b.phone_number || '—'}</div>
               <div className="grid-cell">{isEd ? <select value={it.bag_color || ''} onChange={e => setEdF({ ...edF, bag_color: e.target.value })}>{['', 'Black', 'Red', 'Blue', 'Brown', 'Grey', 'Green'].map(c => <option key={c} value={c}>{c || 'None'}</option>)}</select> : <span className={`color-attribute-badge ${colorCls}`}>{b.bag_color || '—'}</span>}</div>
               <div className="grid-cell">{isEd ? <input type="number" value={it.bag_kilos || ''} onChange={e => setEdF({ ...edF, bag_kilos: e.target.value })} /> : (b.bag_kilos ? <b>{b.bag_kilos} KG</b> : '—')}</div>
               <div className="grid-cell">{isEd ? <select value={it.irregularity_type || ''} onChange={e => setEdF({ ...edF, irregularity_type: e.target.value })}>{['Delayed', 'Damaged', 'Onhand'].map(t => <option key={t} value={t}>{t}</option>)}</select> : <span className={`irregularity-status-tag ${irrCls}`}>{b.irregularity_type}</span>}</div>
-              <div className="grid-cell" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              
-                👤 {getInitials(b.agent_name)}
+              <div className="grid-cell" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                {(() => {
+                  try {
+                    const submittedBy = String(b?.agent_name || b?.custom_agent_id || b?.agent_code || '').trim();
+                    if (!submittedBy || submittedBy.toLowerCase() === 'system' || submittedBy.toUpperCase() === 'AG-UNKNOWN') {
+                      return (
+                        <div className="agent-avatar-circle avatar-sys" title="Automated System Matrix Process Log">
+                          SYS
+                        </div>
+                      );
+                    }
+
+                    const matchingAgent = (agents || []).find(ag => {
+                      const agId = String(ag?.id || '').trim();
+                      const agCode = String(ag?.agent_code || '').trim().toLowerCase();
+                      const agUser = String(ag?.username || '').trim().toLowerCase();
+                      const agFirst = String(ag?.first_name || '').trim().toLowerCase();
+                      return agId === submittedBy.toLowerCase() || agCode === submittedBy.toLowerCase() || agUser === submittedBy.toLowerCase() || agFirst === submittedBy.toLowerCase();
+                    });
+
+                    let initials = 'AG';
+                    let fullNameTooltip = submittedBy;
+
+                    if (matchingAgent) {
+                      const fName = String(matchingAgent.first_name || '').trim();
+                      const mName = String(matchingAgent.middle_name || '').trim();
+                      fullNameTooltip = `${fName} ${mName}`.trim();
+
+                      const firstLetter = fName ? fName.charAt(0).toUpperCase() : '';
+                      const middleLetter = mName ? mName.charAt(0).toUpperCase() : '';
+                      initials = firstLetter && middleLetter ? `${firstLetter}${middleLetter}` : fName.substring(0, 2).toUpperCase() || 'AG';
+                    } else {
+                      const spaceParts = submittedBy.split(/\s+/).filter(Boolean);
+                      if (spaceParts.length >= 2) {
+                        initials = `${spaceParts[0].charAt(0)}${spaceParts[1].charAt(0)}`.toUpperCase();
+                      } else {
+                        initials = submittedBy.substring(0, 2).toUpperCase() || 'AG';
+                      }
+                    }
+
+                    // 🎨 ADAPTIVE COLOR ENGINE: Dynamically hashes initials to generate a stable, premium color token theme
+                    let textHash = 0;
+                    for (let i = 0; i < initials.length; i++) {
+                      textHash = initials.charCodeAt(i) + ((textHash << 5) - textHash);
+                    }
+                    const premiumHuesPalette = [
+                      { bg: '#eff6ff', txt: '#1e40af', border: '#bfdbfe' }, // Royal Blue
+                      { bg: '#ecfdf5', txt: '#065f46', border: '#a7f3d0' }, // Emerald Green
+                      { bg: '#fdf2f8', txt: '#9d174d', border: '#fbcfe8' }, // Deep Rose
+                      { bg: '#fffbeb', txt: '#b45309', border: '#fef3c7' }, // Dark Amber
+                      { bg: '#faf5ff', txt: '#6b21a8', border: '#e9d5ff' }, // Luxury Purple
+                      { bg: '#f0fdfa', txt: '#115e59', border: '#99f6e4' }  // Ocean Teal
+                    ];
+                    const selectedTheme = premiumHuesPalette[Math.abs(textHash) % premiumHuesPalette.length];
+
+                    return (
+                      /* 🎯 STEP 2 INTEGRATION: Integrated full name title tooltips straight over the canvas badge elements */
+                      <div
+                        className="agent-avatar-circle"
+                        title={`Registered By: ${fullNameTooltip}`}
+                        style={{
+                          backgroundColor: selectedTheme.bg,
+                          color: selectedTheme.txt,
+                          borderColor: selectedTheme.border
+                        }}
+                      >
+                        {initials}
+                      </div>
+                    );
+                  } catch (err) {
+                    return <div className="agent-avatar-circle avatar-sys">AG</div>;
+                  }
+                })()}
               </div>
+
+
 
               <div className="grid-cell wt-cell-container">
                 <a
@@ -163,9 +241,10 @@ export default function DashboardTable({ fil = [], u, edId, setEdId, edF, setEdF
                 </a>
 
               </div>
+
               <div className="grid-cell status-select-cell" style={{ display: 'flex', alignItems: 'center', gap: '8px', width: '100%' }}>
 
-                {/* 🎯 TARGET INTEGRATED: Dynamic Animated Pulsing Radar Indicator Dot Element */}
+                {/* 📡 THE RADAR BEACON: Renders breathing rings dynamically for unresolved files */}
                 {(() => {
                   const currentStatus = isEd ? edF.bag_status : (b.bag_status || 'Open');
                   const sLower = String(currentStatus).toLowerCase();
@@ -189,7 +268,7 @@ export default function DashboardTable({ fil = [], u, edId, setEdId, edF, setEdF
                     return `status-color-${String(s).toLowerCase()}`;
                   })()
                     }`}
-                  style={{ flex: 1, minWidth: '0' }} /* Ensures proper sharing of cell horizontal track room */
+                  style={{ flex: 1, minWidth: '0' }}
                   onChange={async (e) => {
                     const selectedValue = e.target.value;
 
@@ -198,8 +277,9 @@ export default function DashboardTable({ fil = [], u, edId, setEdId, edF, setEdF
                     } else {
                       if (!window.confirm(`Are you certain you want to update status to: ${selectedValue}?`)) return;
 
+                      // 🎯 THE FIX: Corrected table link mapping path from 'bagaage_records' to 'baggage_records'
                       const { error } = await sb
-                        .from('bagaage_records')
+                        .from('baggage_records')
                         .update({ bag_status: selectedValue })
                         .eq('id', b.id);
 
@@ -218,12 +298,6 @@ export default function DashboardTable({ fil = [], u, edId, setEdId, edF, setEdF
                   <option value="Closed" className="opt-closed">Closed</option>
                 </select>
               </div>
-
-
-
-
-
-
               <div className="grid-cell">
                 {isEd ? (
                   <>

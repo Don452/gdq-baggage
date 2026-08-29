@@ -78,31 +78,50 @@
   min-width: 1550px; 
   width: 100%;
 }
+/* ==========================================================================
+   📏 ANTI-WRAPPING SPECIFIC PROPORTIONAL 16-COLUMN GRID BLUEPRINT
+   ========================================================================== */
+.grid-table {
+  display: flex;
+  flex-direction: column;
+  /* 🎯 THE FIX: Expanded minimum row tracking axis cleanly to handle multi-button cells */
+  min-width: 1820px; 
+  width: 100%;
+}
 
-/* 📏 Anti-Wrapping Explicit 14-Column Grid Blueprint Tracking */
 .grid-row {
   display: grid;
+  /* 🎯 THE FIX: Explicit fractional weights assign wide breathing room to operational nodes */
   grid-template-columns: 
-    minmax(60px, 0.6fr)   /* Origin Code */
-    minmax(110px, 1fr)   /* Bag Tag No */
-    minmax(110px, 1fr)   /* Last Name */
-    minmax(110px, 1fr)   /* First Name */
-    minmax(100px, 0.9fr) /* File Ref No */
-    minmax(130px, 1.2fr) /* Ticket No */
-    minmax(130px, 1.2fr) /* Phone No */
-    minmax(95px, 0.8fr)  /* Uniform Color */
-    minmax(80px, 0.7fr)  /* Weight Kilos */
-    minmax(95px, 0.8fr)  /* Incident Class */
-    minmax(120px, 1.1fr) /* Handling Agent */
-    minmax(135px, 1.2fr) /* WorldTracer Link */
-    minmax(120px, 1.1fr) /* Status Selector */
-    minmax(140px, 1.3fr);/* Interactive Actions */
+    minmax(60px, 0.6fr)   /* 1. Origin Badge Node */
+    minmax(115px, 1fr)    /* 2. Bag Tag Number */
+    minmax(95px, 0.8fr)   /* 3. Flight Number ✈️ */
+    minmax(115px, 1fr)    /* 4. Flight Date 📅 */
+    minmax(110px, 1fr)    /* 5. Passenger Last Name */
+    minmax(110px, 1fr)    /* 6. Passenger First Name */
+    minmax(100px, 0.9fr)  /* 7. File Reference Number */
+    minmax(125px, 1.1fr)  /* 8. Ticket Code Number */
+    minmax(125px, 1.1fr)  /* 9. Phone Contact String */
+    minmax(95px, 0.8fr)   /* 10. Baggage Uniform Color */
+    minmax(80px, 0.7fr)   /* 11. Weight Payload Kilos */
+    minmax(95px, 0.8fr)   /* 12. Incident Classification */
+    minmax(110px, 1fr)    /* 13. Processing Agent Initials */
+    minmax(90px, 0.8fr)   /* 14. WorldTracer Redirect Pin */
+    minmax(125px, 1.1fr)  /* 15. Real-time Status Dropdown */
+    minmax(165px, 1.5fr); /* 16. Actions Core Button Group [MAXIMIZED SPACE OVERRIDE] */
   align-items: center;
   gap: 16px;
   padding: 12px 16px;
   border-bottom: 1px solid var(--border-color);
   box-sizing: border-box;
 }
+
+/* 🎯 THE FIX: Forces your actions cell to justify properly from the center-right lane */
+.grid-row > .grid-cell:last-child {
+  justify-content: flex-end !important;
+  padding-right: 4px !important;
+}
+
 
 .grid-header {
   background: var(--snow);
@@ -127,7 +146,7 @@
   overflow-y: hidden !important;
   padding: 4px 2px !important;
   box-sizing: border-box !important;
-   font-size: 13px;
+  font-size: 13px;
   
   /* Smooth inertia scrolling touch behaviors for iOS and Android web views */
   -webkit-overflow-scrolling: touch; 
@@ -348,4 +367,36 @@
   }
 }
 
+
+/* ==========================================================================
+   👥 PREMIUM ROUNDED AVATAR BADGES STYLE LAYOUTS
+   ========================================================================== */
+.agent-avatar-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11.5px;
+  font-weight: 800;
+  font-family: monospace;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  user-select: none;
+}
+
+.agent-avatar-circle:hover {
+  transform: scale(1.06);
+  box-shadow: 0 4px 8px rgba(15, 23, 42, 0.08);
+}
+
+/* Fallback automated system background signature tag block */
+.avatar-sys {
+  background-color: #f1f5f9 !important;
+  color: #475569 !important;
+  border-color: #e2e8f0 !important;
+  font-style: italic;
+}
 

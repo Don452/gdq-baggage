@@ -146,7 +146,18 @@ export default function App() {
             srch={srch} setSrch={setSrch} sd={sd} setSd={setSd} ed={ed} setEd={setEd}
           />
 
-          <DashboardTable fil={filteredRecords} u={u} edId={edId} setEdId={setEdId} edF={edF} setEdF={setEdF} fetchRecords={fetchRecords} />
+         {/* 🎯 THE FIX: Pass the agents array prop into your table layer here */}
+<DashboardTable 
+  fil={filteredRecords} 
+  u={u} 
+  agents={agents} // 🔌 INSERT THIS LINE HERE
+  edId={edId} 
+  setEdId={setEdId} 
+  edF={edF} 
+  setEdF={setEdF} 
+  fetchRecords={fetchRecords} 
+/>
+
         </>
       )}
     </main>
